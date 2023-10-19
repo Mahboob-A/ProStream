@@ -87,3 +87,7 @@ class ScheduledLiveStremFollowers(models.Model):
         
         def __str__(self): 
                 return f"{self.followers.username} is follwoing {self.scheduled_live_stream.stream_title} stream"
+        
+        
+        
+        
