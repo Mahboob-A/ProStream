@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser, AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import User, AbstractUser, AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.urls import reverse
 from django.utils import timezone
 import uuid
@@ -9,7 +9,7 @@ from .managers import CustomUserManager
 from django.core.validators import RegexValidator
 
 phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
-from django.conf import settings
+
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin): 
@@ -39,6 +39,21 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         
         USERNAME_FIELD = 'username'
         REQUIRED_FIELDS = ['email']  # this is for superuser only 
+        
+        groups = models.ManyToManyField(
+                Group,
+                verbose_name=_('groups'),
+                blank=True,
+                related_name='custom_user_groups'  # Use a unique related_name
+        )
+    
+        user_permissions = models.ManyToManyField(
+                Permission,
+                verbose_name=_('user permissions'),
+                blank=True,
+                related_name='custom_user_permissions'  # Use a unique related_name
+        )
+
         
         def __str__(self): 
                 return self.username 

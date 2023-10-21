@@ -2,16 +2,16 @@ from django.db import models
 
 import uuid 
 from django.utils import timezone 
-from accounts.models import CustomUser
+# from accounts.models import CustomUser
 from streamer_profile.models import Streamer, Stream
+from django.conf import settings 
 
-from django.conf import settings
 
 # crate an wallent first before accepting Tip for Streamer         
 
-class ViewerWallet(models.Model):
+class UserWallet(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        viewer = models.OneToOneField(CustomUser, on_delete=models.CASCADE) 
+        user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE) 
         last_recharged_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
         available_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
         total_tipped_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -41,11 +41,14 @@ class ViewerWallet(models.Model):
                 else: 
                         return None # if none is returned, then the viewer does not have any money | handle in view while creating Tip instance 
         
-                '''
-                get the ViewerWallet instance of CustmUser. Then user resp_amount = wallet.tip_amout(amount 'get the amont from api')
-                if the resp_amount is not None, then only create an instance of Tip (wallet=streamer wallet, tipper=user instance, stream = current stream instance, amount = resp_amount)
-                '''
+        '''
+        get the ViewerWallet instance of CustmUser. Then user resp_amount = wallet.tip_amout(amount 'get the amont from api')
+        if the resp_amount is not None, then only create an instance of Tip (wallet=streamer wallet, tipper=user instance, stream = current stream instance, amount = resp_amount)
+        '''
 
+
+                
+           
 
 DOCUMENT_CHOICES = (
         ('VOTER', 'VOTER CARD'),
@@ -103,12 +106,10 @@ class BankAccountDetails(models.Model):
         def __str__(self): 
                 return f"{self.first_name} {self.last_name}'s Bank Account"
 
-        
-
 
 class StreamerWallet(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        streamer_id = models.OneToOneField(Streamer, on_delete=models.CASCADE) 
+        streamer = models.OneToOneField(Streamer, on_delete=models.CASCADE) 
         bank_account = models.OneToOneField(BankAccountDetails, on_delete=models.CASCADE)
         
         available_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # total amount of the streamer 
@@ -146,12 +147,13 @@ class StreamerWallet(models.Model):
                         self.save()
                 else:
                         raise Exception("Insufficient balance to withdraw.")
-                
-                
+
+        
+
 class Tip(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         wallet = models.OneToOneField(StreamerWallet, on_delete=models.CASCADE)
-        tipper = models.ForeignKey(CustomUser , on_delete=models.CASCADE, related_name='tips_given')
+        tipper = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tips_given')
         stream = models.ForeignKey(Stream, on_delete=models.CASCADE)
         amount = models.DecimalField(max_digits=6, decimal_places=2, default=0)
         timestamp = models.DateTimeField(auto_now_add=True)
