@@ -3,10 +3,10 @@ import uuid
 import random
 import string 
 from django.utils import timezone
-from django.conf import settings
 
 
 from streamer_profile.models import * 
+from django.conf import settings
 
 
 # 181023, Wednesday, 10.15 pm 
@@ -44,7 +44,7 @@ class ReportTicket(models.Model):
         category = models.ForeignKey(ReportCategory, on_delete=models.CASCADE, related_name='category_reports')
         sub_categoty = models.ForeignKey(Report_SubCategory, on_delete=models.CASCADE, related_name='sub_category_reports')
         user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_reported_tickets')
-        streamer = models.ForeignKey(Streamer, on_delete=models.SET_NULL, related_name='tickets_raised_against')
+        streamer = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='tickets_raised_against')
         
         ticket_no = models.CharField(max_length=15, help_text='Report ticket unique number', null=True, blank=True)
         
@@ -103,11 +103,11 @@ class TicketResolution(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         ticket = models.ForeignKey(ReportTicket, on_delete=models.CASCADE, related_name='ticket_resolutions')
         user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_ticket_resolutions')
-        streamer = models.ForeignKey(Streamer, on_delete=models.SET_NULL, related_name='streamer_ticket_resolutions')
+        streamer = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='streamer_ticket_resolutions')
         
         comment = models.TextField(null=True, blank=True,  help_text='The decision taken on the ticket')
-        report_investiongation = models.CharField(max_length=15, choices=REPORT_INVESTIGATION_CHOICES, help_text='The investation')
-        report_action = models.CharField(max_length=15, choices=REPORT_ACTION_CHOICES, help_text='The action taken for the report')
+        report_investiongation = models.CharField(max_length=27, choices=REPORT_INVESTIGATION_CHOICES, help_text='The investation')
+        report_action = models.CharField(max_length=35, choices=REPORT_ACTION_CHOICES, help_text='The action taken for the report')
         
         createdAt = models.DateTimeField(default=timezone.now)
         updatedAt = models.DateTimeField(auto_now=True)

@@ -3,25 +3,21 @@ from django.utils import timezone
 from django.urls import reverse
 import uuid
 from django.core.mail import send_mail 
-from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator, MinLengthValidator, MaxLengthValidator
 
 from taggit.managers import TaggableManager
 
-from accounts.models import CustomUser
+# from accounts.models import CustomUser
+from live_stream.models import Chat, Category
+from django.conf import settings
 
 
 # id = models.UUIDField(primary_key = True,default = uuid.uuid4, editable = False)
 class Streamer(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        
         original_user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-        bank_detail = models.OneToOneField('BankDetail', on_delete=models.SET_NULL, blank=True, null=True)
-        wallet = models.OneToOneField('StreamerWallet', on_delete=models.SET_NULL, blank=True, null=True)
-        team = models.OneToOneField('Team', on_delete=models.SET_NULL, blank=True, null=True)
-        # social_media = models.OneToOneField('SocialMedia', on_delete=models.SET_NULL)
-        
+
         first_name = models.CharField(max_length=20, null=True, blank=True)
         last_name = models.CharField(max_length=20, null=True, blank=True)
         
@@ -123,8 +119,8 @@ class Stream(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         
         streamer = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='streams', null=True, blank=True),
-        category = models.ForeignKey('Category', on_delete=models.SET_NULL, related_name='category_streams'),
-        chat = models.OneToOneField('Chat', on_delete=models.CASCADE, null=True, blank=True)
+        category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='category_streams'),
+        stream_chat = models.OneToOneField(Chat, on_delete=models.CASCADE, null=True, blank=True)
         tags = TaggableManager()  # for hanling tags efficiently  
         
         stream_title = models.CharField(max_length=150, validators=[MinLengthValidator(15, message='Your title is too short! Type at least 15 characters!')])
@@ -245,17 +241,42 @@ class Team(models.Model):
                  
                 
 
-# category model is not defined yet 
 class Follow(models.Model): 
-        follower = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='following'),
+        follower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following'),
         follwoing = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='followers'),
-        category_follwing = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='category_follower'),
+        category_follwing = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_follower'),
         
         createdAt = models.DateTimeField(default=timezone.now)
         updatedAt = models.DateTimeField(auto_now=True) 
         deletedAt = models.DateTimeField(blank=True, null=True)
         
         
+
+# for scheduling live streams 
+        
+class ScheduleLiveStream(models.Model): 
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        streamer = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='scheduled_streams')
+        followers  = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='followed_scheduled_streams')
+        
+        stream_title = models.CharField(max_length=50, help_text='Title for scheduling notification')
+        scheduled_time = models.DateTimeField(help_text='Time for the scheduled stream')
+        
+        createdAt = models.DateTimeField(default=timezone.now)
+        updatedAt = models.DateTimeField(auto_now=True) 
+        deletedAt = models.DateTimeField(blank=True, null=True)
+        
+        def __str__(self): 
+                return f"{self.streamer.first_name}'s scheduled stream -  {self.stream_title}"
         
         
+class ScheduledLiveStremFollowers(models.Model): 
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        scheduled_live_stream = models.ForeignKey(ScheduleLiveStream, on_delete=models.CASCADE, related_name='scheduled_live_stream_followers')
+        followers = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='scheduled_live_streams_following')
         
+        createdAt = models.DateTimeField(default=timezone.now)
+        updatedAt = models.DateTimeField(auto_now=True) 
+        
+        def __str__(self): 
+                return f"{self.followers.username} is follwoing {self.scheduled_live_stream.stream_title} stream"
