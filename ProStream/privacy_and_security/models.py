@@ -3,14 +3,13 @@ import uuid
 import random
 import string 
 from django.utils import timezone
-from django.conf import settings
 
 
 from streamer_profile.models import * 
+from django.conf import settings
 
 
 # 181023, Wednesday, 10.15 pm 
-''' create model : Report and Report Status''' # when being work on the report task. before that complete the setup that are done still now 3wqas23ed4frtghnj,./|
 
 # 191023, Thursday, 10.00 am 
 
@@ -114,4 +113,6 @@ class TicketResolution(models.Model):
         
         def __str__(self): 
                 return f"Resolution for streamer {self.streamer.first_name} {self.streamer.last_name}'s ticket no - {self.ticket.ticket_no}"
+        
+        
         

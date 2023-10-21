@@ -1,54 +1,13 @@
 from django.db import models
 
 import uuid 
-
+from django.utils import timezone 
 from accounts.models import CustomUser
-from streamer_profile.models import * 
+from streamer_profile.models import Streamer, Stream
 
+from django.conf import settings
 
 # crate an wallent first before accepting Tip for Streamer         
-class StreamerWallet(models.Model):
-        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        streamer = models.OneToOneField(Streamer, on_delete=models.CASCADE) 
-        bank_account = models.OneToOneField('BankAccountDetails', on_delete=models.CASCADE)
-        
-        available_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # total amount of the streamer 
-        ready_to_withdrawal_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # this money will be transferred into bank account 
-        total_tip_received = models.DecimalField(max_digits=10, decimal_places=2, default=0) # this is the overall tip the streamer has received (only for representation purpose)
-        last_recharged_amount  = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
-        createdAt = models.DateTimeField(default=timezone.now)
-        updatedAt = models.DateTimeField(auto_now=True) 
-        deletedAt = models.DateTimeField(blank=True, null=True)
-        
-        def update_available_amout(self, amount): 
-                self.available_amount += amount
-                self.save()
-                
-        def update_total_tip_received(self, amount):
-                self.total_tip_received += amount
-                self.save()
-                
-        def update_last_recharged_amoount(self, amount):
-                self.last_recharged_amount  = amount
-                self.save()
-                
-        def get_available_amount(self): 
-                return self.available_amount 
-
-        # def recharge_wallet(self, amount): | not implemented. Implement as per logic 
-
-        def withdraw(self, amount):  # for testing. add more validations 
-                if self.available_amount >= amount:
-                        self.available_amount -= amount
-                        self.ready_to_withdrawal_amount += amount
-                        self.bank_account.balance += amount
-                        self.bank_account.save()
-                        self.save()
-                else:
-                        raise Exception("Insufficient balance to withdraw.")
-
-
 
 class ViewerWallet(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -87,29 +46,6 @@ class ViewerWallet(models.Model):
                 if the resp_amount is not None, then only create an instance of Tip (wallet=streamer wallet, tipper=user instance, stream = current stream instance, amount = resp_amount)
                 '''
 
-
-    
-class Tip(models.Model):
-        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        wallet = models.OneToOneField(StreamerWallet, on_delete=models.CASCADE)
-        tipper = models.ForeignKey(CustomUser , on_delete=models.CASCADE, related_name='tips_given')
-        stream = models.ForeignKey(Stream, on_delete=models.CASCADE)
-        amount = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-        timestamp = models.DateTimeField(auto_now_add=True)
-
-        createdAt = models.DateTimeField(default=timezone.now)
-        updatedAt = models.DateTimeField(auto_now=True) 
-        deletedAt = models.DateTimeField(blank=True, null=True)
-        
-        def save(self, *args, **kwargs):
-                
-                self.wallet.update_available_amout(self.amount)
-                self.wallet.update_total_tip_received(self.amount)
-                self.tipper.update_total_tipped_amount(self.amount)
-                
-                super(Tip, self).save(*args, **kwargs)
-                
-           
 
 DOCUMENT_CHOICES = (
         ('VOTER', 'VOTER CARD'),
@@ -170,3 +106,64 @@ class BankAccountDetails(models.Model):
         
 
 
+class StreamerWallet(models.Model):
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        streamer_id = models.OneToOneField(Streamer, on_delete=models.CASCADE) 
+        bank_account = models.OneToOneField(BankAccountDetails, on_delete=models.CASCADE)
+        
+        available_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # total amount of the streamer 
+        ready_to_withdrawal_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # this money will be transferred into bank account 
+        total_tip_received = models.DecimalField(max_digits=10, decimal_places=2, default=0) # this is the overall tip the streamer has received (only for representation purpose)
+        last_recharged_amount  = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+        createdAt = models.DateTimeField(default=timezone.now)
+        updatedAt = models.DateTimeField(auto_now=True) 
+        deletedAt = models.DateTimeField(blank=True, null=True)
+        
+        def update_available_amout(self, amount): 
+                self.available_amount += amount
+                self.save()
+                
+        def update_total_tip_received(self, amount):
+                self.total_tip_received += amount
+                self.save()
+                
+        def update_last_recharged_amoount(self, amount):
+                self.last_recharged_amount  = amount
+                self.save()
+                
+        def get_available_amount(self): 
+                return self.available_amount 
+
+        # def recharge_wallet(self, amount): | not implemented. Implement as per logic 
+
+        def withdraw(self, amount):  # for testing. add more validations 
+                if self.available_amount >= amount:
+                        self.available_amount -= amount
+                        self.ready_to_withdrawal_amount += amount
+                        self.bank_account.balance += amount
+                        self.bank_account.save()
+                        self.save()
+                else:
+                        raise Exception("Insufficient balance to withdraw.")
+                
+                
+class Tip(models.Model):
+        id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+        wallet = models.OneToOneField(StreamerWallet, on_delete=models.CASCADE)
+        tipper = models.ForeignKey(CustomUser , on_delete=models.CASCADE, related_name='tips_given')
+        stream = models.ForeignKey(Stream, on_delete=models.CASCADE)
+        amount = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+        timestamp = models.DateTimeField(auto_now_add=True)
+
+        createdAt = models.DateTimeField(default=timezone.now)
+        updatedAt = models.DateTimeField(auto_now=True) 
+        deletedAt = models.DateTimeField(blank=True, null=True)
+        
+        def save(self, *args, **kwargs):
+                
+                self.wallet.update_available_amout(self.amount)
+                self.wallet.update_total_tip_received(self.amount)
+                self.tipper.update_total_tipped_amount(self.amount)
+                
+                super(Tip, self).save(*args, **kwargs)

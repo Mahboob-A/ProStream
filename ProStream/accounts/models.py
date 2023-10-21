@@ -4,12 +4,12 @@ from django.urls import reverse
 from django.utils import timezone
 import uuid
 from django.core.mail import send_mail 
-from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from .managers import CustomUserManager
 from django.core.validators import RegexValidator
 
 phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+from django.conf import settings
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin): 
@@ -20,11 +20,16 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         dob = models.DateField(_('date of birth'), null=True, blank=True)
         gender = models.CharField(_('gender'), max_length=3, choices=(('m', 'Male'), ('f', 'Female'), ('o', 'Other')), null=True, blank=True)
         
+        is_email_verified = models.BooleanField(default=False)
+        is_a_user = models.BooleanField(default=True)
+        is_a_streamer = models.BooleanField(default=False)
         
         is_active = models.BooleanField(default=True)
         is_staff = models.BooleanField(default=False)
         is_temporarily_suspended = models.BooleanField(default=False)
         is_permanently_banned = models.BooleanField(default=False)
+        
+        otp = models.CharField(max_length=6, null=True, blank=True)
         
         createdAt = models.DateTimeField(default=timezone.now)
         updatedAt = models.DateTimeField(auto_now=True) 
