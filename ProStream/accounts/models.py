@@ -16,7 +16,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         id = models.UUIDField(primary_key = True,default = uuid.uuid4, editable = False)
         username = models.CharField(_('username'), max_length=25, unique=True)
         email = models.EmailField(_('email address'), max_length=50, unique=True, default='abc@gmail.com')
-        phone_number = models.CharField(_('phone no'), validators=[phone_regex],  max_length=15, null=True, blank=True)
+        phone_number = models.CharField(_('phone no'), unique=True, validators=[phone_regex],  max_length=15, null=True, blank=True)
         dob = models.DateField(_('date of birth'), null=True, blank=True)
         gender = models.CharField(_('gender'), max_length=3, choices=(('m', 'Male'), ('f', 'Female'), ('o', 'Other')), null=True, blank=True)
         
@@ -40,20 +40,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         USERNAME_FIELD = 'username'
         REQUIRED_FIELDS = ['email']  # this is for superuser only 
         
-        groups = models.ManyToManyField(
-                Group,
-                verbose_name=_('groups'),
-                blank=True,
-                related_name='custom_user_groups'  # Use a unique related_name
-        )
-    
-        user_permissions = models.ManyToManyField(
-                Permission,
-                verbose_name=_('user permissions'),
-                blank=True,
-                related_name='custom_user_permissions'  # Use a unique related_name
-        )
-
         
         def __str__(self): 
                 return self.username 

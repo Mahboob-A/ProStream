@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -153,7 +154,7 @@ REST_FRAMEWORK = {
 
 # Simple-JWT Settings 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -200,3 +201,20 @@ CORS_ALLOW_METHODS = (
     "POST",
     "PUT",
 )
+
+AUTHENTICATION_BACKENDS = [
+    'accounts.authentication.CustomUserBackend',
+    # Other backends if needed
+]
+
+# For password reset using email | ResetPasswordEmailConfirmationSerializer
+PASSWORD_RESET_TIMEOUT = 300
+
+
+# Eamil Configuration 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True 
+EMAIL_HOST_USER = "weswabhimaan@gmail.com"   #  os.environ.get('EMAIL_HOST_USER')   # use decuple for env MUST format this before deploy 
+EMAIL_HOST_PASSWORD = "vkcxnzjivwsppavr"    #os.environ.get('EMAIL_HOST_PASSWORD') #  
