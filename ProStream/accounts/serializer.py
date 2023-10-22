@@ -6,7 +6,7 @@ from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator 
-from django.utils.http import urlencode
+# from django.utils.http import urlencode
 
 # drf 
 from rest_framework import serializers 
@@ -14,8 +14,7 @@ from rest_framework import serializers
 #local 
 from accounts.models import CustomUser
 # send email and formatting body of email 
-from .utils import EmailUser, send_password_reset_email, format_email 
-from django.utils.html import format_html 
+from .utils import EmailUser,  format_email 
 
 
 
@@ -108,8 +107,6 @@ class ChangePasswordAPISerializer(serializers.ModelSerializer):
         
 
 
-        
-
 class ResetPasswordEmailLinkRequestSerializer(serializers.ModelSerializer): 
         ''' Resets user's password given a registered email | sends reset link to the email '''
         email = serializers.EmailField(max_length=50, required=True)
@@ -123,7 +120,7 @@ class ResetPasswordEmailLinkRequestSerializer(serializers.ModelSerializer):
                         user = CustomUser.objects.get(email=email)
                         encoded_uuid = urlsafe_base64_encode(force_bytes(user.id))
                         password_token = PasswordResetTokenGenerator().make_token(user)
-                        link = 'http://127.0.0.1:8000/auth/reset-password-email-confirmation/'+encoded_uuid+'/'+password_token # here is the endpoint to get the new passwords 
+                        link = 'http://127.0.0.1:8000/auth/reset-password/'+encoded_uuid+'/'+password_token # here is the endpoint to get the new passwords 
                         data = format_email(user=user, link=link)
                         # send email 
                         EmailUser.send_email(data)
@@ -163,7 +160,7 @@ class ResetPasswordEmailConfirmationSerializer(serializers.ModelSerializer):
                         decoded_uuid = smart_str(urlsafe_base64_decode(encoded_uuid))
                         user = CustomUser.objects.get(id=decoded_uuid)
                         
-                        # if token is expired or manipulated or the correct token of the user 
+                        # if token is expired, already used, or manipulated or the correct token of the user 
                         if not PasswordResetTokenGenerator().check_token(user=user, token=password_token): 
                                 raise serializers.ValidationError('Token is not valid or expired!') # PASSWORD_RESET_TIMEOUT = 300 (SECONDS)
                         
@@ -195,9 +192,6 @@ class ResetPasswordEmailOtpConfirmationSerializer(serializers.ModelSerializer):
         password2 = serializers.CharField(validators= [MinLengthValidator(5, 'Password must be at least 5 characters'), MaxLengthValidator(15, "Password can not be more than 15 characters")],
                         style={'input_type' : 'password'}, write_only=True, required=True
                 )
-        
-        
-        
         class Meta: 
                 model = CustomUser 
                 fields = ['password', 'password2']
@@ -206,15 +200,17 @@ class ResetPasswordEmailOtpConfirmationSerializer(serializers.ModelSerializer):
                 pass1 = attrs.get('password')
                 pass2 = attrs.get('password2')
                 
-                if pass1 and pass2 and pass1 != pass2: 
-                        raise serializers.ValidationError('Password does not match!')
-        
                 user = self.context.get('user')
-                otp = self.context.get('otp')
+                otp = self.context.get('otp')  
                 
                 if otp : 
+                        # if otp matches, only then proceed 
                         if user.otp == otp: 
-                                user.otp = None
+                                # as the otp is matched, remove the otp so that this otp becomes obsolate to use furthur 
+                                user.otp = None  
+                                # check if pass if correct 
+                                if pass1 and pass2 and pass1 != pass2: 
+                                        raise serializers.ValidationError('Password does not match!')
                                 user.save()
                                 # check if same old password is given for the new password
                                 if user.check_password(pass1): 

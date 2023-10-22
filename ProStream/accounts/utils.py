@@ -3,7 +3,8 @@
 from django.core.mail import EmailMessage 
 from django.core.mail import BadHeaderError, send_mail
 from django.utils.html import format_html 
-import os 
+# import os 
+from rest_framework_simplejwt.tokens import RefreshToken
 import random
 import string
 from django.conf import settings 
@@ -37,7 +38,14 @@ def send_password_reset_email(data):
         except BadHeaderError:
             raise BadHeaderError('Something wrong occured!')
 
-        
+# for creating jwt token 
+def get_tokens_for_user(user):
+        refresh = RefreshToken.for_user(user)
+
+        return {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+        }
 
 def format_email(user, link=None, otp=None): 
         ''' formats the email body based on the reset type - link and otp  '''
@@ -52,7 +60,7 @@ def format_email(user, link=None, otp=None):
         Here is your access to reset your password. Never share this email with anyone. <br> <br>
         Remember, this link is only valid for 5 minutes! <br> <br>
 
-        <a href="{}"> click here </a> to reset your password. <br><br><br><br> <br> <br> <br> <br> <br> <br> <br> <br>
+        <a href="{}"> click here </a> to reset your password. <br><br><br><br> <br> <br> <br> <br> 
 
         Thank you, <br>
         ProStream Team. <br> 
