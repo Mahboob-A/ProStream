@@ -71,7 +71,7 @@ class RegistrationAPISerializer(serializers.ModelSerializer):
                  
                  
 class LoginSerializer(serializers.ModelSerializer): 
-        ''' Serializer for authenticating an existing user with token '''
+        ''' Serializer for authenticating an existing user and generates a access token '''
         email = serializers.EmailField(max_length=50, required=False)
         username = serializers.CharField(max_length=50, required=False)
         class Meta: 
@@ -215,6 +215,7 @@ class ResetPasswordEmailOtpConfirmationSerializer(serializers.ModelSerializer):
                                 # check if same old password is given for the new password
                                 if user.check_password(pass1): 
                                         raise serializers.ValidationError('New password can not be the old password')
+                                
                                 user.set_password(pass1)
                                 user.save()
                                 return attrs 

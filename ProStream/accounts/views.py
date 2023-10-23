@@ -78,7 +78,7 @@ class ResetPaswordEmailLinkRequestAPI(APIView):
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
 
-class ResetPasswordEmailConfirmationAPI(APIView): 
+class ResetPasswordEmailLinkConfirmationAPI(APIView): 
         ''' Validates and changes the password from email link '''
         
         def post(self, request, encoded_uuid, password_token): 
@@ -114,9 +114,12 @@ class ResetPasswordEmailOtpAPI(APIView):
                 otp = generate_otp(otp_size=6)
                 user.otp = otp 
                 user.save()
-                data = format_email(user=user, otp=otp)  # from util | takes care of otp and link both 
-                EmailUser.send_email(data)
-                return Response({'status' : 'success', 'data' : 'Password reset email sent successfully!'}, status=status.HTTP_200_OK)
+                data = format_email(user=user, reset_otp=otp)  # from util | takes care of otp and link both 
+                try: 
+                        EmailUser.send_email(data)
+                        return Response({'status' : 'success', 'data' : 'Password reset email sent successfully!'}, status=status.HTTP_200_OK)
+                except Exception as e: 
+                        return Response({'status' : 'error', 'data' : "It's not you! It's us! Something unexpected happend form our side!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 
 
@@ -134,9 +137,66 @@ class ResetPasswordEmailOtpConfirmationAPI(APIView):
                                 user = CustomUser.objects.get(username=username_or_email)
                 except CustomUser.DoesNotExist: 
                         return Response({'status' : 'error', 'data' : 'User with this email or username does not exist!'})
-                serializer = ResetPasswordEmailOtpConfirmationSerializer(data=request.data, context={'user' : user, 'otp' : otp, 'view' : self}) 
+                serializer = ResetPasswordEmailOtpConfirmationSerializer(data=request.data, context={'user' : user, 'otp' : otp}) 
                 if serializer.is_valid(): 
                         token = get_tokens_for_user(user)
-                        return Response({'status' : 'success', 'token' : token, 'data' : 'Password changed successfully !'}, status=status.HTTP_200_OK)
+                        return Response({'status' : 'success', 'token' : token, 'data' : 'Password changed successfully!'}, status=status.HTTP_200_OK)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
                         
+                        
+                        
+                        
+class LoginWithEmailOtpAPI(APIView): 
+        ''' User login with OTP  - API sends an email with OTP to user email  '''
+        ''' User can pass either username or email '''
+        def post(self, request): 
+                try: 
+                        username_or_email = request.data.get('credential')
+                        try: 
+                                user = CustomUser.objects.get(username=username_or_email)
+                        except CustomUser.DoesNotExist: 
+                                user = CustomUser.objects.get(email=username_or_email)
+                except CustomUser.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : 'User with this email or username does not exist!'})
+                
+                otp = generate_otp(otp_size=6)
+                user.otp = otp
+                user.save()
+                data = format_email(user=user, login_otp=otp)
+                try: 
+                        EmailUser.send_email(data)
+                        return Response({'status' : 'success', 'data' : 'OTP is send successfully to email!'}, status=status.HTTP_200_OK)
+                except Exception as e: 
+                        return Response({'status' : 'error', 'data' : "It's not you! It's us! Something unexpected happend form our side!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                
+                
+                
+class LoginWithEmailOtpConfirmationAPI(APIView): 
+        ''' User login with OTP - API validates the OTP sent using user email  '''
+        def post(self, request): 
+                username_or_email = request.data.get('credential')
+                otp = request.data.get('otp')
+                try: 
+                        try: 
+                                user = CustomUser.objects.get(username=username_or_email)
+                        except CustomUser.DoesNotExist: 
+                                user = CustomUser.objects.get(email=username_or_email)
+                except CustomUser.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : 'User with this email or username does not exist!'})
+                
+                print('user otp : ', user.otp)
+                if otp: 
+                        if user.otp == otp: 
+                                user.otp = None 
+                                user.save()
+                                token = get_tokens_for_user(user)
+                                return Response({'status' : 'success', 'token' : token, 'data' : 'OTP verified seccessfully!'}, status=status.HTTP_200_OK)
+                        else: 
+                                return Response({'status' : 'error', 'data' : 'Invalid OTP or OTP is expired!'}, status=status.HTTP_400_BAD_REQUEST)
+                else: 
+                        return Response({'status' : 'error', 'data' : 'Invalid OTP or OTP is expired!'}, status=status.HTTP_400_BAD_REQUEST)
+                
+                                        
+                                        
+                
+                
