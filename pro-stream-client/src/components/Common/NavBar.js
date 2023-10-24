@@ -14,7 +14,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Button, Grid, Link } from "@mui/material";
-import logo from "../Images/prostream.png";
+import logo from "../../Images/prostream.png";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",

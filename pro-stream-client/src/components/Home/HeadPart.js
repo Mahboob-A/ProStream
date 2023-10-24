@@ -1,9 +1,9 @@
 import React from "react";
 import { Grid } from "@mui/material";
-import stream1 from "../Images/stream1.png";
-import stream2 from "../Images/stream2.png";
-import stream3 from "../Images/stream3.png";
-import stream4 from "../Images/stream4.png";
+import stream1 from "../../Images/stream1.png";
+import stream2 from "../../Images/stream2.png";
+import stream3 from "../../Images/stream3.png";
+import stream4 from "../../Images/stream4.png";
 
 const HeadPart = () => {
   return (

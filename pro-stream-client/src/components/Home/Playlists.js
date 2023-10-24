@@ -1,9 +1,9 @@
 import { Box, Divider, Grid, Typography } from "@mui/material";
 import React from "react";
-import img1 from "../Images/playlist.png";
-import img2 from "../Images/playlist1.png";
-import img3 from "../Images/playlist2.png";
-import img4 from "../Images/playlist3.png";
+import img1 from "../../Images/playlist1.png";
+import img2 from "../../Images/playlist1.png";
+import img3 from "../../Images/playlist2.png";
+import img4 from "../../Images/playlist3.png";
 
 const Playlists = () => {
   return (
