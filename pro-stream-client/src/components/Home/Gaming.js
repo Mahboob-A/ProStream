@@ -11,7 +11,8 @@ const Gaming = () => {
         Gaming
       </Typography>
       <Divider sx={{ background: "red", height: "3px" }} />
-      <Grid container spacing={1} padding={2} justifyContent="space-between">
+
+      <Grid container spacing={1} padding={1}>
         <Grid item>
           <img style={{ width: "100%" }} src={img1} alt="" />
         </Grid>
