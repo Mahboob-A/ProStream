@@ -14,6 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import NavBar from "../Common/NavBar";
 import signupbg from "../../Images/signinbg.jpg";
+import { Toolbar } from "@mui/material";
 
 const defaultTheme = createTheme();
 
@@ -22,14 +23,17 @@ export default function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
+      username: data.get("username"),
       email: data.get("email"),
       password: data.get("password"),
+      password2: data.get("password2"),
     });
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <NavBar />
+      <Toolbar />
       <Box
         sx={{
           backgroundImage: `url(${signupbg})`,
@@ -69,41 +73,54 @@ export default function SignUp() {
                 <Grid item xs={12} sm={12}>
                   <TextField
                     autoComplete="given-name"
-                    name="userName"
+                    name="username"
                     required
                     fullWidth
                     id="userName"
                     label="User Name"
                     autoFocus
-                    color="success"
-                    sx={{ color: "white" }}
+                    color="secondary"
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    autoComplete="email"
                     required
                     fullWidth
                     id="email"
                     label="Email Address"
                     name="email"
-                    autoComplete="email"
+                    color="secondary"
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    autoComplete="new-password"
                     required
                     fullWidth
                     name="password"
                     label="Password"
                     type="password"
                     id="password"
+                    color="secondary"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
                     autoComplete="new-password"
+                    required
+                    fullWidth
+                    name="password2"
+                    label="Password"
+                    type="password"
+                    id="password2"
+                    color="secondary"
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <FormControlLabel
                     control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
+                      <Checkbox value="allowExtraEmails" color="secondary" />
                     }
                     label="I want to receive inspiration, marketing promotions and updates via email."
                   />
@@ -114,12 +131,13 @@ export default function SignUp() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                color="secondary"
               >
                 Sign Up
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link href="/signin" variant="body2">
+                  <Link href="/signin" variant="body2" color="secondary">
                     Already have an account? Sign in
                   </Link>
                 </Grid>

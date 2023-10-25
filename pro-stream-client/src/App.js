@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Stream from "./components/Stream/Stream";
 import Home from "./components/Home/Home";
 import AllStream from "./components/Home/AllStream";
+import ValidationPage from "./components/ForgotPassword/ValidationPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="signup" element={<SignUp />} />
           <Route path="signin" element={<SignIn />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password" element={<ValidationPage />} />
         </Routes>
       </BrowserRouter>
     </div>

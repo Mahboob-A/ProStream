@@ -17,8 +17,9 @@ const ValidationPage = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get("email"),
+      otp: data.get("otp"),
       password: data.get("password"),
+      password2: data.get("password2"),
     });
   };
 
@@ -35,6 +36,7 @@ const ValidationPage = () => {
         borderRadius: "10px",
       }}
     >
+      <Typography variant="h4">Please, give your information</Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
@@ -43,40 +45,39 @@ const ValidationPage = () => {
           id="otp"
           label="Enter your OTP"
           name="otp"
-          autoComplete="email"
+          autoComplete="off"
           autoFocus
-          color="success"
-          sx={{ color: "white" }}
+          color="secondary"
         />
         <TextField
           margin="normal"
           required
           fullWidth
-          id="email"
-          label="Enter your email or user name"
-          name="email"
-          autoComplete="email"
+          id="password"
+          label="Enter your new password"
+          name="password"
+          autoComplete="password"
           autoFocus
-          color="success"
-          sx={{ color: "white" }}
+          color="secondary"
         />
         <TextField
           margin="normal"
           required
           fullWidth
-          id="email"
-          label="Enter your email or user name"
-          name="email"
+          id="password2"
+          label="Enter your password again"
+          name="password2"
           autoComplete="email"
           autoFocus
-          color="success"
-          sx={{ color: "white" }}
+          color="secondary"
         />
         <Button
           type="submit"
           fullWidth
           variant="contained"
+          color="secondary"
           sx={{ mt: 3, mb: 2 }}
+          href="/"
         >
           Continue
         </Button>

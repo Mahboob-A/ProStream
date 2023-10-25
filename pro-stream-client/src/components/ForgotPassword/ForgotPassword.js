@@ -18,7 +18,6 @@ const ForgotPassword = () => {
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
-      password: data.get("password"),
     });
   };
 
@@ -50,18 +49,19 @@ const ForgotPassword = () => {
           required
           fullWidth
           id="email"
-          label="Enter your email or user name"
+          label="Enter your email or User name"
           name="email"
           autoComplete="email"
           autoFocus
-          color="success"
-          sx={{ color: "white" }}
+          color="secondary"
         />
         <Button
           type="submit"
           fullWidth
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          color="secondary"
+          href="/reset-password"
         >
           Continue
         </Button>

@@ -14,6 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signinbg from "../../Images/signinbg.jpg";
 import NavBar from "../Common/NavBar";
+import { Toolbar } from "@mui/material";
 const defaultTheme = createTheme();
 
 export default function SignIn() {
@@ -29,6 +30,7 @@ export default function SignIn() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <NavBar />
+      <Toolbar />
       <Box
         sx={{
           backgroundImage: `url(${signinbg})`,
@@ -69,12 +71,11 @@ export default function SignIn() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Email Address or User Name"
                 name="email"
                 autoComplete="email"
                 autoFocus
-                color="success"
-                sx={{ color: "white" }}
+                color="secondary"
               />
               <TextField
                 margin="normal"
@@ -85,9 +86,10 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                color="secondary"
               />
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={<Checkbox value="remember" color="secondary" />}
                 label="Remember me"
               />
               <Button
@@ -95,17 +97,22 @@ export default function SignIn() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                color="secondary"
               >
                 Sign In
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="/forgot-password" variant="body2">
+                  <Link
+                    href="/forgot-password"
+                    variant="body2"
+                    color="secondary"
+                  >
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/signup" variant="body2">
+                  <Link href="/signup" variant="body2" color="secondary">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

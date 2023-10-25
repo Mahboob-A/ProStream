@@ -33,7 +33,7 @@ const Stream = () => {
   return (
     <Box sx={{ marginTop: "20px", padding: "5px" }}>
       <Grid container spacing={1}>
-        <Grid item xs={12} md={7}>
+        <Grid item xs={12} md={8}>
           <Paper elevation={1}>
             <iframe
               width="100%"
@@ -113,7 +113,7 @@ const Stream = () => {
         </Grid>
 
         {/*  Chat Page */}
-        <Grid item xs={12} md={5}>
+        <Grid item xs={12} md={4}>
           <Typography sx={{ color: "white", textAlign: "center" }} variant="h4">
             Stream Chat
           </Typography>
