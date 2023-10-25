@@ -164,8 +164,13 @@ export default function NavBar() {
   );
 
   return (
-    <Box sx={{ flexGrow: 1, backgroundColor: "black" }}>
-      <AppBar position="static" sx={{ backgroundColor: "black" }}>
+    <Box
+      sx={{
+        flexGrow: 1,
+        backgroundColor: "black",
+      }}
+    >
+      <AppBar position="fixed" sx={{ backgroundColor: "black" }}>
         <Grid
           container
           spacing={12}

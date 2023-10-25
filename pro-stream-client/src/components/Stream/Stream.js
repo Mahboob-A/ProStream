@@ -1,11 +1,15 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import React from "react";
-import NavBar from "../Common/NavBar";
+import Video from "./Video";
+import Chat from "./Chat";
 
 const Stream = () => {
   return (
     <Box>
-      <NavBar />
+      <Grid container>
+        <Video />
+        <Chat />
+      </Grid>
     </Box>
   );
 };
