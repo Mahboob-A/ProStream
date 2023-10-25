@@ -9,7 +9,7 @@ import AllStream from "./components/Home/AllStream";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" style={{ backgroundColor: "black" }}>
       <BrowserRouter>
         <Routes>
           <Route path="" element={<Home />}>

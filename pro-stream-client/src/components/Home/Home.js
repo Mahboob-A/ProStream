@@ -163,8 +163,8 @@ export default function Home() {
           </List>
         </Drawer>
         {/* Main part */}
-        <Box component="main" sx={{ flexGrow: 1 }}>
-          <Toolbar />
+        <Box sx={{ flexGrow: 1 }}>
+          <Toolbar sx={{ marginBottom: "10px" }} />
           <Outlet />
         </Box>
       </Box>

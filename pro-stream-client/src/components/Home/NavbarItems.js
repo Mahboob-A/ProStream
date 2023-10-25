@@ -1,44 +1,49 @@
-import PeopleIcon from "@mui/icons-material/People";
-import ImageIcon from "@mui/icons-material/Image";
-import PublicIcon from "@mui/icons-material/Public";
-import SettingsEthernetIcon from "@mui/icons-material/SettingsEthernet";
-import SettingsInputComponentIcon from "@mui/icons-material/SettingsInputComponent";
-import DnsIcon from "@mui/icons-material/Dns";
+import Avatar from "@mui/material/Avatar";
 
 export const navbarItems = [
   {
     id: 0,
-    icon: <PeopleIcon />,
+    icon: (
+      <Avatar alt="Remy Sharp" src="https://i.ibb.co/xHhvpZj/people-1.png" />
+    ),
     label: "Authentication",
     route: "authentication",
   },
   {
     id: 1,
-    icon: <DnsIcon />,
+    icon: (
+      <Avatar alt="Remy Sharp" src="https://i.ibb.co/93k5nd5/people-2.png" />
+    ),
     label: "Database",
     route: "database",
   },
   {
     id: 2,
-    icon: <ImageIcon />,
+    icon: (
+      <Avatar alt="Remy Sharp" src="https://i.ibb.co/t3VKnps/people-3.png" />
+    ),
     label: "Storage",
     route: "storage",
   },
   {
     id: 3,
-    icon: <PublicIcon />,
+    icon: <Avatar alt="Atiq" src="https://i.ibb.co/xHhvpZj/people-1.png" />,
     label: "Hosting",
     route: "hosting",
   },
   {
     id: 4,
-    icon: <SettingsEthernetIcon />,
+    icon: (
+      <Avatar alt="Remy Sharp" src="https://i.ibb.co/93k5nd5/people-2.png" />
+    ),
     label: "Functions",
     route: "functions",
   },
   {
     id: 5,
-    icon: <SettingsInputComponentIcon />,
+    icon: (
+      <Avatar alt="Remy Sharp" src="https://i.ibb.co/t3VKnps/people-3.png" />
+    ),
     label: "Machine learning",
     route: "machine-learning",
   },
