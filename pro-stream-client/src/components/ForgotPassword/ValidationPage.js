@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-const ForgotPassword = () => {
+const ValidationPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -35,16 +35,31 @@ const ForgotPassword = () => {
         borderRadius: "10px",
       }}
     >
-      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-        <LockOutlinedIcon />
-      </Avatar>
-      <Typography component="h2" variant="h5">
-        Getting back into your ProStream account
-      </Typography>
-      <Typography component="h4" variant="h5">
-        Tell us some information about your account.
-      </Typography>
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="otp"
+          label="Enter your OTP"
+          name="otp"
+          autoComplete="email"
+          autoFocus
+          color="success"
+          sx={{ color: "white" }}
+        />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Enter your email or user name"
+          name="email"
+          autoComplete="email"
+          autoFocus
+          color="success"
+          sx={{ color: "white" }}
+        />
         <TextField
           margin="normal"
           required
@@ -70,4 +85,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ValidationPage;

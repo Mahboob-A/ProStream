@@ -4,13 +4,16 @@ import stream1 from "../../Images/stream1.png";
 import stream2 from "../../Images/stream2.png";
 import stream3 from "../../Images/stream3.png";
 import stream4 from "../../Images/stream4.png";
+import { Link } from "react-router-dom";
 
 const HeadPart = () => {
   return (
     <div>
       <Grid container>
         <Grid item xs={12} md={7}>
-          <img style={{ width: "100%" }} src={stream1} alt="" />
+          <Link to="video">
+            <img style={{ width: "100%" }} src={stream1} alt="" />
+          </Link>
         </Grid>
         <Grid item xs={12} md={5}>
           <Grid container>

@@ -4,6 +4,7 @@ import Home from "./components/Home/Home";
 import SignIn from "./components/SignIn/SignIn";
 import SignUp from "./components/SignUp/SignUp";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import Stream from "./components/Stream/Stream";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="video" element={<Stream />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="signin" element={<SignIn />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
