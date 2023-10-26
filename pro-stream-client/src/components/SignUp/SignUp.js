@@ -15,19 +15,43 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import NavBar from "../Common/NavBar";
 import signupbg from "../../Images/signinbg.jpg";
 import { Toolbar } from "@mui/material";
+import { useState } from "react";
+import axios from "axios"; // Import Axios
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const [username, setUserName] = useState(""); // State for email
+  const [email, setEmail] = useState(""); // State for email
+  const [password, setPassword] = useState(""); // State for password
+  const [password2, setPassword2] = useState(""); // State for password
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      username: data.get("username"),
-      email: data.get("email"),
-      password: data.get("password"),
-      password2: data.get("password2"),
-    });
+
+    try {
+      // Make an Axios POST request to your login endpoint
+      const response = await axios.post(
+        "http://127.0.0.1:8000/auth/register/",
+        {
+          username,
+          email,
+          password,
+          password2,
+        }
+      );
+
+      // Handle the response (e.g., set user token or redirect to a dashboard)
+      console.log("Login successful", response.data);
+      if (response.data.status == "success") {
+        navigate("/signin");
+      }
+    } catch (error) {
+      // Handle any errors (e.g., display an error message)
+      console.error("Login failed", error);
+    }
   };
 
   return (
@@ -63,12 +87,7 @@ export default function SignUp() {
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
-            >
+            <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={12}>
                   <TextField
@@ -80,6 +99,8 @@ export default function SignUp() {
                     label="User Name"
                     autoFocus
                     color="secondary"
+                    value={username}
+                    onChange={(e) => setUserName(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -91,6 +112,8 @@ export default function SignUp() {
                     label="Email Address"
                     name="email"
                     color="secondary"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -103,6 +126,8 @@ export default function SignUp() {
                     type="password"
                     id="password"
                     color="secondary"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -115,6 +140,8 @@ export default function SignUp() {
                     type="password"
                     id="password2"
                     color="secondary"
+                    value={password2}
+                    onChange={(e) => setPassword2(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -142,7 +169,7 @@ export default function SignUp() {
                   </Link>
                 </Grid>
               </Grid>
-            </Box>
+            </form>
           </Box>
         </Container>
       </Box>

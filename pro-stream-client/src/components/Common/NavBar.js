@@ -98,8 +98,8 @@ export default function NavBar() {
       onClose={handleMenuClose}
       sx={{ marginTop: "50px" }}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onChange={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onChange={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 
@@ -148,7 +148,7 @@ export default function NavBar() {
           Sign Up
         </Button>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onChange={handleProfileMenuOpen}>
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -228,7 +228,7 @@ export default function NavBar() {
                 aria-label="account of current user"
                 aria-controls={menuId}
                 aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
+                onChange={handleProfileMenuOpen}
                 color="inherit"
               >
                 <PersonOutlineIcon />
@@ -240,7 +240,7 @@ export default function NavBar() {
                 aria-label="show more"
                 aria-controls={mobileMenuId}
                 aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
+                onChange={handleMobileMenuOpen}
                 color="inherit"
               >
                 <MoreIcon />

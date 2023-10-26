@@ -91,7 +91,7 @@ const Stream = () => {
                 aria-controls={open ? "basic-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
+                onChange={handleClick}
               >
                 <MoreVert sx={{ color: "white" }} />
               </IconButton>
@@ -105,8 +105,8 @@ const Stream = () => {
                 }}
                 sx={{ marginTop: "5px" }}
               >
-                <MenuItem onClick={handleClose}>Report Live Stream</MenuItem>
-                <MenuItem onClick={handleClose}>Report Someting Else</MenuItem>
+                <MenuItem onChange={handleClose}>Report Live Stream</MenuItem>
+                <MenuItem onChange={handleClose}>Report Someting Else</MenuItem>
               </Menu>
             </Grid>
           </Grid>

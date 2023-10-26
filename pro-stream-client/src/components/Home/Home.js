@@ -107,7 +107,7 @@ export default function Home() {
           }}
         >
           <DrawerHeader>
-            <IconButton onClick={handleDrawer}>
+            <IconButton onChange={handleDrawer}>
               {open == true ? (
                 <Box
                   sx={{
@@ -136,7 +136,7 @@ export default function Home() {
             {navbarItems.map((text, index) => (
               <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
                 <ListItemButton
-                  onClick={() => navigate(text.route)}
+                  onChange={() => navigate(text.route)}
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
