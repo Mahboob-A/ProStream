@@ -81,7 +81,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Home() {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawer = () => {
     setOpen(!open);
@@ -107,8 +107,8 @@ export default function Home() {
           }}
         >
           <DrawerHeader>
-            <IconButton onChange={handleDrawer}>
-              {open == true ? (
+            <IconButton onClick={handleDrawer}>
+              {open === true ? (
                 <Box
                   sx={{
                     display: "flex",
@@ -136,7 +136,7 @@ export default function Home() {
             {navbarItems.map((text, index) => (
               <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
                 <ListItemButton
-                  onChange={() => navigate(text.route)}
+                  onClick={() => navigate(text.route)}
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
