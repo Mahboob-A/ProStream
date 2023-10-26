@@ -1,26 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import {
-  Avatar,
   Box,
   Button,
-  FormControlLabel,
-  Grid,
   TextField,
   Typography,
-  Link,
-  Checkbox,
 } from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const ValidationPage = () => {
-  const handleSubmit = (event) => {
+  const [otp, setOTP] = useState("");
+  const [error, setError] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      otp: data.get("otp"),
-      password: data.get("password"),
-      password2: data.get("password2"),
-    });
+    try {
+      const credential = localStorage.getItem("credential");
+      const response = await axios.post(
+        "http://127.0.0.1:8000/auth/reset-password-email-otp-confirmation/",
+        { otp, credential, password, password2 }
+      );
+      console.log(response);
+      if (response.data.status === "success") {
+        alert("Validation successfull");
+        navigate("/");
+      } else {
+        setError("User not found. Please check your email/username.");
+      }
+    } catch (error) {
+      console.error("Login failed", error);
+      setError("An error occurred. Please try again later.");
+    }
   };
 
   return (
@@ -37,6 +50,7 @@ const ValidationPage = () => {
       }}
     >
       <Typography variant="h4">Please, give your information</Typography>
+      {error && <p className="error">{error}</p>}
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
@@ -48,6 +62,8 @@ const ValidationPage = () => {
           autoComplete="off"
           autoFocus
           color="secondary"
+          value={otp}
+          onChange={(e) => setOTP(e.target.value)}
         />
         <TextField
           margin="normal"
@@ -59,6 +75,8 @@ const ValidationPage = () => {
           autoComplete="password"
           autoFocus
           color="secondary"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <TextField
           margin="normal"
@@ -67,9 +85,11 @@ const ValidationPage = () => {
           id="password2"
           label="Enter your password again"
           name="password2"
-          autoComplete="email"
+          autoComplete="password"
           autoFocus
           color="secondary"
+          value={password2}
+          onChange={(e) => setPassword2(e.target.value)}
         />
         <Button
           type="submit"
@@ -77,7 +97,6 @@ const ValidationPage = () => {
           variant="contained"
           color="secondary"
           sx={{ mt: 3, mb: 2 }}
-          href="/"
         >
           Continue
         </Button>
