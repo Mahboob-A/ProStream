@@ -64,29 +64,38 @@ const Stream = () => {
             ></iframe>
           </Paper>
           <Stack direction="column" spacing={1}>
-            <Grid container alignItems="center" spacing={1}>
+            <Grid
+              container
+              alignItems="center"
+              spacing={1}
+              justifyContent="space-between"
+            >
               <Grid item>
-                <Avatar
-                  sx={{ height: "70px", width: "70px" }}
-                  src="https://i.ibb.co/xHhvpZj/people-1.png"
-                />
-              </Grid>
-              <Grid item>
-                <Typography variant="h5" sx={{ color: "white" }}>
-                  Atiqur Rahman
-                </Typography>
-                <Typography variant="body2" sx={{ color: "white" }}>
-                  [Drops] New battle item inventory
-                </Typography>
-                <Typography variant="h6" sx={{ color: "white" }}>
-                  Category name
-                </Typography>
-                <Typography variant="body" sx={{ color: "white" }}>
-                  tag1
-                </Typography>{" "}
-                <Typography variant="body" sx={{ color: "white" }}>
-                  tag2
-                </Typography>
+                <Grid container alignItems="center" spacing={1}>
+                  <Grid item>
+                    <Avatar
+                      sx={{ height: "70px", width: "70px" }}
+                      src="https://i.ibb.co/xHhvpZj/people-1.png"
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Typography variant="h5" sx={{ color: "white" }}>
+                      Atiqur Rahman
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: "white" }}>
+                      [Drops] New battle item inventory
+                    </Typography>
+                    <Typography variant="h6" sx={{ color: "white" }}>
+                      Category name
+                    </Typography>
+                    <Typography variant="body" sx={{ color: "white" }}>
+                      tag1
+                    </Typography>{" "}
+                    <Typography variant="body" sx={{ color: "white" }}>
+                      tag2
+                    </Typography>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item>
                 <Button
