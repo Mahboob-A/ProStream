@@ -20,7 +20,7 @@ class EmailUser:
                         from_email=  settings.EMAIL_HOST_USER,  # os.environ.get('EMAIL_HOST_USER'), #settings.EMAIL_HOST_USER,  
                         to=[data.get('recipient_email')]
                 )
-                print('here now')
+                print('Sending email...')
                 email.content_subtype = 'html'
                 email.send()
                 
@@ -47,7 +47,7 @@ def get_tokens_for_user(user):
                 'access': str(refresh.access_token),
         }
 
-def format_email(user, link=None, otp=None): 
+def format_email(user, link=None, reset_otp=None, login_otp=None): 
         ''' formats the email body based on the reset type - link and otp  '''
         ''' returns the fully formatted email body  '''
         
@@ -66,7 +66,7 @@ def format_email(user, link=None, otp=None):
         ProStream Team. <br> 
                                 
         ''', user.username, link)
-        else: 
+        elif reset_otp: 
                 email_body = format_html(
         ''' 
         Howdy {}! <br> <br>
@@ -79,15 +79,39 @@ def format_email(user, link=None, otp=None):
         Thank you, <br>
         ProStream Team. <br> 
                                 
-        ''', user.username, otp)
+        ''', user.username, reset_otp)
+        else: 
+                email_body = format_html(
+        ''' 
+        Howdy {}! <br> <br>
+        You requested to login in ProStream using OTP.  <br> <br>
+        Here is your OTP {} to login to your account. Never share this OTP with anyone.&#128578; <br> <br>
+        Remember, this OTP is only valid for 5 minutes! <br> <br>
+
+       <br><br><br><br> <br> <br> <br> <br> 
+
+        Thank you, <br>
+        ProStream Team. <br> 
+                                
+        ''', user.username, login_otp)
+                
         
         # email data  
-        data = {
-                'subject' : 'Reset Your Password in ProStream!',
-                'body' : email_body, 
-                'recipient_email' : user.email, 
-        }
-        return data 
+        if link or reset_otp: 
+                data = {
+                        'subject' : 'Reset Your Password in ProStream!',
+                        'body' : email_body, 
+                        'recipient_email' : user.email, 
+                }
+                return data 
+        else: # if login_otp is sent 
+                data = {
+                        'subject' : 'OTP to Login in ProStream!',
+                        'body' : email_body, 
+                        'recipient_email' : user.email, 
+                }
+                return data 
+                
 
 
 def generate_otp(otp_size=6): 

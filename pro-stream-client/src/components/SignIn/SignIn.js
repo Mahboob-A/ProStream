@@ -22,7 +22,7 @@ import { useNavigate } from "react-router-dom";
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [email, setEmail] = useState(""); // State for email
+  const [credential, setCredential] = useState(""); // State for email
   const [password, setPassword] = useState(""); // State for password
   const navigate = useNavigate();
 
@@ -32,7 +32,7 @@ export default function SignIn() {
     try {
       // Make an Axios POST request to your login endpoint
       const response = await axios.post("http://127.0.0.1:8000/auth/login/", {
-        email,
+        credential,
         password,
       });
 
@@ -99,8 +99,8 @@ export default function SignIn() {
                 autoComplete="email"
                 autoFocus
                 color="secondary"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={credential}
+                onChange={(e) => setCredential(e.target.value)}
               />
               <TextField
                 margin="normal"
