@@ -3,10 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
@@ -21,9 +17,8 @@ import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
-  const [credential, setCredential] = useState(""); // State for email
-  const [password, setPassword] = useState(""); // State for password
+const LogInOTP = () => {
+  const [credential, setCredential] = useState(""); // State for email or username
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -31,29 +26,23 @@ export default function SignIn() {
 
     try {
       // Make an Axios POST request to your login endpoint
-      const response = await axios.post("http://127.0.0.1:8000/auth/login/", {
-        credential,
-        password,
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:8000/auth/login-with-otp-email/",
+        {
+          credential,
+        }
+      );
 
       // Handle the response (e.g., set user token or redirect to a dashboard)
       console.log("Login successful", response.data);
       if (response.data.status == "success") {
-        navigate("/");
+        navigate("/login-with-otp-email-confirmation");
       }
     } catch (error) {
       // Handle any errors (e.g., display an error message)
       console.error("Login failed", error);
     }
   };
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get("email"),
-  //     password: data.get("password"),
-  //   });
-  // };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -85,8 +74,9 @@ export default function SignIn() {
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign in
+            <Typography variant="h5">Sign in with OTP</Typography>
+            <Typography variant="body">
+              Please give your valid information
             </Typography>
             <form onSubmit={handleSubmit}>
               <TextField
@@ -102,42 +92,7 @@ export default function SignIn() {
                 value={credential}
                 onChange={(e) => setCredential(e.target.value)}
               />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                color="secondary"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
 
-              <Grid
-                container
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Grid item>
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="secondary" />}
-                    label="Remember me"
-                  />
-                </Grid>
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    sx={{ textTransform: "capitalize" }}
-                    href="/login-with-otp"
-                  >
-                    Sign In With OTP
-                  </Button>
-                </Grid>
-              </Grid>
               <Button
                 type="submit"
                 fullWidth
@@ -145,28 +100,14 @@ export default function SignIn() {
                 sx={{ mt: 3, mb: 2 }}
                 color="secondary"
               >
-                Sign In
+                Continue
               </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link
-                    href="/forgot-password"
-                    variant="body2"
-                    color="secondary"
-                  >
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/signup" variant="body2" color="secondary">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
             </form>
           </Box>
         </Container>
       </Box>
     </ThemeProvider>
   );
-}
+};
+
+export default LogInOTP;

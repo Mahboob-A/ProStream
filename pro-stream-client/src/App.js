@@ -7,6 +7,8 @@ import Stream from "./components/Stream/Stream";
 import Home from "./components/Home/Home";
 import AllStream from "./components/Home/AllStream";
 import ValidationPage from "./components/ForgotPassword/ValidationPage";
+import LogInOTP from "./components/SignIn/LogInOTP";
+import ConfirmOTP from "./components/SignIn/ConfirmOTP";
 
 function App() {
   return (
@@ -19,8 +21,14 @@ function App() {
           </Route>
           <Route path="signup" element={<SignUp />} />
           <Route path="signin" element={<SignIn />} />
+          <Route path="change-password" element={<ForgotPassword />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
           <Route path="reset-password" element={<ValidationPage />} />
+          <Route path="login-with-otp" element={<LogInOTP />} />
+          <Route
+            path="login-with-otp-email-confirmation"
+            element={<ConfirmOTP />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
