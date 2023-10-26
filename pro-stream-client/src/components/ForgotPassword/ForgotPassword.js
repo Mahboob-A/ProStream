@@ -61,7 +61,7 @@ const ForgotPassword = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
           color="secondary"
-          href="/reset-password"
+          href="/otp-validation"
         >
           Continue
         </Button>

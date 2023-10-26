@@ -38,7 +38,7 @@ export default function SignIn() {
 
       // Handle the response (e.g., set user token or redirect to a dashboard)
       console.log("Login successful", response.data);
-      if (response.data.status == "success") {
+      if (response.data.status === "success") {
         navigate("/");
       }
     } catch (error) {
@@ -155,6 +155,13 @@ export default function SignIn() {
                     color="secondary"
                   >
                     Forgot password?
+                  </Link>
+                  <Link
+                    href="/change-password"
+                    variant="body2"
+                    color="secondary"
+                  >
+                    Change Password
                   </Link>
                 </Grid>
                 <Grid item>

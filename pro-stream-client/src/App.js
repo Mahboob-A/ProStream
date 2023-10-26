@@ -9,6 +9,8 @@ import AllStream from "./components/Home/AllStream";
 import ValidationPage from "./components/ForgotPassword/ValidationPage";
 import LogInOTP from "./components/SignIn/LogInOTP";
 import ConfirmOTP from "./components/SignIn/ConfirmOTP";
+import ChangePassword from "./components/ForgotPassword/ChangePassword";
+import ConfirmChangePassword from "./components/ForgotPassword/ConfirmChangePassword";
 
 function App() {
   return (
@@ -21,9 +23,13 @@ function App() {
           </Route>
           <Route path="signup" element={<SignUp />} />
           <Route path="signin" element={<SignIn />} />
-          <Route path="change-password" element={<ForgotPassword />} />
+          <Route path="change-password" element={<ChangePassword />} />
+          {/* <Route
+            path="reset-password/:encoded_uuid/:password_token"
+            element={<ConfirmChangePassword />}
+          /> */}
           <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="reset-password" element={<ValidationPage />} />
+          <Route path="otp-validation" element={<ValidationPage />} />
           <Route path="login-with-otp" element={<LogInOTP />} />
           <Route
             path="login-with-otp-email-confirmation"
