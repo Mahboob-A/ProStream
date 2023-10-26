@@ -36,25 +36,23 @@ class RegistrationAPI(APIView):
 
 class LoginAPI(APIView): 
         ''' Authenticates an user with either username or email and password, and passes token '''
-        def post(self, request): 
-                serializer = LoginSerializer(data=request.data)
-                if serializer.is_valid(): 
+        def post(self, request):
                         
-                        username = serializer.validated_data.get('username', None)
-                        email = serializer.validated_data.get('email', None)
-                        password = serializer.validated_data.get('password', None)
-                        
-                        # users are able to log in using either username or email and password 
-                        if username: 
-                                user = authenticate(request, username=username,  password=password)
-                        else: 
-                                user = authenticate(request, email=email,  password=password)
-                                 
-                        if user is not None: 
-                                token = get_tokens_for_user(user)
-                                return Response({'status' : 'success', 'token' : token}, status=status.HTTP_200_OK)
-                        return Response({'status' : 'error', 'data' : {'non_field_errors' : ['Username, email or password is incorrect']}}, status=status.HTTP_404_NOT_FOUND)
-                return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_404_NOT_FOUND)
+                username_or_email = request.data.get('credential', None)
+                password = request.data.get('password', None)
+                # users are able to log in using either username or email and password 
+                
+                # try authenticating using username 
+                user = authenticate(request, username=username_or_email,  password=password)
+              
+                # now trying to authenticate the user with the email.   
+                if user is None: 
+                        user = authenticate(request, email=username_or_email,  password=password)
+                if user is not None: 
+                        token = get_tokens_for_user(user)
+                        return Response({'status' : 'success', 'token' : token}, status=status.HTTP_200_OK)
+                return Response({'status' : 'error', 'data' : {'non_field_errors' : ['Username, email or password is incorrect']}}, status=status.HTTP_404_NOT_FOUND)
+               
                         
 
 
