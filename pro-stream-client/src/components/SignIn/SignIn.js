@@ -15,17 +15,45 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signinbg from "../../Images/signinbg.jpg";
 import NavBar from "../Common/NavBar";
 import { Toolbar } from "@mui/material";
+import { useState } from "react";
+import axios from "axios"; // Import Axios
+import { useNavigate } from "react-router-dom";
+
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const [email, setEmail] = useState(""); // State for email
+  const [password, setPassword] = useState(""); // State for password
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    try {
+      // Make an Axios POST request to your login endpoint
+      const response = await axios.post("http://127.0.0.1:8000/auth/login/", {
+        email,
+        password,
+      });
+
+      // Handle the response (e.g., set user token or redirect to a dashboard)
+      console.log("Login successful", response.data);
+      if (response.data.status == "success") {
+        navigate("/");
+      }
+    } catch (error) {
+      // Handle any errors (e.g., display an error message)
+      console.error("Login failed", error);
+    }
   };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get("email"),
+  //     password: data.get("password"),
+  //   });
+  // };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -60,12 +88,7 @@ export default function SignIn() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
-            >
+            <form onSubmit={handleSubmit}>
               <TextField
                 margin="normal"
                 required
@@ -76,6 +99,8 @@ export default function SignIn() {
                 autoComplete="email"
                 autoFocus
                 color="secondary"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -87,7 +112,10 @@ export default function SignIn() {
                 id="password"
                 autoComplete="current-password"
                 color="secondary"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
+
               <FormControlLabel
                 control={<Checkbox value="remember" color="secondary" />}
                 label="Remember me"
@@ -117,7 +145,7 @@ export default function SignIn() {
                   </Link>
                 </Grid>
               </Grid>
-            </Box>
+            </form>
           </Box>
         </Container>
       </Box>
