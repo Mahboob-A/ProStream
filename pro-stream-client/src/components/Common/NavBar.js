@@ -15,6 +15,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Button, Grid, Link } from "@mui/material";
 import logo from "../../Images/prostream.png";
+import { useNavigate } from "react-router-dom";
+
+const credential = localStorage.getItem("credential");
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -59,7 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function NavBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const navigate = useNavigate();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -78,6 +81,11 @@ export default function NavBar() {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  const handleLogout = (e) => {
+    localStorage.removeItem("credential");
+    window.location.reload();
   };
 
   const menuId = "primary-search-account-menu";
@@ -100,6 +108,11 @@ export default function NavBar() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {credential && (
+        <MenuItem onClick={() => navigate("/change-password")}>
+          Change Password
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -121,33 +134,66 @@ export default function NavBar() {
       onClose={handleMobileMenuClose}
       sx={{ marginTop: "50px" }}
     >
-      <MenuItem>
-        <Button
-          sx={{
-            color: "white",
-            backgroundColor: "gray",
-            paddingX: "10px",
-            marginRight: "5px",
-            textTransform: "capitalize",
-          }}
-          href="/signin"
-        >
-          Sign In
-        </Button>
-      </MenuItem>
-      <MenuItem>
-        <Button
-          sx={{
-            color: "white",
-            backgroundColor: "gray",
-            paddingX: "10px",
-            textTransform: "capitalize",
-          }}
-          href="/signup"
-        >
-          Sign Up
-        </Button>
-      </MenuItem>
+      {!credential ? (
+        <>
+          <MenuItem>
+            <Button
+              sx={{
+                color: "white",
+                backgroundColor: "gray",
+                paddingX: "10px",
+                marginRight: "5px",
+                textTransform: "capitalize",
+              }}
+              href="/signin"
+            >
+              Sign In
+            </Button>
+          </MenuItem>
+          <MenuItem>
+            <Button
+              sx={{
+                color: "white",
+                backgroundColor: "gray",
+                paddingX: "10px",
+                textTransform: "capitalize",
+              }}
+              href="/signup"
+            >
+              Sign Up
+            </Button>
+          </MenuItem>
+        </>
+      ) : (
+        <>
+          <Button
+            sx={{
+              color: "white",
+              backgroundColor: "gray",
+              paddingX: "10px",
+              marginRight: "5px",
+              textTransform: "capitalize",
+            }}
+            href="#"
+          >
+            Become Streamer
+          </Button>
+          <MenuItem>
+            <Button
+              sx={{
+                color: "white",
+                backgroundColor: "gray",
+                paddingX: "10px",
+                textTransform: "capitalize",
+              }}
+              href="#"
+              onClick={() => handleLogout()}
+            >
+              Logout
+            </Button>
+          </MenuItem>
+        </>
+      )}
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -199,29 +245,60 @@ export default function NavBar() {
           <Grid item>
             {/* <Box sx={{ flexGrow: 1 }} /> */}
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <Button
-                sx={{
-                  color: "white",
-                  backgroundColor: "gray",
-                  paddingX: "10px",
-                  marginRight: "5px",
-                  textTransform: "capitalize",
-                }}
-                href="/signin"
-              >
-                Sign In
-              </Button>
-              <Button
-                sx={{
-                  color: "white",
-                  backgroundColor: "gray",
-                  paddingX: "10px",
-                  textTransform: "capitalize",
-                }}
-                href="/signup"
-              >
-                Sign Up
-              </Button>
+              {!credential ? (
+                <>
+                  <Button
+                    sx={{
+                      color: "white",
+                      backgroundColor: "gray",
+                      paddingX: "10px",
+                      marginRight: "5px",
+                      textTransform: "capitalize",
+                    }}
+                    href="/signin"
+                  >
+                    Sign In
+                  </Button>
+                  <Button
+                    sx={{
+                      color: "white",
+                      backgroundColor: "gray",
+                      paddingX: "10px",
+                      textTransform: "capitalize",
+                    }}
+                    href="/signup"
+                  >
+                    Sign Up
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    sx={{
+                      color: "white",
+                      backgroundColor: "gray",
+                      paddingX: "10px",
+                      marginRight: "5px",
+                      textTransform: "capitalize",
+                    }}
+                    href="#"
+                  >
+                    Become Streamer
+                  </Button>
+                  <Button
+                    sx={{
+                      color: "white",
+                      backgroundColor: "gray",
+                      paddingX: "10px",
+                      textTransform: "capitalize",
+                    }}
+                    href="#"
+                    onClick={() => handleLogout()}
+                  >
+                    Logout
+                  </Button>
+                </>
+              )}
               <IconButton
                 size="large"
                 edge="end"

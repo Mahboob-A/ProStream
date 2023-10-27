@@ -18,14 +18,16 @@ import { useNavigate } from "react-router-dom";
 const defaultTheme = createTheme();
 
 const ConfirmOTP = () => {
-  const [credential, setCredential] = useState(""); // State for email or username
   const [otp, setOtp] = useState(); // State for email or username
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
+      const credential = localStorage.getItem("credential");
+      console.log(credential);
       // Make an Axios POST request to your login endpoint
       const response = await axios.post(
         "http://127.0.0.1:8000/auth/login-with-otp-email-confirmation/",
@@ -38,11 +40,18 @@ const ConfirmOTP = () => {
       // Handle the response (e.g., set user token or redirect to a dashboard)
       console.log("Login successful", response.data);
       if (response.data.status == "success") {
+        alert("You are successfully login. Go to home page.");
         navigate("/");
+        window.location.reload();
+      } else {
+        setError("Please, provide right OTP.");
       }
     } catch (error) {
       // Handle any errors (e.g., display an error message)
-      console.error("Login failed", error);
+      // console.error("Login failed", error);
+      if (error.response && error.response.data) {
+        setError("An error occurred. Please try again later.");
+      }
     }
   };
 
@@ -53,9 +62,11 @@ const ConfirmOTP = () => {
       <Box
         sx={{
           backgroundImage: `url(${signinbg})`,
-          backgroundRepeat: `no-repeat`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
           opacity: ".9",
-          height: "100%",
+          height: "100vh",
           width: "100%",
         }}
       >
@@ -78,19 +89,6 @@ const ConfirmOTP = () => {
             </Avatar>
             <Typography variant="h5">Confirm Your OTP</Typography>
             <form onSubmit={handleSubmit}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address or User Name"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                color="secondary"
-                value={credential}
-                onChange={(e) => setCredential(e.target.value)}
-              />
               <TextField
                 margin="normal"
                 required

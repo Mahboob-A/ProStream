@@ -16,7 +16,7 @@ import ListItemText from "@mui/material/ListItemText";
 import { navbarItems } from "./NavbarItems";
 import { Outlet, useNavigate } from "react-router-dom";
 import NavBar from "../Common/NavBar";
-import { Toolbar, Typography } from "@mui/material";
+import { Grid, Toolbar, Typography } from "@mui/material";
 
 const drawerWidth = 240;
 
@@ -153,10 +153,21 @@ export default function Home() {
                   >
                     {text.icon}
                   </ListItemIcon>
-                  <ListItemText
-                    primary={text.label}
+                  <Grid
+                    container
+                    justifyContent="space-between"
                     sx={{ opacity: open ? 1 : 0 }}
-                  />
+                  >
+                    <Grid item>
+                      <ListItemText primary={text.label} />
+                    </Grid>
+                    <Grid item>
+                      <ListItemText
+                        primary={text.watching}
+                        sx={{ color: "red" }}
+                      />
+                    </Grid>
+                  </Grid>
                 </ListItemButton>
               </ListItem>
             ))}

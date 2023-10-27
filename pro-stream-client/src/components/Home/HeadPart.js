@@ -1,15 +1,15 @@
 import React from "react";
-import { Grid } from "@mui/material";
-import stream1 from "../../Images/stream1.png";
-import stream2 from "../../Images/stream2.png";
-import stream3 from "../../Images/stream3.png";
-import stream4 from "../../Images/stream4.png";
+import { Box, Grid } from "@mui/material";
+import stream1 from "../../Images/Stream/main_stream2.jpg";
+import stream2 from "../../Images/Stream/main_stream.jpg";
+import stream3 from "../../Images/Stream/stream1.webp";
+import stream4 from "../../Images/Stream/stream2.png";
 import { Link } from "react-router-dom";
 
 const HeadPart = () => {
   return (
-    <div>
-      <Grid container>
+    <Box>
+      <Grid container alignItems="center">
         <Grid item xs={12} md={7}>
           <Link to="video">
             <img style={{ width: "100%" }} src={stream1} alt="" />
@@ -17,8 +17,8 @@ const HeadPart = () => {
         </Grid>
         <Grid item xs={12} md={5}>
           <Grid container>
-            <Grid item container>
-              <Grid item xs={12} md={12}>
+            <Grid item>
+              <Grid container>
                 <img style={{ width: "100%" }} src={stream2} alt="" />
               </Grid>
             </Grid>
@@ -33,7 +33,7 @@ const HeadPart = () => {
           </Grid>
         </Grid>
       </Grid>
-    </div>
+    </Box>
   );
 };
 

@@ -1,7 +1,6 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -18,6 +17,8 @@ import { Toolbar } from "@mui/material";
 import { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const defaultTheme = createTheme();
 
@@ -27,6 +28,8 @@ export default function SignUp() {
   const [password, setPassword] = useState(""); // State for password
   const [password2, setPassword2] = useState(""); // State for password
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -44,15 +47,33 @@ export default function SignUp() {
       );
 
       // Handle the response (e.g., set user token or redirect to a dashboard)
-      console.log("Login successful", response.data);
+      // console.log(response.data);
       if (response.data.status == "success") {
-        navigate("/signin");
+        setUserName(""); // Clear the username field
+        setEmail(""); // Clear the email field
+        setPassword(""); // Clear the password field
+        setPassword2(""); // Clear the password2 field
+
+        setSuccessMessage("Registration successful!");
+        setErrors({});
+        // alert("Go to sign in page");
+        // navigate("/signin");
+      } else {
+        setSuccessMessage("");
+        setErrors(response.data.data);
       }
     } catch (error) {
-      // Handle any errors (e.g., display an error message)
-      console.error("Login failed", error);
+      setSuccessMessage("");
+      if (error.response && error.response.data) {
+        setErrors(error.response.data.data);
+      }
+      // console.error("Registration failed", error.response.data);
+      // setErrors(error.response.data);
+      // console.error(error.response.data.data);
     }
   };
+  // console.log(errors);
+  // console.log(successMessage);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -61,10 +82,12 @@ export default function SignUp() {
       <Box
         sx={{
           backgroundImage: `url(${signupbg})`,
-          backgroundRepeat: `no-repeat`,
-          opacity: ".9",
-          height: "100%",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
           width: "100%",
+          height: "100vh",
+          opacity: ".9",
         }}
       >
         <Container component="main" maxWidth="xs" sx={{ padding: 2 }}>
@@ -87,6 +110,44 @@ export default function SignUp() {
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
+            <Box>
+              {successMessage && (
+                <Alert severity="success" sx={{ marginY: "15px" }}>
+                  <AlertTitle>Success</AlertTitle>
+                  {successMessage}
+                </Alert>
+              )}
+              {errors.email && (
+                <Alert severity="error" sx={{ marginY: "15px" }}>
+                  <AlertTitle>Error</AlertTitle>
+                  {errors.email[0]}
+                </Alert>
+              )}
+              {errors.username && (
+                <Alert severity="error" sx={{ marginY: "15px" }}>
+                  <AlertTitle>Error</AlertTitle>
+                  {errors.username[0]}
+                </Alert>
+              )}
+              {errors.non_field_errors && (
+                <Alert severity="error" sx={{ marginY: "15px" }}>
+                  <AlertTitle>Error</AlertTitle>
+                  {errors.non_field_errors[0]}
+                </Alert>
+              )}
+              {errors.password && (
+                <Alert severity="error" sx={{ marginY: "15px" }}>
+                  <AlertTitle>1st Password Error</AlertTitle>
+                  {errors.password[0]}
+                </Alert>
+              )}
+              {errors.password2 && (
+                <Alert severity="error" sx={{ marginY: "15px" }}>
+                  <AlertTitle>2nd Password Error</AlertTitle>
+                  {errors.password2[0]}
+                </Alert>
+              )}
+            </Box>
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={12}>
@@ -136,7 +197,7 @@ export default function SignUp() {
                     required
                     fullWidth
                     name="password2"
-                    label="Password"
+                    label="Confirm Password"
                     type="password"
                     id="password2"
                     color="secondary"

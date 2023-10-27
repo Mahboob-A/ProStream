@@ -14,12 +14,15 @@ import { Toolbar } from "@mui/material";
 import { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const defaultTheme = createTheme();
 
 const LogInOTP = () => {
   const [credential, setCredential] = useState(""); // State for email or username
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -34,13 +37,18 @@ const LogInOTP = () => {
       );
 
       // Handle the response (e.g., set user token or redirect to a dashboard)
-      console.log("Login successful", response.data);
+      console.log(response.data);
       if (response.data.status == "success") {
+        localStorage.setItem("credential", credential);
+        alert("Email send successfully. Please, check your email.");
         navigate("/login-with-otp-email-confirmation");
+      } else {
+        setError("User not found. Please check your email/username.");
       }
     } catch (error) {
       // Handle any errors (e.g., display an error message)
-      console.error("Login failed", error);
+      // console.error("Login failed", error);
+      setError("An error occurred. Please try again later.");
     }
   };
 
@@ -52,9 +60,11 @@ const LogInOTP = () => {
         sx={{
           backgroundImage: `url(${signinbg})`,
           backgroundRepeat: `no-repeat`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
           opacity: ".9",
-          height: "100%",
           width: "100%",
+          height: "100vh",
         }}
       >
         <Container component="main" maxWidth="xs" sx={{ padding: 4 }}>
@@ -78,6 +88,12 @@ const LogInOTP = () => {
             <Typography variant="body">
               Please give your valid information
             </Typography>
+            {error && (
+              <Alert severity="error" sx={{ marginY: "15px" }}>
+                <AlertTitle>Error</AlertTitle>
+                {error}
+              </Alert>
+            )}
             <form onSubmit={handleSubmit}>
               <TextField
                 margin="normal"

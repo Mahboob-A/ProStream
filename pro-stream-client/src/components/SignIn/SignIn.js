@@ -18,6 +18,8 @@ import { Toolbar } from "@mui/material";
 import { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const defaultTheme = createTheme();
 
@@ -25,6 +27,8 @@ export default function SignIn() {
   const [credential, setCredential] = useState(""); // State for email
   const [password, setPassword] = useState(""); // State for password
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -39,13 +43,24 @@ export default function SignIn() {
       // Handle the response (e.g., set user token or redirect to a dashboard)
       console.log("Login successful", response.data);
       if (response.data.status === "success") {
+        localStorage.setItem('credential', credential);
+        alert("Sign In Successfully complete. Now, Go to home page");
         navigate("/");
+        window.location.reload();
+      } else {
+        setSuccessMessage("");
+        setErrors(response.data.data);
       }
     } catch (error) {
-      // Handle any errors (e.g., display an error message)
-      console.error("Login failed", error);
+      console.error("Login failed", error.response.data);
+      if (error.response && error.response.data) {
+        setErrors(error.response.data.data);
+      }
     }
   };
+  console.log(errors);
+  console.log(successMessage);
+
   // const handleSubmit = (event) => {
   //   event.preventDefault();
   //   const data = new FormData(event.currentTarget);
@@ -62,9 +77,11 @@ export default function SignIn() {
       <Box
         sx={{
           backgroundImage: `url(${signinbg})`,
-          backgroundRepeat: `no-repeat`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
           opacity: ".9",
-          height: "100%",
+          height: "100vh",
           width: "100%",
         }}
       >
@@ -88,6 +105,44 @@ export default function SignIn() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+            <Box>
+              {successMessage && (
+                <Alert severity="success" sx={{ marginY: "15px" }}>
+                  <AlertTitle>Success</AlertTitle>
+                  {successMessage}
+                </Alert>
+              )}
+              {errors.email && (
+                <Alert severity="error" sx={{ marginY: "15px" }}>
+                  <AlertTitle>Error</AlertTitle>
+                  {errors.email[0]}
+                </Alert>
+              )}
+              {errors.username && (
+                <Alert severity="error" sx={{ marginY: "15px" }}>
+                  <AlertTitle>Error</AlertTitle>
+                  {errors.username[0]}
+                </Alert>
+              )}
+              {errors.non_field_errors && (
+                <Alert severity="error" sx={{ marginY: "15px" }}>
+                  <AlertTitle>Error</AlertTitle>
+                  {errors.non_field_errors[0]}
+                </Alert>
+              )}
+              {errors.password && (
+                <Alert severity="error" sx={{ marginY: "15px" }}>
+                  <AlertTitle>1st Password Error</AlertTitle>
+                  {errors.password[0]}
+                </Alert>
+              )}
+              {errors.password2 && (
+                <Alert severity="error" sx={{ marginY: "15px" }}>
+                  <AlertTitle>2nd Password Error</AlertTitle>
+                  {errors.password2[0]}
+                </Alert>
+              )}
+            </Box>
             <form onSubmit={handleSubmit}>
               <TextField
                 margin="normal"
@@ -155,13 +210,6 @@ export default function SignIn() {
                     color="secondary"
                   >
                     Forgot password?
-                  </Link>
-                  <Link
-                    href="/change-password"
-                    variant="body2"
-                    color="secondary"
-                  >
-                    Change Password
                   </Link>
                 </Grid>
                 <Grid item>

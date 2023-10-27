@@ -21,6 +21,8 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import SendIcon from "@mui/icons-material/Send";
 import stream1 from "../../Images/stream1.png";
+import stream2 from "../../Images/mickey_mouse.png";
+import stream3 from "../../Images/stream3.png";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -189,16 +191,56 @@ const Stream = () => {
             </Stack>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <img style={{ width: "100%" }} src={stream1} alt="" />
+                <Stack direction="column">
+                  <Typography variant="h5" sx={{ color: "white" }}>
+                    Hi,
+                  </Typography>
+                  <Typography variant="h5" sx={{ color: "white" }}>
+                    My name is Atiqur Rahman
+                  </Typography>
+                  <Typography
+                    variant="text"
+                    sx={{ color: "white", marginTop: "20px" }}
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Est
+                    dolores enim consequuntur, alias sapiente voluptates
+                    consectetur, ipsam possimus qui eum hic ipsum amet ipsa
+                    distinctio assumenda laboriosam ullam ea molestias.
+                  </Typography>
+                </Stack>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <img style={{ width: "100%" }} src={stream1} alt="" />
+                <img
+                  style={{ width: "100%", height: "300px" }}
+                  src={stream2}
+                  alt=""
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <img style={{ width: "100%" }} src={stream1} alt="" />
+                <img
+                  style={{ width: "100%", height: "300px" }}
+                  src={stream2}
+                  alt=""
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <img style={{ width: "100%" }} src={stream1} alt="" />
+                <Stack direction="column">
+                  <Typography variant="h5" sx={{ color: "white" }}>
+                    All Videos
+                  </Typography>
+                  <Typography variant="h5" sx={{ color: "white" }}>
+                    My videos are technical education.
+                  </Typography>
+                  <Typography
+                    variant="text"
+                    sx={{ color: "white", marginTop: "20px" }}
+                  >
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Est
+                    dolores enim consequuntur, alias sapiente voluptates
+                    consectetur, ipsam possimus qui eum hic ipsum amet ipsa
+                    distinctio assumenda laboriosam ullam ea molestias.
+                  </Typography>
+                </Stack>
               </Grid>
             </Grid>
           </Stack>
