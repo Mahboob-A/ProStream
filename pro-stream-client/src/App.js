@@ -12,16 +12,20 @@ import ConfirmOTP from "./components/SignIn/ConfirmOTP";
 import ChangePassword from "./components/ForgotPassword/ChangePassword";
 import ConfirmChangePassword from "./components/ForgotPassword/ConfirmChangePassword";
 import { useSelector } from "react-redux";
+import NavBar from "./components/Common/NavBar";
+import Footer from "./components/Common/Footer";
 function App() {
   // access access_token from redux state
   const { access_token } = useSelector((state) => state.auth);
   return (
     <div className="App" style={{ backgroundColor: "black" }}>
       <BrowserRouter>
+        <NavBar />
         <Routes>
           <Route
             path=""
-            element={access_token ? <Home /> : <Navigate to="/signin" />}
+            // element={access_token ? <Home /> : <Navigate to="/signin" />} // home page private route
+            element={<Home />}
           >
             <Route path="/" element={<AllStream />} />
             <Route path="video" element={<Stream />} />
@@ -61,6 +65,7 @@ function App() {
             element={!access_token ? <ConfirmOTP /> : <Navigate to="/" />}
           />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );

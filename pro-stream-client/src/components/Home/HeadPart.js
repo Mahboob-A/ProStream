@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Grid } from "@mui/material";
 import stream1 from "../../Images/Stream/main_stream2.jpg";
 import stream2 from "../../Images/Stream/main_stream.jpg";
-import stream3 from "../../Images/Stream/stream1.webp";
+import stream3 from "../../Images/Stream/showgunners.jpg";
 import stream4 from "../../Images/Stream/stream2.png";
 import { Link } from "react-router-dom";
 
