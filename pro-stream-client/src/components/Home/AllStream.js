@@ -13,8 +13,8 @@ const AllStream = () => {
       <HeadPart />
       <Category />
       <Trending />
-      <Playlists />
-      <Gaming />
+      {/* <Playlists />
+      <Gaming /> */}
     </Box>
   );
 };

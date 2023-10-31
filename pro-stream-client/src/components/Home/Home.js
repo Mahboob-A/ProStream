@@ -17,6 +17,9 @@ import { navbarItems } from "./NavbarItems";
 import { Outlet, useNavigate } from "react-router-dom";
 import NavBar from "../Common/NavBar";
 import { Grid, Toolbar, Typography } from "@mui/material";
+import { getToken } from "../../services/LocalStorageService";
+import { setUserToken } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -82,11 +85,16 @@ export default function Home() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
+  const dispatch = useDispatch();
 
   const handleDrawer = () => {
     setOpen(!open);
   };
 
+  let { access_token } = getToken();
+  React.useEffect(() => {
+    dispatch(setUserToken({ access_token: access_token }));
+  }, [access_token, dispatch]);
   return (
     <Box>
       <NavBar />

@@ -189,7 +189,7 @@ const Category = () => {
         columns={12}
       >
         {categoryItems.map((text, index) => (
-          <Grid item xs={12} sm={4} lg={3} xl={2}>
+          <Grid item key={text.id} xs={12} sm={4} lg={3} xl={2}>
             <Card
               sx={{
                 backgroundColor: "black",

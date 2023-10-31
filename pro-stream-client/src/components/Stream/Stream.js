@@ -189,7 +189,7 @@ const Stream = () => {
                 TikTok
               </Button>
             </Stack>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} sm={6}>
                 <Stack direction="column">
                   <Typography variant="h5" sx={{ color: "white" }}>
@@ -211,14 +211,14 @@ const Stream = () => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <img
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "400px" }}
                   src={stream2}
                   alt=""
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <img
-                  style={{ width: "100%", height: "300px" }}
+                  style={{ width: "100%", height: "400px" }}
                   src={stream2}
                   alt=""
                 />

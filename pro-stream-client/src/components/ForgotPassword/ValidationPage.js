@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,9 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Container from "@mui/material/Container";
 import signinbg from "../../Images/signinbg.jpg";
+import { useDispatch } from "react-redux";
+import { getToken } from "../../services/LocalStorageService";
+import { setUserToken } from "../../features/authSlice";
 
 const ValidationPage = () => {
   const [otp, setOTP] = useState("");
@@ -13,6 +16,7 @@ const ValidationPage = () => {
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -26,7 +30,8 @@ const ValidationPage = () => {
       if (response.data.status === "success") {
         alert("Password Change Successfull");
         navigate("/");
-        window.location.reload();
+        localStorage.removeItem("credential");
+        // window.location.reload();
       } else {
         setError("User not found. Please check your email/username.");
       }
@@ -38,6 +43,10 @@ const ValidationPage = () => {
     }
   };
   // console.log(error);
+  let { access_token } = getToken();
+  useEffect(() => {
+    dispatch(setUserToken({ access_token: access_token }));
+  }, [access_token, dispatch]);
   return (
     <Box
       sx={{

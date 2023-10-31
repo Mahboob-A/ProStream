@@ -14,6 +14,9 @@ import { Toolbar } from "@mui/material";
 import { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useNavigate } from "react-router-dom";
+import { getToken, storeToken } from "../../services/LocalStorageService";
+import { setUserToken } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
 
 const defaultTheme = createTheme();
 
@@ -21,6 +24,7 @@ const ConfirmOTP = () => {
   const [otp, setOtp] = useState(); // State for email or username
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -40,9 +44,14 @@ const ConfirmOTP = () => {
       // Handle the response (e.g., set user token or redirect to a dashboard)
       console.log("Login successful", response.data);
       if (response.data.status == "success") {
+        storeToken(response.data.token);
+        // set user token in redux store
+        let { access_token } = getToken();
+        dispatch(setUserToken({ access_token: access_token }));
         alert("You are successfully login. Go to home page.");
         navigate("/");
-        window.location.reload();
+        localStorage.removeItem("credential");
+        // window.location.reload();
       } else {
         setError("Please, provide right OTP.");
       }
@@ -54,6 +63,12 @@ const ConfirmOTP = () => {
       }
     }
   };
+
+  // after reload on this (signin) page redux state data will be present all time
+  let { access_token } = getToken();
+  React.useEffect(() => {
+    dispatch(setUserToken({ access_token: access_token }));
+  }, [access_token, dispatch]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
