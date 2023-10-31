@@ -69,7 +69,7 @@ const Trending = () => {
           <img style={{ width: "100%" }} src={img4} alt="" />
         </Grid>
         {treadingItems.map((text, index) => (
-          <Grid item spacing={1} padding={1}>
+          <Grid item key={text.id} padding={1}>
             <img
               style={{ width: "270px", height: "160px" }}
               src={text.img}

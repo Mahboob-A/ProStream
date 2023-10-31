@@ -15,11 +15,14 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signinbg from "../../Images/signinbg.jpg";
 import NavBar from "../Common/NavBar";
 import { Toolbar } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios"; // Import Axios
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { getToken, storeToken } from "../../services/LocalStorageService";
+import { setUserToken } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
 
 const defaultTheme = createTheme();
 
@@ -29,7 +32,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
-
+  const dispatch = useDispatch();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -40,13 +43,16 @@ export default function SignIn() {
         password,
       });
 
-      // Handle the response (e.g., set user token or redirect to a dashboard)
-      console.log("Login successful", response.data);
+      console.log("Login responese", response.data);
       if (response.data.status === "success") {
-        localStorage.setItem('credential', credential);
+        // localStorage.setItem("credential", credential);
+        storeToken(response.data.token);
+        // set user token in redux store
+        let { access_token } = getToken();
+        dispatch(setUserToken({ access_token: access_token }));
         alert("Sign In Successfully complete. Now, Go to home page");
         navigate("/");
-        window.location.reload();
+        // window.location.reload();
       } else {
         setSuccessMessage("");
         setErrors(response.data.data);
@@ -58,17 +64,14 @@ export default function SignIn() {
       }
     }
   };
-  console.log(errors);
-  console.log(successMessage);
+  // console.log(errors);
+  // console.log(successMessage);
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log({
-  //     email: data.get("email"),
-  //     password: data.get("password"),
-  //   });
-  // };
+  // after reload on this (signin) page redux state data will be present all time
+  let { access_token } = getToken();
+  useEffect(() => {
+    dispatch(setUserToken({ access_token: access_token }));
+  }, [access_token, dispatch]);
 
   return (
     <ThemeProvider theme={defaultTheme}>

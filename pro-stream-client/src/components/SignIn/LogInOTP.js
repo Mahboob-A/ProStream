@@ -16,6 +16,9 @@ import axios from "axios"; // Import Axios
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { getToken } from "../../services/LocalStorageService";
+import { setUserToken } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
 
 const defaultTheme = createTheme();
 
@@ -23,7 +26,7 @@ const LogInOTP = () => {
   const [credential, setCredential] = useState(""); // State for email or username
   const navigate = useNavigate();
   const [error, setError] = useState("");
-
+  const dispatch = useDispatch();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -51,7 +54,10 @@ const LogInOTP = () => {
       setError("An error occurred. Please try again later.");
     }
   };
-
+  let { access_token } = getToken();
+  React.useEffect(() => {
+    dispatch(setUserToken({ access_token: access_token }));
+  }, [access_token, dispatch]);
   return (
     <ThemeProvider theme={defaultTheme}>
       <NavBar />

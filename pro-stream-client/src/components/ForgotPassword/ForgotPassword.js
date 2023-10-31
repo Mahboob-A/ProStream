@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -13,12 +13,15 @@ import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import signinbg from "../../Images/signinbg.jpg";
+import { getToken } from "../../services/LocalStorageService";
+import { setUserToken } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
 
 const ForgotPassword = () => {
   const [credential, setCredential] = useState(""); // State for email
   const navigate = useNavigate();
   const [error, setError] = useState("");
-
+  const dispatch = useDispatch();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -53,6 +56,11 @@ const ForgotPassword = () => {
   //     email: data.get("email"),
   //   });
   // };
+
+  let { access_token } = getToken();
+  useEffect(() => {
+    dispatch(setUserToken({ access_token: access_token }));
+  }, [access_token, dispatch]);
 
   return (
     <Box

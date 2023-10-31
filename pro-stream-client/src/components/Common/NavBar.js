@@ -16,8 +16,13 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Button, Grid, Link } from "@mui/material";
 import logo from "../../Images/prostream.png";
 import { useNavigate } from "react-router-dom";
+import { getToken, removeToken } from "../../services/LocalStorageService";
+import { setUserToken, unSetUserToken } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-const credential = localStorage.getItem("credential");
+// const access_token = localStorage.getItem("credential");
+// let { access_token } = getToken();
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -65,6 +70,9 @@ export default function NavBar() {
   const navigate = useNavigate();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const dispatch = useDispatch();
+
+  const { access_token } = useSelector((state) => state.auth);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -84,8 +92,11 @@ export default function NavBar() {
   };
 
   const handleLogout = (e) => {
-    localStorage.removeItem("credential");
-    window.location.reload();
+    // localStorage.removeItem("credential");
+    dispatch(unSetUserToken({ access_token: null }));
+    removeToken();
+    navigate("/signin");
+    // window.location.reload();
   };
 
   const menuId = "primary-search-account-menu";
@@ -108,7 +119,7 @@ export default function NavBar() {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      {credential && (
+      {access_token && (
         <MenuItem onClick={() => navigate("/change-password")}>
           Change Password
         </MenuItem>
@@ -134,8 +145,8 @@ export default function NavBar() {
       onClose={handleMobileMenuClose}
       sx={{ marginTop: "50px" }}
     >
-      {!credential ? (
-        <>
+      {!access_token ? (
+        <Box>
           <MenuItem>
             <Button
               sx={{
@@ -145,7 +156,7 @@ export default function NavBar() {
                 marginRight: "5px",
                 textTransform: "capitalize",
               }}
-              href="/signin"
+              onClick={() => navigate("/signin")}
             >
               Sign In
             </Button>
@@ -158,14 +169,14 @@ export default function NavBar() {
                 paddingX: "10px",
                 textTransform: "capitalize",
               }}
-              href="/signup"
+              onClick={() => navigate("/signup")}
             >
               Sign Up
             </Button>
           </MenuItem>
-        </>
+        </Box>
       ) : (
-        <>
+        <Box>
           <Button
             sx={{
               color: "white",
@@ -174,7 +185,7 @@ export default function NavBar() {
               marginRight: "5px",
               textTransform: "capitalize",
             }}
-            href="#"
+            onClick={() => navigate("/")}
           >
             Become Streamer
           </Button>
@@ -186,13 +197,12 @@ export default function NavBar() {
                 paddingX: "10px",
                 textTransform: "capitalize",
               }}
-              href="#"
               onClick={() => handleLogout()}
             >
               Logout
             </Button>
           </MenuItem>
-        </>
+        </Box>
       )}
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -245,8 +255,8 @@ export default function NavBar() {
           <Grid item>
             {/* <Box sx={{ flexGrow: 1 }} /> */}
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              {!credential ? (
-                <>
+              {!access_token ? (
+                <Box>
                   <Button
                     sx={{
                       color: "white",
@@ -270,9 +280,9 @@ export default function NavBar() {
                   >
                     Sign Up
                   </Button>
-                </>
+                </Box>
               ) : (
-                <>
+                <Box>
                   <Button
                     sx={{
                       color: "white",
@@ -292,12 +302,11 @@ export default function NavBar() {
                       paddingX: "10px",
                       textTransform: "capitalize",
                     }}
-                    href="#"
                     onClick={() => handleLogout()}
                   >
                     Logout
                   </Button>
-                </>
+                </Box>
               )}
               <IconButton
                 size="large"

@@ -14,11 +14,14 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import NavBar from "../Common/NavBar";
 import signupbg from "../../Images/signinbg.jpg";
 import { Toolbar } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios"; // Import Axios
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
+import { getToken, storeToken } from "../../services/LocalStorageService";
+import { setUserToken } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
 
 const defaultTheme = createTheme();
 
@@ -30,6 +33,7 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -46,16 +50,15 @@ export default function SignUp() {
         }
       );
 
-      // Handle the response (e.g., set user token or redirect to a dashboard)
       // console.log(response.data);
-      if (response.data.status == "success") {
-        setUserName(""); // Clear the username field
-        setEmail(""); // Clear the email field
-        setPassword(""); // Clear the password field
-        setPassword2(""); // Clear the password2 field
-
+      if (response.data.status === "success") {
         setSuccessMessage("Registration successful!");
         setErrors({});
+        setEmail("");
+        setUserName("");
+        setPassword("");
+        setPassword2("");
+        // storeToken(response.data.token);
         // alert("Go to sign in page");
         // navigate("/signin");
       } else {
@@ -74,7 +77,10 @@ export default function SignUp() {
   };
   // console.log(errors);
   // console.log(successMessage);
-
+  let { access_token } = getToken();
+  useEffect(() => {
+    dispatch(setUserToken({ access_token: access_token }));
+  }, [access_token, dispatch]);
   return (
     <ThemeProvider theme={defaultTheme}>
       <NavBar />
