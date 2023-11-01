@@ -149,9 +149,10 @@ export default function NavBar() {
         <Box>
           <MenuItem>
             <Button
+              variant="contained"
               sx={{
                 color: "white",
-                backgroundColor: "gray",
+                backgroundColor: "#9147ff",
                 paddingX: "10px",
                 marginRight: "5px",
                 textTransform: "capitalize",
@@ -163,9 +164,10 @@ export default function NavBar() {
           </MenuItem>
           <MenuItem>
             <Button
+              variant="contained"
               sx={{
                 color: "white",
-                backgroundColor: "gray",
+                backgroundColor: "#CB6D85",
                 paddingX: "10px",
                 textTransform: "capitalize",
               }}
@@ -178,9 +180,10 @@ export default function NavBar() {
       ) : (
         <Box>
           <Button
+            variant="contained"
             sx={{
               color: "white",
-              backgroundColor: "gray",
+              backgroundColor: "#CB6D85",
               paddingX: "10px",
               marginRight: "5px",
               textTransform: "capitalize",
@@ -191,9 +194,10 @@ export default function NavBar() {
           </Button>
           <MenuItem>
             <Button
+              variant="contained"
               sx={{
                 color: "white",
-                backgroundColor: "gray",
+                backgroundColor: "#9147ff",
                 paddingX: "10px",
                 textTransform: "capitalize",
               }}
@@ -258,9 +262,10 @@ export default function NavBar() {
               {!access_token ? (
                 <Box>
                   <Button
+                    variant="contained"
                     sx={{
                       color: "white",
-                      backgroundColor: "gray",
+                      backgroundColor: "#9147ff",
                       paddingX: "10px",
                       marginRight: "5px",
                       textTransform: "capitalize",
@@ -270,9 +275,10 @@ export default function NavBar() {
                     Sign In
                   </Button>
                   <Button
+                    variant="contained"
                     sx={{
                       color: "white",
-                      backgroundColor: "gray",
+                      backgroundColor: "#CB6D85",
                       paddingX: "10px",
                       textTransform: "capitalize",
                     }}
@@ -284,9 +290,10 @@ export default function NavBar() {
               ) : (
                 <Box>
                   <Button
+                    variant="contained"
                     sx={{
                       color: "white",
-                      backgroundColor: "gray",
+                      backgroundColor: "#CB6D85",
                       paddingX: "10px",
                       marginRight: "5px",
                       textTransform: "capitalize",
@@ -296,9 +303,10 @@ export default function NavBar() {
                     Become Streamer
                   </Button>
                   <Button
+                    variant="contained"
                     sx={{
                       color: "white",
-                      backgroundColor: "gray",
+                      backgroundColor: "#9147ff",
                       paddingX: "10px",
                       textTransform: "capitalize",
                     }}

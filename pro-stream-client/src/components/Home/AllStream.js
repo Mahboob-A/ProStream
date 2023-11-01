@@ -5,6 +5,7 @@ import Gaming from "./Gaming";
 import { Box } from "@mui/material";
 import Category from "./Category";
 import Trending from "./Trending";
+import Footer from "../Common/Footer";
 
 const AllStream = () => {
   return (
@@ -15,6 +16,7 @@ const AllStream = () => {
       <Trending />
       {/* <Playlists />
       <Gaming /> */}
+      <Footer />
     </Box>
   );
 };

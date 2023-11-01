@@ -14,6 +14,7 @@ import ConfirmChangePassword from "./components/ForgotPassword/ConfirmChangePass
 import { useSelector } from "react-redux";
 import NavBar from "./components/Common/NavBar";
 import Footer from "./components/Common/Footer";
+import SingleStream from "./components/Stream/SingleStream";
 function App() {
   // access access_token from redux state
   const { access_token } = useSelector((state) => state.auth);
@@ -28,7 +29,7 @@ function App() {
             element={<Home />}
           >
             <Route path="/" element={<AllStream />} />
-            <Route path="video" element={<Stream />} />
+            <Route path="video" element={<SingleStream />} />
           </Route>
           <Route
             path="signup"

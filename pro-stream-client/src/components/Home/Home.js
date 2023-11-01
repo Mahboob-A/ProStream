@@ -188,7 +188,6 @@ export default function Home() {
           <Outlet />
         </Box>
       </Box>
-      <Footer marginLeftFooter={open ? "240px" : "50px"} />
     </Box>
   );
 }

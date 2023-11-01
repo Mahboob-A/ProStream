@@ -5,9 +5,9 @@ import { Box, Stack } from "@mui/material";
 import img1 from "../../Images/stream1.png";
 import img2 from "../../Images/stream2.png";
 
-const Footer = ({ marginLeftFooter }) => {
+const Footer = ({ marginRightFooter }) => {
   return (
-    <Box padding={3} marginLeft={marginLeftFooter}>
+    <Box padding={3} marginRight={marginRightFooter}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6} md={3}>
           <Typography variant="h6" sx={{ color: "white", mb: 2 }}>
