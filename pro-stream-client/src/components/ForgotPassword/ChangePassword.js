@@ -14,6 +14,7 @@ import { Toolbar } from "@mui/material";
 import { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useNavigate } from "react-router-dom";
+import Footer from "../Common/Footer";
 
 const defaultTheme = createTheme();
 
@@ -47,7 +48,7 @@ const ChangePassword = ({ encoded_uuid, password_token }) => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <NavBar />
+      {/* <NavBar /> */}
       <Toolbar />
       <Box
         sx={{
@@ -107,6 +108,7 @@ const ChangePassword = ({ encoded_uuid, password_token }) => {
           </Box>
         </Container>
       </Box>
+      <Footer />
     </ThemeProvider>
   );
 };

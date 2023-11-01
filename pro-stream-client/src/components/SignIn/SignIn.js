@@ -23,6 +23,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { getToken, storeToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
+import Footer from "../Common/Footer";
 
 const defaultTheme = createTheme();
 
@@ -75,7 +76,7 @@ export default function SignIn() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <NavBar />
+      {/* <NavBar /> */}
       <Toolbar />
       <Box
         sx={{
@@ -225,6 +226,7 @@ export default function SignIn() {
           </Box>
         </Container>
       </Box>
+      <Footer />
     </ThemeProvider>
   );
 }

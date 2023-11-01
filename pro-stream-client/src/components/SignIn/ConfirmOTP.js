@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { getToken, storeToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
+import Footer from "../Common/Footer";
 
 const defaultTheme = createTheme();
 
@@ -72,7 +73,7 @@ const ConfirmOTP = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <NavBar />
+      {/* <NavBar /> */}
       <Toolbar />
       <Box
         sx={{
@@ -131,6 +132,7 @@ const ConfirmOTP = () => {
           </Box>
         </Container>
       </Box>
+      <Footer/>
     </ThemeProvider>
   );
 };

@@ -65,7 +65,6 @@ function App() {
             element={!access_token ? <ConfirmOTP /> : <Navigate to="/" />}
           />
         </Routes>
-        <Footer />
       </BrowserRouter>
     </div>
   );

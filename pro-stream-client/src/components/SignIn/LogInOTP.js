@@ -19,6 +19,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
+import Footer from "../Common/Footer";
 
 const defaultTheme = createTheme();
 
@@ -60,7 +61,7 @@ const LogInOTP = () => {
   }, [access_token, dispatch]);
   return (
     <ThemeProvider theme={defaultTheme}>
-      <NavBar />
+      {/* <NavBar /> */}
       <Toolbar />
       <Box
         sx={{
@@ -128,6 +129,7 @@ const LogInOTP = () => {
           </Box>
         </Container>
       </Box>
+      <Footer/>
     </ThemeProvider>
   );
 };

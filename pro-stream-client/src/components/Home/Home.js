@@ -20,6 +20,7 @@ import { Grid, Toolbar, Typography } from "@mui/material";
 import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
+import Footer from "../Common/Footer";
 
 const drawerWidth = 240;
 
@@ -187,6 +188,7 @@ export default function Home() {
           <Outlet />
         </Box>
       </Box>
+      <Footer marginLeftFooter={open ? "240px" : "50px"} />
     </Box>
   );
 }
