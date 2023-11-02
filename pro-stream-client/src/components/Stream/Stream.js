@@ -59,7 +59,7 @@ const Stream = () => {
           <Paper elevation={1}>
             <iframe
               width="100%"
-              height="360"
+              height="560"
               src="https://www.youtube.com/embed/xjMP0hspNLE"
               title="Video Player"
               allowFullScreen
