@@ -20,7 +20,8 @@ import { getToken, removeToken } from "../../services/LocalStorageService";
 import { setUserToken, unSetUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-
+import StreamIcon from "@mui/icons-material/Stream";
+import VideoCallIcon from "@mui/icons-material/VideoCall";
 // const access_token = localStorage.getItem("credential");
 // let { access_token } = getToken();
 
@@ -182,6 +183,20 @@ export default function NavBar() {
           <Button
             variant="contained"
             sx={{
+              color: "#ffffff",
+              backgroundColor: "red",
+              paddingX: "10px",
+              marginRight: "5px",
+              textTransform: "capitalize",
+            }}
+            startIcon={<VideoCallIcon sx={{ color: "white" }} />}
+            href="/stream-form"
+          >
+            Go Live
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
               color: "white",
               backgroundColor: "#CB6D85",
               paddingX: "10px",
@@ -289,6 +304,20 @@ export default function NavBar() {
                 </Box>
               ) : (
                 <Box>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      color: "#ffffff",
+                      backgroundColor: "red",
+                      paddingX: "10px",
+                      marginRight: "5px",
+                      textTransform: "capitalize",
+                    }}
+                    startIcon={<VideoCallIcon sx={{ color: "white" }} />}
+                    href="/stream-form"
+                  >
+                    Go Live
+                  </Button>
                   <Button
                     variant="contained"
                     sx={{

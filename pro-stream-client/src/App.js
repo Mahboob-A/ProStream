@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import NavBar from "./components/Common/NavBar";
 import Footer from "./components/Common/Footer";
 import SingleStream from "./components/Stream/SingleStream";
+import StreamForm from "./components/Stream/StreamForm";
 function App() {
   // access access_token from redux state
   const { access_token } = useSelector((state) => state.auth);
@@ -31,6 +32,7 @@ function App() {
             <Route path="/" element={<AllStream />} />
             <Route path="video" element={<SingleStream />} />
           </Route>
+          <Route path="stream-form" element={<StreamForm />} />
           <Route
             path="signup"
             element={!access_token ? <SignUp /> : <Navigate to="/" />}
