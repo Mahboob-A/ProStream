@@ -1,0 +1,47 @@
+{% extends "AgoraClient/core.html" %}
+{% load static %}
+
+{% block title %}Stream{% endblock title %}
+
+{% block content %}
+
+<main>
+
+    <section id="room-name-wrapper">
+        <p>Room Name: <span id="room-name"></span></p>
+    </section>
+
+    <!-- this video stream section shows the stream (inside here the stream is shown ) -->
+    <section id="video-stream">
+    </section>
+
+    <section class="stream-actions" id="controls-wrapper">
+        <!-- give access to these only to the host  -->
+
+        <div class="icon-wrapper">
+            <img class="control-icon" id="mic-button"
+                src="{% static 'images/mic.svg' %}">
+        </div>
+
+        <div class="icon-wrapper">
+            <img class="control-icon" id="camera-button"
+                src="{% static 'images/camera.svg' %}">
+        </div>
+
+        <div class="icon-wrapper">
+            <img class="control-icon" id="leave-button"
+                src="{% static 'images/leave.svg' %}">
+        </div>
+
+        <div class="icon-wrapper">
+            <button class="control-icon" id="stream-button"></button>
+        </div>
+
+    </section>
+
+</main>
+
+<script type="text/javascript" src="{% static 'assets/AgoraRTC_N-4.19.2.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/stream_live.js' %}"></script>
+
+{% endblock content %}
