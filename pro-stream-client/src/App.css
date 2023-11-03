@@ -1,3 +1,31 @@
 /* .App{
     background-color: black;
 } */
+#room-name-wrapper {
+    text-align:  center;
+    font-size: 18px;
+}
+
+#video-stream{
+    display: flex;
+    flex-wrap: wrap;
+    height: 85vh;
+    width: 75%;
+    margin:  0 auth;
+}
+
+.video-container{
+    height:  100%;
+    width: 100%;
+
+}
+
+.video-player {
+    height: 100%;
+    width: 100%;
+}
+
+.icon-wrapper{
+    height: "40px";
+    width: "40px";
+}

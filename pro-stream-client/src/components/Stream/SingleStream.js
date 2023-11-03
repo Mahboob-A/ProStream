@@ -15,6 +15,7 @@ import StartSharpIcon from "@mui/icons-material/StartSharp";
 import Footer from "../Common/Footer";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useParams } from "react-router-dom";
 
 const drawerWidth = 340;
 
@@ -87,6 +88,9 @@ export default function SingleStream() {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
+  const params = useParams();
+  console.log(params.id);
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -199,7 +203,7 @@ export default function SingleStream() {
               <InfiniteScroll dataLength={CHAT_CONTENT.length} height="700px">
                 {dataArray.map((item, index) => {
                   return (
-                    <Box>
+                    <Box key={index}>
                       <Typography variant="body" sx={{ color: "white" }}>
                         {item}
                       </Typography>

@@ -16,6 +16,10 @@ import NavBar from "./components/Common/NavBar";
 import Footer from "./components/Common/Footer";
 import SingleStream from "./components/Stream/SingleStream";
 import StreamForm from "./components/Stream/StreamForm";
+import Core from "./components/VideoStream/VideoCore";
+import VideoHome from "./components/VideoStream/VideoHome";
+import VideoStream from "./components/VideoStream/VideoStream";
+
 function App() {
   // access access_token from redux state
   const { access_token } = useSelector((state) => state.auth);
@@ -30,7 +34,9 @@ function App() {
             element={<Home />}
           >
             <Route path="/" element={<AllStream />} />
-            <Route path="video" element={<SingleStream />} />
+            <Route path="video" element={<SingleStream />}>
+              <Route path=":id" element={<SingleStream />} />
+            </Route>
           </Route>
           <Route path="stream-form" element={<StreamForm />} />
           <Route
@@ -67,6 +73,10 @@ function App() {
             path="login-with-otp-email-confirmation"
             element={!access_token ? <ConfirmOTP /> : <Navigate to="/" />}
           />
+          {/* video stream check  */}
+          {/* <Route path="core-check" element={<Core />}></Route> */}
+          <Route path="home-check" element={<VideoHome />}></Route>
+          <Route path="stream-check" element={<VideoStream />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

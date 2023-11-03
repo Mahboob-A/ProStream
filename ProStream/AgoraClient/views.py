@@ -17,11 +17,9 @@ from agora_token_builder import RtcTokenBuilder
 
 
 def get_random_channel_name(): 
-        string_length = random.randint(4, 15)  
-        letters = string.ascii_letters  
-        digits = string.digits
-        take = letters + digits 
-        result = ''.join(random.choice(take) for _ in range(string_length))
+        string_length = random.randint(5, 15)  
+        letters = 'ABCDE1FG34H45IJK86LM7N3OPQ86RS0T23UV9WZ2Y6Z'
+        result = ''.join(random.choice(letters) for _ in range(string_length))
         return result
 
 
@@ -39,7 +37,7 @@ def getToken(request):
         appId = '165129b40d854d378bb66172725f9dd2'
         appCertificate = '42aba9a313ab4670b594e68608433084'
         channelName = request.GET.get('channel')
-        uid = random.randint(1, 230) * 10
+        uid = random.randint(1, 230) * 30
         role = 2
         expirationTime = 3600 # seconds
         curerntTimeStamp = time.time()
@@ -49,18 +47,38 @@ def getToken(request):
         return JsonResponse({'token' : token, 'uid' : uid, 'role' : role, 'channel' : channelName}, safe=False)
 
 
-def getChannelAndToken(request): 
-        appId = '165129b40d854d378bb66172725f9dd2'
-        appCertificate = '42aba9a313ab4670b594e68608433084'
-        channelName = get_random_channel_name()
-        uid = get_uid()
-        role = 1
-        expirationTime = 3600 # seconds
-        curerntTimeStamp = time.time()
-        privilegeExpiredTs = curerntTimeStamp + expirationTime 
+# APIs For Agora Token 
+class GetTokenForHostAPI(APIView): 
+        ''' API For Agora Video SDK Token For Host '''
+        def get(self, request): 
+                appId = '165129b40d854d378bb66172725f9dd2'
+                appCertificate = '42aba9a313ab4670b594e68608433084'
+                channelName = get_random_channel_name()
+                uid = random.randint(1, 230) * 25
+                role = 2
+                expirationTime = 3600 # seconds
+                curerntTimeStamp = time.time()
+                privilegeExpiredTs = curerntTimeStamp + expirationTime 
+                print('host channel : ', channelName)
+                token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
+                return Response({'token' : token, 'uid' : uid, 'role' : role, 'channel' : channelName}, status=status.HTTP_200_OK)
         
-        token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
-        return JsonResponse({'token' : token, 'uid' : uid, 'role' : role, 'channel' : channelName}, safe=False)
+
+
+class GetTokenForViewerAPI(APIView): 
+        ''' API For Agora Video SDK Token For Viewer  '''
+        def get(self, request): 
+                appId = '165129b40d854d378bb66172725f9dd2'
+                appCertificate = '42aba9a313ab4670b594e68608433084'
+                channelName = request.GET.get('channel',) 
+                uid = random.randint(1, 230) * 25
+                role = 2
+                expirationTime = 3600 # seconds
+                curerntTimeStamp = time.time()
+                privilegeExpiredTs = curerntTimeStamp + expirationTime 
+                
+                token = RtcTokenBuilder.buildTokenWithUid(appId, appCertificate, channelName, uid, role, privilegeExpiredTs)
+                return Response({'token' : token, 'uid' : uid, 'role' : role, 'channel' : channelName}, status=status.HTTP_200_OK)
 
 
 

@@ -20,13 +20,14 @@ import AddReactionOutlinedIcon from "@mui/icons-material/AddReactionOutlined";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-import stream1 from "../../Images/stream1.png";
+import stream1 from "../../Images/Stream/main_stream2.jpg";
 import stream2 from "../../Images/mickey_mouse.png";
-import stream3 from "../../Images/stream3.png";
+
 import VerifiedIcon from "@mui/icons-material/Verified";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { Link } from "react-router-dom";
 
 const TikTokIcon = ({ color = "#ffffff" }) => {
   return (
@@ -57,13 +58,16 @@ const Stream = () => {
       <Grid container spacing={1}>
         <Grid item xs={12} md={12}>
           <Paper elevation={1}>
-            <iframe
+            {/* <iframe
               width="100%"
               height="560"
               src="https://www.youtube.com/embed/xjMP0hspNLE"
               title="Video Player"
               allowFullScreen
-            ></iframe>
+            ></iframe> */}
+            <Link to="/home-check">
+              <img style={{ width: "100%" }} src={stream1} alt="" />
+            </Link>
           </Paper>
           <Stack direction="column" spacing={1}>
             <Grid
