@@ -142,4 +142,5 @@ GitHub.sublime-settings
 newEnv
 
 # database
-
+db.sqlite3
+db.sqlite3/
