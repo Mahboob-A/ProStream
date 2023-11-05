@@ -19,6 +19,8 @@ import StreamForm from "./components/Stream/StreamForm";
 import Core from "./components/VideoStream/VideoCore";
 import VideoHome from "./components/VideoStream/VideoHome";
 import VideoStream from "./components/VideoStream/VideoStream";
+import BecomeStreamForm from "./components/Home/BecomeStreamForm";
+import Profile from "./components/Dashboard/Profile";
 
 function App() {
   // access access_token from redux state
@@ -39,6 +41,7 @@ function App() {
             </Route>
           </Route>
           <Route path="stream-form" element={<StreamForm />} />
+          <Route path="become-stream-form" element={<BecomeStreamForm />} />
           <Route
             path="signup"
             element={!access_token ? <SignUp /> : <Navigate to="/" />}
@@ -77,6 +80,9 @@ function App() {
           {/* <Route path="core-check" element={<Core />}></Route> */}
           <Route path="home-check" element={<VideoHome />}></Route>
           <Route path="stream-check" element={<VideoStream />}></Route>
+
+          {/* dashboard all routes  */}
+          <Route path="dashboard/profile" element={<Profile />} />
         </Routes>
       </BrowserRouter>
     </div>

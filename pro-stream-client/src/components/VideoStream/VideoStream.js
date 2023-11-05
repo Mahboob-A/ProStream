@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import mic from "../../Images/icons/mic.svg";
 import camera from "../../Images/icons/camera.svg";
@@ -7,11 +7,11 @@ import AgoraRTC from "agora-rtc-sdk-ng";
 
 const VideoStream = () => {
   const initiateRTCRef = useRef(false);
+  const CHANNEL = sessionStorage.getItem("channel");
   useEffect(() => {
     if (initiateRTCRef.current) return;
     initiateRTCRef.current = true;
     const APP_ID = "165129b40d854d378bb66172725f9ddjoin2";
-    const CHANNEL = sessionStorage.getItem("channel");
     const TOKEN = sessionStorage.getItem("token");
     let uid = Number(sessionStorage.getItem("uid"));
     let userName = sessionStorage.getItem("username");
@@ -226,38 +226,22 @@ const VideoStream = () => {
     initiateRTC();
   }, []);
 
-  // Example control buttons click handlers
-  const handleMicButtonClick = () => {
-    // Handle microphone button click action
-  };
-
-  const handleCameraButtonClick = () => {
-    // Handle camera button click action
-  };
-
-  const handleLeaveButtonClick = () => {
-    // Handle leave button click action
-  };
-
-  const handleStreamButtonClick = () => {
-    // Handle stream button click action
-  };
-
   return (
-    <Box sx={{ backgroundColor: "red" }}>
+    <Box>
       <section id="room-name-wrapper">
-        <p>
-          Room Name: <span id="room-name"></span>
+        <p style={{ fontWeight: "bold" }}>
+          Room Name: <span id="room-name">{CHANNEL}</span>
         </p>
       </section>
       <section id="video-stream">{/* Video streaming content */}</section>
       <section className="stream-actions" id="controls-wrapper">
-        <Stack direction="row">
+        <Stack direction="row" justifyContent="center" alignItems="center">
           <div className="icon-wrapper">
             <img
               className="control-icon"
               id="mic-button"
               src={mic}
+              style={{ width: "50px", height: "50px" }}
               // onClick={handleMicButtonClick}
             />
           </div>
@@ -266,6 +250,7 @@ const VideoStream = () => {
               className="control-icon"
               id="camera-button"
               src={camera}
+              style={{ width: "50px", height: "50px" }}
               // onClick={handleCameraButtonClick}
             />
           </div>
@@ -274,17 +259,21 @@ const VideoStream = () => {
               className="control-icon"
               id="leave-button"
               src={leave}
+              style={{ width: "50px", height: "50px" }}
               // onClick={handleLeaveButtonClick}
             />
           </div>
           <div className="icon-wrapper">
-            <button
+            <Button
+              variant="contained"
               className="control-icon"
               id="stream-button"
+              color="secondary"
+              size="large"
               // onClick={handleStreamButtonClick}
             >
-              Pause/Start
-            </button>
+              Start Streaming
+            </Button>
           </div>
         </Stack>
       </section>

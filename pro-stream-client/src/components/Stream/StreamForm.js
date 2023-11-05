@@ -58,6 +58,7 @@ const StreamForm = () => {
     streamer: "",
     category: "",
     stream_title: "",
+    thumbnail: "",
     go_live_notification: "",
     content_classification: "",
     language: "",
@@ -160,6 +161,18 @@ const StreamForm = () => {
                     name="stream_title"
                     label="Stream Title"
                     value={formData.stream_title}
+                    onChange={handleInputChange}
+                    color="secondary"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="thumbnail"
+                    name="thumbnail"
+                    label="Thumbnail URL"
+                    value={formData.thumbnail}
                     onChange={handleInputChange}
                     color="secondary"
                   />

@@ -1,8 +1,10 @@
 import { Box, Toolbar } from "@mui/material";
 import React from "react";
 import chat from "../../Images/icons/chat.png";
+import { useNavigate } from "react-router-dom";
 
 const VideoHome = () => {
+  const navigate = useNavigate();
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     // window.open("/stream-check", "_blank");
@@ -29,7 +31,8 @@ const VideoHome = () => {
       sessionStorage.setItem("username", userName);
       console.log(uid, "-----", token, channel, userName);
       // Replace the following with React Router navigation
-      window.open("/stream-check", "_blank");
+      // window.open("/stream-check", "_blank");
+      navigate("/video");
     } catch (error) {
       console.error("Error:", error);
     }

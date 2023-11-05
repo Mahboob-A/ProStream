@@ -118,7 +118,10 @@ export default function NavBar() {
       onClose={handleMenuClose}
       sx={{ marginTop: "50px" }}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem>
+        <Button href="/dashboard/profile">Profile</Button>{" "}
+      </MenuItem>
+
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       {access_token && (
         <MenuItem onClick={() => navigate("/change-password")}>
@@ -203,7 +206,7 @@ export default function NavBar() {
               marginRight: "5px",
               textTransform: "capitalize",
             }}
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/become-stream-form")}
           >
             Become Streamer
           </Button>
@@ -223,18 +226,20 @@ export default function NavBar() {
           </MenuItem>
         </Box>
       )}
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <PersonOutlineIcon />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      <Button href="/dashboard/profile">
+        <MenuItem>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <PersonOutlineIcon />
+          </IconButton>
+          <p>Profile</p>
+        </MenuItem>
+      </Button>
     </Menu>
   );
 
@@ -327,7 +332,7 @@ export default function NavBar() {
                       marginRight: "5px",
                       textTransform: "capitalize",
                     }}
-                    href="#"
+                    href="/become-stream-form"
                   >
                     Become Streamer
                   </Button>

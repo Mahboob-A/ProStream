@@ -9,8 +9,8 @@
 #video-stream{
     display: flex;
     flex-wrap: wrap;
-    height: 85vh;
-    width: 75%;
+    height: 50vh;
+    width: 100%;
     margin:  0 auth;
 }
 

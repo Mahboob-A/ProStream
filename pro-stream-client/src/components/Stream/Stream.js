@@ -28,6 +28,8 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { Link } from "react-router-dom";
+import VideoHome from "../VideoStream/VideoHome";
+import VideoStream from "../VideoStream/VideoStream";
 
 const TikTokIcon = ({ color = "#ffffff" }) => {
   return (
@@ -58,16 +60,7 @@ const Stream = () => {
       <Grid container spacing={1}>
         <Grid item xs={12} md={12}>
           <Paper elevation={1}>
-            {/* <iframe
-              width="100%"
-              height="560"
-              src="https://www.youtube.com/embed/xjMP0hspNLE"
-              title="Video Player"
-              allowFullScreen
-            ></iframe> */}
-            <Link to="/home-check">
-              <img style={{ width: "100%" }} src={stream1} alt="" />
-            </Link>
+            <VideoStream />
           </Paper>
           <Stack direction="column" spacing={1}>
             <Grid
