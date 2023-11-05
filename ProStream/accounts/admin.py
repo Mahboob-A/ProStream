@@ -6,7 +6,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 class CustomUserAdmin(BaseUserAdmin):
 
-        list_display = ['id', 'username', 'email', 'phone_number',  'is_a_user', 'is_a_streamer', 
+        list_display = ['id', 'username', 'email', 'phone_number',  'is_a_user', 'is_a_streamer', "streamer_id",
                        'is_staff', 'createdAt', 'updatedAt', ]
         list_filter = ["email"]
         fieldsets = [
