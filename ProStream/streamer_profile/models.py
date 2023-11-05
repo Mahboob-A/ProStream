@@ -44,7 +44,7 @@ class Streamer(models.Model):
                 verbose_name_plural = _("Streamers")
 
         def __str__(self):
-                return self.name
+                return self.first_name
 
         def get_absolute_url(self):
                 return reverse("streamer_detail", kwargs={"id": self.id})
@@ -119,12 +119,13 @@ class Stream(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         
         streamer = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='streams', null=True, blank=True),
-        category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='category_streams'),
+        category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='category_streams',),
         stream_chat = models.OneToOneField(Chat, on_delete=models.CASCADE, null=True, blank=True)
-        tags = TaggableManager()  # for hanling tags efficiently  
         
         stream_title = models.CharField(max_length=150, validators=[MinLengthValidator(15, message='Your title is too short! Type at least 15 characters!')])
         go_live_notification = models.CharField(max_length=150, validators=[MinLengthValidator(15, message='Your notification title is too short! Type at least 15 characters!')], null=True, blank=True)
+        
+        thumbnail = models.URLField(max_length=500, null=True, blank=True)
         
         content_classification = models.CharField(max_length=15, default='General', choices=CONTENT_CLASSIFICATIONS, null=True, blank=True)
         has_content_classification = models.BooleanField(default=False)
