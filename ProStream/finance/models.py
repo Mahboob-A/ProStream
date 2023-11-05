@@ -169,3 +169,9 @@ class Tip(models.Model):
                 self.tipper.update_total_tipped_amount(self.amount)
                 
                 super(Tip, self).save(*args, **kwargs)
+
+
+class PaymentGateWaySettings(models.Model):
+    '''ssl commerz details'''
+    store_id = models.CharField(max_length=500, blank=True, null=True)
+    store_pass = models.CharField(max_length=500, blank=True, null = True)
