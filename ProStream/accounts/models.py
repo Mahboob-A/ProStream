@@ -24,8 +24,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         is_a_user = models.BooleanField(default=True)
         is_a_streamer = models.BooleanField(default=False)
         
-        streamer_id = models.CharField(max_length=50, editable=False, null=True, blank=True) # to store the related streamer id when an instance of streamer is created 
-        
         is_active = models.BooleanField(default=True)
         is_staff = models.BooleanField(default=False)
         is_temporarily_suspended = models.BooleanField(default=False)

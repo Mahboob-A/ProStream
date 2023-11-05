@@ -6,11 +6,11 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 class CustomUserAdmin(BaseUserAdmin):
 
-        list_display = ['id', 'username', 'email', 'phone_number',  'is_a_user', 'is_a_streamer', 'streamer_id',
+        list_display = ['id', 'username', 'email', 'phone_number',  'is_a_user', 'is_a_streamer', 
                        'is_staff', 'createdAt', 'updatedAt', ]
         list_filter = ["email"]
         fieldsets = [
-                ('User Credentials' , {"fields": ["email",  "username", "is_a_user", "is_a_streamer", ]}),
+                ('User Credentials' , {"fields": ["email",  "username", "is_a_user", "is_a_streamer"]}),
                 ("Personal info", {"fields": ['phone_number',"dob", "gender",]}),
                 ("Permissions", {"fields": ["is_staff", "is_email_verified", "is_temporarily_suspended", "is_permanently_banned"]}),
         ]
