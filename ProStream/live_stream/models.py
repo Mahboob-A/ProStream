@@ -19,7 +19,6 @@ class Category(models.Model):
         language = models.CharField(max_length=20, null=True, blank=True)
         total_views_count = models.PositiveIntegerField(default=0, null=True, blank=True)
         total_followers = models.PositiveIntegerField(default=0,  null=True, blank=True)
-        tags = TaggableManager()
         
         createdAt = models.DateTimeField(default=timezone.now)
         updatedAt = models.DateTimeField(auto_now=True) 
