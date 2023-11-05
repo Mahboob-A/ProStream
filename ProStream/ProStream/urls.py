@@ -21,4 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('accounts.urls')),
     path('token/',include('AgoraClient.urls')),
+    path('finance/', include('finance.urls')),
+    path('live-stream/', include('streamer_profile.urls')),
+    path('live-chat/', include('live_stream.urls')),
 ]
