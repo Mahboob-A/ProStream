@@ -9,3 +9,4 @@ class CategoryCRUDSerializer(serializers.ModelSerializer):
                 model = Category
                 fields = '__all__'
                  
+                 
