@@ -3,14 +3,12 @@
 *.pot
 *.pyc
 __pycache__
-__pycache__/
 db.sqlite3
-db.sqlite3/
 media
 doc/
 # Backup files # 
 *.bak 
-Postman API testing/
+
 # If you are using PyCharm # 
 # User-specific stuff
 .idea/**/workspace.xml
