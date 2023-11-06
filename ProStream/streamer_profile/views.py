@@ -8,16 +8,19 @@ from rest_framework.response import Response
 from .models import * 
 from .serializer import * 
 
-
+from rest_framework.permissions import IsAuthenticated
 
 class StreamerCreateAPI(APIView): 
         ''' Creates An Instance Of Streamer '''
+        permission_classes = [IsAuthenticated]
         def post(self, request): 
                 serializer = StreamerCRUDSerializer(data=request.data)
                 if serializer.is_valid(): 
-                        streamer = serializer.save()
-                        user = streamer.original_user 
-                        user.streamer_id = streamer.id
+                        instance = serializer.save()
+                        user = request.user
+                        user.streamer_id = instance.id
+                        instance.original_user = user
+                        instance.save()
                         user.save()
                         return Response({'status' : 'success', 'data' : 'Streamer Created Successfully!'}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
@@ -26,10 +29,18 @@ class StreamerCreateAPI(APIView):
 
 
 class StreamGoLiveAPI(APIView): 
+        permission_classes = [IsAuthenticated]
         ''' Creates An Instance Of Stream Model When A Streamer Goes Live '''
         def post(self, request): 
+                user = request.user 
+                streamer_id = user.streamer_id
+                print('streamer_id: ', streamer_id)
                 serializer = StreamCRUDSerializer(data=request.data)
+                print('data :  ', request.data)
+                print('user : ', user)
                 if serializer.is_valid(): 
-                        serializer.save()
+                        instance = serializer.save()
+                        instance.streamer = streamer_id
+                        instance.save()
                         return Response({'status' : 'success', 'data' : 'Stream InstanceCreated Successfully!'}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

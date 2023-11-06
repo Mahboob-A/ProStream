@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json 
 
-from .models import RoomMembers, StreamInfo
+from .models import RoomMembers, StreamInfo, TempStremData
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,7 +14,7 @@ from rest_framework import status
 
 
 from agora_token_builder import RtcTokenBuilder
-
+from .serializer import TempStremDataSerializer
 
 def get_random_channel_name(): 
         string_length = random.randint(5, 15)  
@@ -148,3 +148,29 @@ def home(request):
 def stream(request): 
         return render(request, 'AgoraClient/stream.html')
 
+
+
+class TempStremDataAPI(APIView): 
+        '''' api for temporary data '''
+        def get(self, request): 
+                all_data = TempStremData.objects.all()
+                serializer = TempStremDataSerializer(all_data, many=True)
+                return Response({'status' : 'success', 'data' : serializer.data}, status=status.HTTP_200_OK)
+        
+        def post(self, request): 
+                serializer = TempStremDataSerializer(data=request.data)
+                if serializer.is_valid(): 
+                        serializer.save()
+                        return Response({'status' : 'success', 'data' : 'Data Created Successfully!'}, status=status.HTTP_201_CREATED)
+                return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_404_NOT_FOUND)
+        
+        def delete(self, request): 
+                uid = request.data.get('uid')
+                channel_name = request.data.get('channel')
+                token = request.data.get('token')
+                try : 
+                        item = TempStremData.objects.get(uid=uid, channel_name=channel_name, token=token)
+                        item.delete()
+                        return Response({'status' : 'success', 'data' : 'Data Deleted Successfully!'}, status=status.HTTP_204_NO_CONTENT)
+                except TempStremData.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : 'Data Not Found'}, status=status.HTTP_404_NOT_FOUND)

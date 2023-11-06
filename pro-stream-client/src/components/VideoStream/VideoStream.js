@@ -14,7 +14,7 @@ const VideoStream = () => {
     const APP_ID = "165129b40d854d378bb66172725f9ddjoin2";
     const TOKEN = sessionStorage.getItem("token");
     let uid = Number(sessionStorage.getItem("uid"));
-    let userName = sessionStorage.getItem("username");
+    // let userName = sessionStorage.getItem("username");
     let localTracks = [];
     let localScreenTracks;
     let remoteUsers = {};
@@ -207,6 +207,9 @@ const VideoStream = () => {
         localTracks[i].close();
       }
       await client.leave();
+      sessionStorage.removeItem("channel");
+      sessionStorage.removeItem("uid");
+      sessionStorage.removeItem("token");
       window.open("/", "_self");
     };
     // ------------------------------------

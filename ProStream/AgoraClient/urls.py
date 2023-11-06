@@ -16,4 +16,6 @@ urlpatterns = [
     
     path('get-token-for-host/api/', views.GetTokenForHostAPI.as_view(), name='get_token_for_host'),
     path('get-token-for-viewer/api/', views.GetTokenForViewerAPI.as_view(), name='get_token_for_viewer'),
+
+    path('stream-temp-data/api/', views.TempStremDataAPI.as_view(), name='temp_stream_data'),
 ]

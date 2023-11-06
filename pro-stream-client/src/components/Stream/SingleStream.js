@@ -133,6 +133,7 @@ export default function SingleStream() {
         <CssBaseline />
         {/* <Toolbar /> */}
         <Main open={open}>
+          {/* full streamer page show this section  */}
           <Stream />
         </Main>
         <Drawer

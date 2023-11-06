@@ -3,31 +3,20 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import {
-  Box,
-  Checkbox,
-  Container,
-  FormControlLabel,
-  Grid,
-  Toolbar,
-} from "@mui/material";
+import { Box, Container, Grid, Toolbar } from "@mui/material";
 import signupbg from "../../Images/signinbg.jpg";
 import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import Footer from "../Common/Footer";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 const BecomeStreamForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    original_user: "",
     first_name: "",
     last_name: "",
   });
@@ -37,25 +26,31 @@ const BecomeStreamForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleCheckboxChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.checked });
-  };
-
   formData.original_user = sessionStorage.getItem("credential");
   console.log(formData.original_user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const headers = {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    };
+
     try {
       const response = await axios.post(
-        "http://your_api_endpoint_here",
-        formData
+        "http://127.0.0.1:8000/live-stream/create-streamer/api/",
+        formData,
+        { headers: headers }
       );
-      console.log("Form submitted:", response.data);
+      console.log("Become streamer form submitted:", response.data);
+      if (response.data.status === "success") {
+        alert("Now your are a streamer");
+        navigate("/stream-form");
+      }
       // Add any further actions with the response data here
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error become streamer submitting form:", error);
       // Handle any errors here
     }
   };

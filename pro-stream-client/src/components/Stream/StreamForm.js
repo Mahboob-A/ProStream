@@ -18,10 +18,10 @@ import { useDispatch } from "react-redux";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Footer from "../Common/Footer";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
@@ -54,20 +54,38 @@ const CONTENT_CLASSIFICATIONS = [
 ];
 
 const StreamForm = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [category, setCategory] = useState([]);
   const [formData, setFormData] = useState({
-    streamer: "",
     category: "",
     stream_title: "",
-    thumbnail: "",
     go_live_notification: "",
+    thumbnail: "",
     content_classification: "",
     language: "",
     follower_goals: 0,
     is_previously_recorded: false,
     has_branded_content: false,
-    // ...add other fields from the Django model as needed
   });
-  const dispatch = useDispatch();
+  console.log(formData);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/live-chat/category-crud/api/"
+        );
+        // console.log(response.data.data);
+        setCategory(response.data.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -80,16 +98,61 @@ const StreamForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const headers = {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    };
+
     try {
-      const response = await axios.post(
-        "http://your_api_endpoint_here",
-        formData
+      // create a stream model
+      const response1 = await axios.post(
+        "http://127.0.0.1:8000/live-stream/create-stream/api/",
+        formData,
+        { headers: headers }
       );
-      console.log("Form submitted:", response.data);
-      // Add any further actions with the response data here
+      console.log("Create Stream Form submitted:", response1.data);
+
+      // hosting video
+      let response2 = await fetch(
+        "http://127.0.0.1:8000/token/get-token-for-host/api/"
+      );
+
+      let data = await response2.json();
+      console.log("Host Stream:", data);
+
+      let uid = data.uid;
+      let token = data.token;
+      let channel = data.channel;
+
+      sessionStorage.setItem("uid", uid);
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("channel", channel);
+      /// here we need username of user
+      // let userName = e.target.username.value;
+      // sessionStorage.setItem("username", userName);
+
+      console.log({
+        uid: uid,
+        channel_name: channel,
+        token: token,
+        thumbnail: formData.thumbnail,
+      });
+
+      // create stream model
+      const response3 = await axios.post(
+        "http://127.0.0.1:8000/token/stream-temp-data/api/",
+        {
+          uid: uid,
+          channel_name: channel,
+          token: token,
+          thumbnail: formData.thumbnail,
+        }
+      );
+      console.log("Create Stream:", response3.data);
+
+      navigate("/video");
     } catch (error) {
-      console.error("Error submitting form:", error);
-      // Handle any errors here
+      console.error("Error Stream Form:", error);
     }
   };
 
@@ -113,7 +176,6 @@ const StreamForm = () => {
         }}
       >
         <Container component="main" maxWidth="xs" sx={{ padding: 2 }}>
-          {/* <CssBaseline /> */}
           <Box
             sx={{
               marginTop: 1,
@@ -128,30 +190,29 @@ const StreamForm = () => {
           >
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="streamer"
-                    name="streamer"
-                    label="Streamer"
-                    value={formData.streamer}
-                    onChange={handleInputChange}
-                    color="secondary"
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="category"
-                    name="category"
-                    label="Category"
-                    value={formData.category}
-                    onChange={handleInputChange}
-                    color="secondary"
-                  />
+                <Grid item xs={12}>
+                  <FormControl sx={{ width: "100%" }}>
+                    <InputLabel id="demo-multiple-name-label" color="secondary">
+                      Category *
+                    </InputLabel>
+                    <Select
+                      required
+                      fullWidth
+                      id="category"
+                      label="Category"
+                      value={formData.category}
+                      onChange={handleInputChange}
+                      name="category"
+                      color="secondary"
+                      autoFocus
+                    >
+                      {category?.map((data) => (
+                        <MenuItem key={data.id} value={data.id}>
+                          {data?.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <TextField
