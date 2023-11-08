@@ -44,7 +44,7 @@ class Streamer(models.Model):
                 verbose_name_plural = _("Streamers")
 
         def __str__(self):
-               return self.first_name + " " + self.last_name 
+               return self.first_name + " " + self.last_name + " " + str(self.id)
 
         def get_absolute_url(self):
                 return reverse("streamer_detail", kwargs={"id": self.id})

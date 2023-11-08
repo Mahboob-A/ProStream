@@ -80,13 +80,22 @@ export default function SingleStream() {
   const handleModalClose = () => setOpenModal(false);
   let { access_token } = getToken();
   const handleSentTip = async () => {
+    const headers = {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    };
     try {
-      const response = await axios.post("YOUR_API_ENDPOINT", {
-        stream_id: "",
-        amount,
-        access_token,
-        streamer_id: "",
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:8000/finance/tip/",
+        {
+          stream_id: "80010b8a-778c-4640-9bc2-e8eb52bb1207",
+          amount: amount,
+          streamer_id: "d5942890-411d-4210-a859-e96751889d46",
+        },
+        {
+          headers: headers,
+        }
+      );
       console.log("Tip Data sent:", response.data);
     } catch (error) {
       console.error("Error sending tip data:", error);
