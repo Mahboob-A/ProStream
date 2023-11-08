@@ -64,13 +64,13 @@ Streamer will verify themselves, then they can add bank account
 '''
 class Verification(models.Model): 
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        streamer = models.OneToOneField(Streamer, on_delete=models.CASCADE)
+        streamer = models.OneToOneField(Streamer, on_delete=models.CASCADE, null= True, blank= True)
         
         first_name = models.CharField(max_length=35, help_text='Your First Name')      
         last_name = models.CharField(max_length=30, help_text='Your Last Name')
         
-        document_type = models.CharField(max_length=10, choices=DOCUMENT_CHOICES)
-        document = models.ImageField(upload_to='Finance/Streamer/Documents/Verification/',)
+        document_type = models.CharField(max_length=10, choices=DOCUMENT_CHOICES, null = True, blank= True)
+        document = models.ImageField(upload_to='Finance/Streamer/Documents/Verification/',null = True, blank= True)
         
         is_verification_approaved = models.BooleanField(default=False)
         
@@ -88,8 +88,8 @@ i.e. streamer needs to verify themselves first, then they can add bank details.
 '''
 class BankAccountDetails(models.Model): 
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        streamer = models.OneToOneField(Streamer, on_delete=models.CASCADE)
-        verification = models.OneToOneField(Verification, on_delete=models.CASCADE)
+        streamer = models.OneToOneField(Streamer, on_delete=models.CASCADE, null = True, blank = True)
+        verification = models.OneToOneField(Verification, on_delete=models.CASCADE, null = True, blank = True)
         
         first_name = models.CharField(max_length=35, help_text='Your First Name')      
         last_name = models.CharField(max_length=30, help_text='Your Last Name')
@@ -152,9 +152,9 @@ class StreamerWallet(models.Model):
 
 class Tip(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        wallet = models.OneToOneField(StreamerWallet, on_delete=models.CASCADE)
-        tipper = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tips_given')
-        stream = models.ForeignKey(Stream, on_delete=models.CASCADE)
+        wallet = models.ForeignKey(StreamerWallet, on_delete=models.CASCADE, null=True, blank=True)
+        tipper = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='tips_given', null=True, blank=True)
+        stream = models.ForeignKey(Stream, on_delete=models.CASCADE, null=True, blank=True)
         amount = models.DecimalField(max_digits=6, decimal_places=2, default=0)
         timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -162,13 +162,12 @@ class Tip(models.Model):
         updatedAt = models.DateTimeField(auto_now=True) 
         deletedAt = models.DateTimeField(blank=True, null=True)
         
-        def save(self, *args, **kwargs):
+        # def save(self, *args, **kwargs):
+        #         # self.wallet.update_available_amout(amount=self.amount)
+        #         # self.wallet.update_total_tip_received(amount=self.amount)
+        #         # self.tipper.update_total_tipped_amount(self.amount)
                 
-                self.wallet.update_available_amout(self.amount)
-                self.wallet.update_total_tip_received(self.amount)
-                self.tipper.update_total_tipped_amount(self.amount)
-                
-                super(Tip, self).save(*args, **kwargs)
+        #         super(Tip, self).save(*args, **kwargs)
 
 
 class PaymentGateWaySettings(models.Model):
