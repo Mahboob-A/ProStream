@@ -165,12 +165,16 @@ class TempStremDataAPI(APIView):
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_404_NOT_FOUND)
         
         def delete(self, request): 
-                uid = request.data.get('uid')
-                channel_name = request.data.get('channel')
-                token = request.data.get('token')
+                # uid = request.data.get('uid')
+                # channel_name = request.data.get('channel_name')
+                channel_name = request.query_params.get('channel_name')
+                print("Channel name",channel_name)
+                # token = request.data.get('token')
                 try : 
-                        item = TempStremData.objects.get(uid=uid, channel_name=channel_name, token=token)
+                        item = TempStremData.objects.get( channel_name=channel_name )
                         item.delete()
+                        print("Item delete")
                         return Response({'status' : 'success', 'data' : 'Data Deleted Successfully!'}, status=status.HTTP_204_NO_CONTENT)
                 except TempStremData.DoesNotExist: 
+                        print("Could not delete")
                         return Response({'status' : 'error', 'data' : 'Data Not Found'}, status=status.HTTP_404_NOT_FOUND)

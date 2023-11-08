@@ -16,6 +16,21 @@ import Footer from "../Common/Footer";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useParams } from "react-router-dom";
+import Modal from "@mui/material/Modal";
+import axios from "axios";
+import { getToken } from "../../services/LocalStorageService";
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const drawerWidth = 340;
 
@@ -59,6 +74,25 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function SingleStream() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [amount, setAmount] = React.useState("");
+  const handleModalOpen = () => setOpenModal(true);
+  const handleModalClose = () => setOpenModal(false);
+  let { access_token } = getToken();
+  const handleSentTip = async () => {
+    try {
+      const response = await axios.post("YOUR_API_ENDPOINT", {
+        stream_id: "",
+        amount,
+        access_token,
+        streamer_id: "",
+      });
+      console.log("Tip Data sent:", response.data);
+    } catch (error) {
+      console.error("Error sending tip data:", error);
+    }
+    handleModalClose();
+  };
   let CHAT_CONTENT = [
     "Hi",
     "Hello",
@@ -217,6 +251,41 @@ export default function SingleStream() {
             <Box sx={{ position: "absolute", bottom: "70px" }}>
               <Grid container paddingY={2} alignItems="center" spacing={1}>
                 <Grid item xs={9.5}>
+                  <Modal
+                    open={openModal}
+                    onClose={handleModalClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box sx={modalStyle}>
+                      <Typography
+                        id="modal-modal-title"
+                        variant="h6"
+                        component="h2"
+                        sx={{ marginBottom: 2 }}
+                      >
+                        Sent Tip
+                      </Typography>
+
+                      <TextField
+                        id="outlined-basic"
+                        label="Amount"
+                        variant="outlined"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        fullWidth
+                      />
+                      <br />
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        sx={{ marginTop: 2 }}
+                        onClick={handleSentTip}
+                      >
+                        Sent
+                      </Button>
+                    </Box>
+                  </Modal>
                   <form onSubmit={handleFormSubmit}>
                     <Grid container columns={9.5} spacing={1}>
                       <Grid item xs={7}>
@@ -251,6 +320,7 @@ export default function SingleStream() {
                 <Grid item xs={2.5}>
                   <Button
                     variant="contained"
+                    onClick={handleModalOpen}
                     sx={{ padding: "1px" }}
                     endIcon={
                       <VolunteerActivismIcon

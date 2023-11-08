@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Box, Grid } from "@mui/material";
-import stream1 from "../../Images/Stream/main_stream2.jpg";
-import stream2 from "../../Images/Stream/main_stream.jpg";
-import stream3 from "../../Images/Stream/showgunners.jpg";
-import stream4 from "../../Images/Stream/stream2.png";
+import stream1 from "../../Images/NotStream/stream-1.jpg";
+import stream2 from "../../Images/NotStream/stream-2.jpg";
+import stream3 from "../../Images/NotStream/stream-3.jpg";
+import stream4 from "../../Images/NotStream/stream-4.jpg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { getToken } from "../../services/LocalStorageService";
@@ -69,35 +69,62 @@ const HeadPart = () => {
     <Box>
       <Grid container alignItems="center">
         <Grid item xs={12} md={7}>
-          {/* <Link to="/video"> */}
-          {/* <img style={{ width: "100%" }} src={stream1} alt="" /> */}
-          <img
-            style={{ width: "100%" }}
-            src={currentStream[0]?.thumbnail}
-            alt=""
-            onClick={() => handleClick(currentStream[0]?.channel_name)}
-          />
-          {/* </Link> */}
+          {currentStream[0]?.thumbnail === "" ? (
+            <img
+              style={{ width: "100%" }}
+              src={currentStream[0]?.thumbnail}
+              alt=""
+              onClick={() => handleClick(currentStream[0]?.channel_name)}
+            />
+          ) : (
+            <img style={{ width: "100%" }} src={stream1} alt="" />
+          )}
         </Grid>
         <Grid item xs={12} md={5}>
           <Grid container>
             <Grid item>
-              <Grid container>
-                <Link to="/video">
-                  <img style={{ width: "100%" }} src={stream2} alt="" />
-                </Link>
-              </Grid>
+              {currentStream[1]?.thumbnail === "" ? (
+                <img
+                  style={{ width: "100%" }}
+                  src={currentStream[1]?.thumbnail}
+                  alt=""
+                  onClick={() => handleClick(currentStream[1]?.channel_name)}
+                />
+              ) : (
+                <img style={{ width: "100%" }} src={stream2} alt="" />
+              )}
             </Grid>
-            <Grid container item>
-              <Grid item xs={12} md={6}>
-                <Link to="/video">
-                  <img style={{ width: "100%" }} src={stream3} alt="" />
-                </Link>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Link to="/video">
-                  <img style={{ width: "100%" }} src={stream4} alt="" />
-                </Link>
+            <Grid item>
+              <Grid container>
+                <Grid item xs={12} md={6}>
+                  {currentStream[2]?.thumbnail === "" ? (
+                    <img
+                      style={{ width: "100%" }}
+                      src={currentStream[2]?.thumbnail}
+                      alt=""
+                      onClick={() =>
+                        handleClick(currentStream[2]?.channel_name)
+                      }
+                    />
+                  ) : (
+                    <img style={{ width: "100%" }} src={stream3} alt="" />
+                  )}
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  {currentStream[3]?.thumbnail === "" ? (
+                    <img
+                      style={{ width: "100%" }}
+                      src={currentStream[3]?.thumbnail}
+                      alt=""
+                      onClick={() =>
+                        handleClick(currentStream[3]?.channel_name)
+                      }
+                    />
+                  ) : (
+                    <img style={{ width: "100%" }} src={stream4} alt="" />
+                  )}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
