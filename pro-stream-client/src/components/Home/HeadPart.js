@@ -65,39 +65,43 @@ const HeadPart = () => {
   //   dispatch(setUserToken({ access_token: access_token }));
   // }, [access_token, dispatch]);
 
+  console.log(currentStream[0]?.thumbnail);
+
   return (
     <Box>
       <Grid container alignItems="center">
         <Grid item xs={12} md={7}>
-          {currentStream[0]?.thumbnail === "" ? (
+          {!currentStream[0]?.thumbnail ? (
+            <img style={{ width: "100%" }} src={stream1} alt="" />
+          ) : (
             <img
               style={{ width: "100%" }}
               src={currentStream[0]?.thumbnail}
               alt=""
               onClick={() => handleClick(currentStream[0]?.channel_name)}
             />
-          ) : (
-            <img style={{ width: "100%" }} src={stream1} alt="" />
           )}
         </Grid>
         <Grid item xs={12} md={5}>
           <Grid container>
             <Grid item>
-              {currentStream[1]?.thumbnail === "" ? (
+              {!currentStream[1]?.thumbnail ? (
+                <img style={{ width: "100%" }} src={stream2} alt="" />
+              ) : (
                 <img
                   style={{ width: "100%" }}
                   src={currentStream[1]?.thumbnail}
                   alt=""
                   onClick={() => handleClick(currentStream[1]?.channel_name)}
                 />
-              ) : (
-                <img style={{ width: "100%" }} src={stream2} alt="" />
               )}
             </Grid>
             <Grid item>
               <Grid container>
                 <Grid item xs={12} md={6}>
-                  {currentStream[2]?.thumbnail === "" ? (
+                  {!currentStream[2]?.thumbnail ? (
+                    <img style={{ width: "100%" }} src={stream3} alt="" />
+                  ) : (
                     <img
                       style={{ width: "100%" }}
                       src={currentStream[2]?.thumbnail}
@@ -106,13 +110,13 @@ const HeadPart = () => {
                         handleClick(currentStream[2]?.channel_name)
                       }
                     />
-                  ) : (
-                    <img style={{ width: "100%" }} src={stream3} alt="" />
                   )}
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                  {currentStream[3]?.thumbnail === "" ? (
+                  {!currentStream[3]?.thumbnail ? (
+                    <img style={{ width: "100%" }} src={stream4} alt="" />
+                  ) : (
                     <img
                       style={{ width: "100%" }}
                       src={currentStream[3]?.thumbnail}
@@ -121,8 +125,6 @@ const HeadPart = () => {
                         handleClick(currentStream[3]?.channel_name)
                       }
                     />
-                  ) : (
-                    <img style={{ width: "100%" }} src={stream4} alt="" />
                   )}
                 </Grid>
               </Grid>
