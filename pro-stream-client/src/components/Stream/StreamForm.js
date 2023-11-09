@@ -22,6 +22,8 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import { useNavigate } from "react-router-dom";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const defaultTheme = createTheme();
 
@@ -56,6 +58,7 @@ const CONTENT_CLASSIFICATIONS = [
 const StreamForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [error, setError] = useState("");
   const [category, setCategory] = useState([]);
   const [formData, setFormData] = useState({
     category: "",
@@ -69,7 +72,6 @@ const StreamForm = () => {
     has_branded_content: false,
   });
   console.log(formData);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -153,9 +155,15 @@ const StreamForm = () => {
       navigate("/video");
     } catch (error) {
       console.error("Error Stream Form:", error);
+      if (error.response && error.response.data && error.response.data.data) {
+        setError(error.response.data.data);
+      } else {
+        setError("Something went wrong.");
+      }
     }
   };
 
+  // after reload on this page redux state data will be present all time
   let { access_token } = getToken();
   useEffect(() => {
     dispatch(setUserToken({ access_token: access_token }));
@@ -190,6 +198,14 @@ const StreamForm = () => {
           >
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  {error && (
+                    <Alert severity="error">
+                      <AlertTitle>error</AlertTitle>
+                      {error}
+                    </Alert>
+                  )}
+                </Grid>
                 <Grid item xs={12}>
                   <FormControl sx={{ width: "100%" }}>
                     <InputLabel id="demo-multiple-name-label" color="secondary">

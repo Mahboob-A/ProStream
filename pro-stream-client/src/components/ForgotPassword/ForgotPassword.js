@@ -14,16 +14,12 @@ import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import signinbg from "../../Images/signinbg.jpg";
-import { getToken } from "../../services/LocalStorageService";
-import { setUserToken } from "../../features/authSlice";
-import { useDispatch } from "react-redux";
 import Footer from "../Common/Footer";
 
 const ForgotPassword = () => {
   const [credential, setCredential] = useState(""); // State for email
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const dispatch = useDispatch();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -35,9 +31,8 @@ const ForgotPassword = () => {
           credential,
         }
       );
-
-      // Handle the response (e.g., set user token or redirect to a dashboard)
       console.log(response.data);
+
       if (response.data.status === "success") {
         localStorage.setItem("credential", credential);
         alert("Email send successfully. Please, check your email.");
@@ -46,7 +41,6 @@ const ForgotPassword = () => {
         setError("User not found. Please check your email/username.");
       }
     } catch (error) {
-      // Handle any errors (e.g., display an error message)
       // console.error("Login failed", error);
       setError("An error occurred. Please try again later.");
     }
@@ -59,11 +53,6 @@ const ForgotPassword = () => {
   //   });
   // };
 
-  let { access_token } = getToken();
-  useEffect(() => {
-    dispatch(setUserToken({ access_token: access_token }));
-  }, [access_token, dispatch]);
-
   return (
     <Box>
       <Toolbar />
@@ -74,7 +63,7 @@ const ForgotPassword = () => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           opacity: ".9",
-          height: "100vh",
+          height: "55vh",
           width: "100%",
         }}
       >
@@ -101,7 +90,7 @@ const ForgotPassword = () => {
               Tell us some information about your account.
             </Typography>
             {error && (
-              <Alert severity="error" sx={{ marginY: "15px" }}>
+              <Alert severity="error" sx={{ marginY: "2px" }}>
                 <AlertTitle>Error</AlertTitle>
                 {error}
               </Alert>

@@ -11,15 +11,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import NavBar from "../Common/NavBar";
 import signupbg from "../../Images/signinbg.jpg";
 import { Toolbar } from "@mui/material";
 import { useState, useEffect } from "react";
-import axios from "axios"; // Import Axios
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { getToken, storeToken } from "../../services/LocalStorageService";
+import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
 import Footer from "../Common/Footer";
@@ -27,11 +25,10 @@ import Footer from "../Common/Footer";
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const [username, setUserName] = useState(""); // State for email
-  const [email, setEmail] = useState(""); // State for email
-  const [password, setPassword] = useState(""); // State for password
-  const [password2, setPassword2] = useState(""); // State for password
-  const navigate = useNavigate();
+  const [username, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password2, setPassword2] = useState("");
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const dispatch = useDispatch();
@@ -84,7 +81,6 @@ export default function SignUp() {
   }, [access_token, dispatch]);
   return (
     <ThemeProvider theme={defaultTheme}>
-      {/* <NavBar /> */}
       <Toolbar />
       <Box
         sx={{
@@ -98,7 +94,6 @@ export default function SignUp() {
         }}
       >
         <Container component="main" maxWidth="xs" sx={{ padding: 2 }}>
-          {/* <CssBaseline /> */}
           <Box
             sx={{
               marginTop: 1,
@@ -119,37 +114,37 @@ export default function SignUp() {
             </Typography>
             <Box>
               {successMessage && (
-                <Alert severity="success" sx={{ marginY: "15px" }}>
+                <Alert severity="success" sx={{ marginY: "2px" }}>
                   <AlertTitle>Success</AlertTitle>
                   {successMessage}
                 </Alert>
               )}
               {errors.email && (
-                <Alert severity="error" sx={{ marginY: "15px" }}>
+                <Alert severity="error" sx={{ marginY: "2px" }}>
                   <AlertTitle>Error</AlertTitle>
                   {errors.email[0]}
                 </Alert>
               )}
               {errors.username && (
-                <Alert severity="error" sx={{ marginY: "15px" }}>
+                <Alert severity="error" sx={{ marginY: "2px" }}>
                   <AlertTitle>Error</AlertTitle>
                   {errors.username[0]}
                 </Alert>
               )}
               {errors.non_field_errors && (
-                <Alert severity="error" sx={{ marginY: "15px" }}>
+                <Alert severity="error" sx={{ marginY: "2px" }}>
                   <AlertTitle>Error</AlertTitle>
                   {errors.non_field_errors[0]}
                 </Alert>
               )}
               {errors.password && (
-                <Alert severity="error" sx={{ marginY: "15px" }}>
+                <Alert severity="error" sx={{ marginY: "2px" }}>
                   <AlertTitle>1st Password Error</AlertTitle>
                   {errors.password[0]}
                 </Alert>
               )}
               {errors.password2 && (
-                <Alert severity="error" sx={{ marginY: "15px" }}>
+                <Alert severity="error" sx={{ marginY: "2px" }}>
                   <AlertTitle>2nd Password Error</AlertTitle>
                   {errors.password2[0]}
                 </Alert>

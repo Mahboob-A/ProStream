@@ -8,27 +8,18 @@ import {
   MenuItem,
   Paper,
   Stack,
-  TextField,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import React from "react";
-import Video from "./Video";
-import Chat from "./Chat";
 import MoreVert from "@mui/icons-material/MoreVert";
 import AddReactionOutlinedIcon from "@mui/icons-material/AddReactionOutlined";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-
-import stream1 from "../../Images/Stream/main_stream2.jpg";
-import stream2 from "../../Images/mickey_mouse.png";
-
+import mickeyMouse from "../../Images/mickey_mouse.png";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
-import { Link } from "react-router-dom";
-import VideoHome from "../VideoStream/VideoHome";
 import VideoStream from "../VideoStream/VideoStream";
 
 const TikTokIcon = ({ color = "#ffffff" }) => {
@@ -208,10 +199,10 @@ const Stream = () => {
                 </Stack>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <img style={{ width: "50%" }} src={stream2} alt="" />
+                <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
               </Grid>
               <Grid item xs={12} sm={4}>
-                <img style={{ width: "50%" }} src={stream2} alt="" />
+                <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
               </Grid>
               <Grid item xs={12} sm={8}>
                 <Stack direction="column">

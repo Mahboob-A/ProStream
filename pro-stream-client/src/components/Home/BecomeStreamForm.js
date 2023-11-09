@@ -6,21 +6,30 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Box, Container, Grid, Toolbar } from "@mui/material";
 import signupbg from "../../Images/signinbg.jpg";
 import { getToken } from "../../services/LocalStorageService";
-import { setUserToken } from "../../features/authSlice";
-import { useDispatch } from "react-redux";
 import Footer from "../Common/Footer";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserToken } from "../../features/authSlice";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const defaultTheme = createTheme();
 
 const BecomeStreamForm = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  let { access_token } = getToken();
+  // after reload on this page redux state data will be present all time
+  useEffect(() => {
+    dispatch(setUserToken({ access_token: access_token }));
+  }, [access_token, dispatch]);
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
   });
-  const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -45,20 +54,18 @@ const BecomeStreamForm = () => {
       );
       console.log("Become streamer form submitted:", response.data);
       if (response.data.status === "success") {
-        alert("Now your are a streamer");
+        alert(response.data.data);
         navigate("/stream-form");
+      } else {
+        setError(response.data.data);
       }
-      // Add any further actions with the response data here
     } catch (error) {
       console.error("Error become streamer submitting form:", error);
-      // Handle any errors here
+      if (error.response && error.response.data) {
+        setError(error.response.data.data);
+      }
     }
   };
-
-  let { access_token } = getToken();
-  useEffect(() => {
-    dispatch(setUserToken({ access_token: access_token }));
-  }, [access_token, dispatch]);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -70,11 +77,11 @@ const BecomeStreamForm = () => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           width: "100%",
-          height: "40vh",
+          height: "45vh",
           opacity: ".9",
         }}
       >
-        <Container component="main" maxWidth="xs" sx={{ padding: 2 }}>
+        <Container component="main" maxWidth="xs" sx={{ padding: 3 }}>
           {/* <CssBaseline /> */}
           <Box
             sx={{
@@ -89,7 +96,15 @@ const BecomeStreamForm = () => {
             }}
           >
             <form onSubmit={handleSubmit}>
-              <Grid container spacing={2}>
+              <Grid container spacing={1}>
+                <Grid item xs={12} sm={12}>
+                  {error && (
+                    <Alert severity="error">
+                      <AlertTitle>error</AlertTitle>
+                      {error}
+                    </Alert>
+                  )}
+                </Grid>
                 <Grid item xs={12} sm={12}>
                   <TextField
                     required

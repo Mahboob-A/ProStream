@@ -1,7 +1,6 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -13,10 +12,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signinbg from "../../Images/signinbg.jpg";
-import NavBar from "../Common/NavBar";
 import { Toolbar } from "@mui/material";
 import { useState, useEffect } from "react";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -28,8 +26,8 @@ import Footer from "../Common/Footer";
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [credential, setCredential] = useState(""); // State for email
-  const [password, setPassword] = useState(""); // State for password
+  const [credential, setCredential] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
@@ -43,8 +41,8 @@ export default function SignIn() {
         credential,
         password,
       });
-
       console.log("Login responese", response.data);
+
       if (response.data.status === "success") {
         // localStorage.setItem("credential", credential);
         storeToken(response.data.token);
@@ -76,7 +74,6 @@ export default function SignIn() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {/* <NavBar /> */}
       <Toolbar />
       <Box
         sx={{
@@ -85,12 +82,11 @@ export default function SignIn() {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           opacity: ".9",
-          height: "100vh",
+          height: "75vh",
           width: "100%",
         }}
       >
         <Container component="main" maxWidth="xs" sx={{ padding: 4 }}>
-          <CssBaseline />
           <Box
             sx={{
               marginTop: 1,
@@ -111,37 +107,37 @@ export default function SignIn() {
             </Typography>
             <Box>
               {successMessage && (
-                <Alert severity="success" sx={{ marginY: "15px" }}>
+                <Alert severity="success" sx={{ marginY: "2px" }}>
                   <AlertTitle>Success</AlertTitle>
                   {successMessage}
                 </Alert>
               )}
               {errors.email && (
-                <Alert severity="error" sx={{ marginY: "15px" }}>
+                <Alert severity="error" sx={{ marginY: "2px" }}>
                   <AlertTitle>Error</AlertTitle>
                   {errors.email[0]}
                 </Alert>
               )}
               {errors.username && (
-                <Alert severity="error" sx={{ marginY: "15px" }}>
+                <Alert severity="error" sx={{ marginY: "2px" }}>
                   <AlertTitle>Error</AlertTitle>
                   {errors.username[0]}
                 </Alert>
               )}
               {errors.non_field_errors && (
-                <Alert severity="error" sx={{ marginY: "15px" }}>
+                <Alert severity="error" sx={{ marginY: "2px" }}>
                   <AlertTitle>Error</AlertTitle>
                   {errors.non_field_errors[0]}
                 </Alert>
               )}
               {errors.password && (
-                <Alert severity="error" sx={{ marginY: "15px" }}>
+                <Alert severity="error" sx={{ marginY: "2px" }}>
                   <AlertTitle>1st Password Error</AlertTitle>
                   {errors.password[0]}
                 </Alert>
               )}
               {errors.password2 && (
-                <Alert severity="error" sx={{ marginY: "15px" }}>
+                <Alert severity="error" sx={{ marginY: "2px" }}>
                   <AlertTitle>2nd Password Error</AlertTitle>
                   {errors.password2[0]}
                 </Alert>

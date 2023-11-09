@@ -4,15 +4,15 @@ import stream1 from "../../Images/NotStream/stream-1.jpg";
 import stream2 from "../../Images/NotStream/stream-2.jpg";
 import stream3 from "../../Images/NotStream/stream-3.jpg";
 import stream4 from "../../Images/NotStream/stream-4.jpg";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getToken } from "../../services/LocalStorageService";
 
 const HeadPart = () => {
   const [currentStream, setCurrentStream] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
+      // runing streaming info
       try {
         const response = await axios.get(
           "http://127.0.0.1:8000/token/stream-temp-data/api/"
@@ -29,13 +29,9 @@ const HeadPart = () => {
 
   const handleClick = async (channel_name) => {
     // console.log(channel_name);
-    const headers = {
-      Authorization: `Bearer ${access_token}`,
-      "Content-Type": "application/json",
-    };
 
     try {
-      // hosting video
+      // get hosting video info 
       let res = await fetch(
         `http://127.0.0.1:8000/token/get-token-for-viewer/api/?channel=${channel_name}`
       );
@@ -60,12 +56,7 @@ const HeadPart = () => {
     }
   };
 
-  let { access_token } = getToken();
-  // useEffect(() => {
-  //   dispatch(setUserToken({ access_token: access_token }));
-  // }, [access_token, dispatch]);
-
-  console.log(currentStream[0]?.thumbnail);
+  // console.log(currentStream[0]?.thumbnail);
 
   return (
     <Box>

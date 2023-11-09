@@ -30,8 +30,8 @@ const ValidationPage = () => {
       // console.log(response);
       if (response.data.status === "success") {
         alert("Password Change Successfull");
-        navigate("/");
         localStorage.removeItem("credential");
+        navigate("/signin");
         // window.location.reload();
       } else {
         setError("User not found. Please check your email/username.");
@@ -58,7 +58,7 @@ const ValidationPage = () => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           opacity: ".9",
-          height: "100vh",
+          height: "70vh",
           width: "100%",
         }}
       >
@@ -77,19 +77,19 @@ const ValidationPage = () => {
           >
             <Typography variant="h4">Please, give your information</Typography>
             {error.non_field_errors && (
-              <Alert severity="error" sx={{ marginY: "15px" }}>
+              <Alert severity="error" sx={{ marginY: "2px" }}>
                 <AlertTitle>Error</AlertTitle>
                 {error.non_field_errors[0]}
               </Alert>
             )}
             {error.password && (
-              <Alert severity="error" sx={{ marginY: "15px" }}>
+              <Alert severity="error" sx={{ marginY: "2px" }}>
                 <AlertTitle>1st Password Error</AlertTitle>
                 {error.password[0]}
               </Alert>
             )}
             {error.password2 && (
-              <Alert severity="error" sx={{ marginY: "15px" }}>
+              <Alert severity="error" sx={{ marginY: "2px" }}>
                 <AlertTitle>2nd Password Error</AlertTitle>
                 {error.password2[0]}
               </Alert>

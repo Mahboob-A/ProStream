@@ -3,27 +3,20 @@ import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Button, Grid, Link } from "@mui/material";
 import logo from "../../Images/prostream.png";
 import { useNavigate } from "react-router-dom";
-import { getToken, removeToken } from "../../services/LocalStorageService";
-import { setUserToken, unSetUserToken } from "../../features/authSlice";
+import { removeToken } from "../../services/LocalStorageService";
+import { unSetUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import StreamIcon from "@mui/icons-material/Stream";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
-// const access_token = localStorage.getItem("credential");
-// let { access_token } = getToken();
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -73,6 +66,7 @@ export default function NavBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const dispatch = useDispatch();
 
+  // access access_token from redux state
   const { access_token } = useSelector((state) => state.auth);
 
   const handleProfileMenuOpen = (event) => {

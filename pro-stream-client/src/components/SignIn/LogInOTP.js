@@ -9,10 +9,9 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signinbg from "../../Images/signinbg.jpg";
-import NavBar from "../Common/NavBar";
 import { Toolbar } from "@mui/material";
 import { useState } from "react";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -24,7 +23,7 @@ import Footer from "../Common/Footer";
 const defaultTheme = createTheme();
 
 const LogInOTP = () => {
-  const [credential, setCredential] = useState(""); // State for email or username
+  const [credential, setCredential] = useState("");
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const dispatch = useDispatch();
@@ -32,7 +31,6 @@ const LogInOTP = () => {
     event.preventDefault();
 
     try {
-      // Make an Axios POST request to your login endpoint
       const response = await axios.post(
         "http://127.0.0.1:8000/auth/login-with-otp-email/",
         {
@@ -40,9 +38,8 @@ const LogInOTP = () => {
         }
       );
 
-      // Handle the response (e.g., set user token or redirect to a dashboard)
       console.log(response.data);
-      if (response.data.status == "success") {
+      if (response.data.status === "success") {
         localStorage.setItem("credential", credential);
         alert("Email send successfully. Please, check your email.");
         navigate("/login-with-otp-email-confirmation");
@@ -50,18 +47,19 @@ const LogInOTP = () => {
         setError("User not found. Please check your email/username.");
       }
     } catch (error) {
-      // Handle any errors (e.g., display an error message)
       // console.error("Login failed", error);
       setError("An error occurred. Please try again later.");
     }
   };
+
+  // after reload on this page redux state data will be present all time
   let { access_token } = getToken();
   React.useEffect(() => {
     dispatch(setUserToken({ access_token: access_token }));
   }, [access_token, dispatch]);
+
   return (
     <ThemeProvider theme={defaultTheme}>
-      {/* <NavBar /> */}
       <Toolbar />
       <Box
         sx={{
@@ -71,7 +69,7 @@ const LogInOTP = () => {
           backgroundSize: "cover",
           opacity: ".9",
           width: "100%",
-          height: "100vh",
+          height: "60vh",
         }}
       >
         <Container component="main" maxWidth="xs" sx={{ padding: 4 }}>
@@ -96,7 +94,7 @@ const LogInOTP = () => {
               Please give your valid information
             </Typography>
             {error && (
-              <Alert severity="error" sx={{ marginY: "15px" }}>
+              <Alert severity="error" sx={{ marginY: "1px" }}>
                 <AlertTitle>Error</AlertTitle>
                 {error}
               </Alert>
@@ -129,7 +127,7 @@ const LogInOTP = () => {
           </Box>
         </Container>
       </Box>
-      <Footer/>
+      <Footer />
     </ThemeProvider>
   );
 };

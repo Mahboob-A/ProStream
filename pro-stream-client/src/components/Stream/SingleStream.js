@@ -1,16 +1,14 @@
 import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import Stream from "./Stream";
 import SendIcon from "@mui/icons-material/Send";
-import { navbarItems } from "../Home/NavbarItems";
-import { Button, Grid, Paper, Stack, TextField } from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 import StartSharpIcon from "@mui/icons-material/StartSharp";
 import Footer from "../Common/Footer";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
@@ -72,7 +70,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function SingleStream() {
-  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const [openModal, setOpenModal] = React.useState(false);
   const [amount, setAmount] = React.useState("");
@@ -174,7 +171,6 @@ export default function SingleStream() {
 
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        {/* <Toolbar /> */}
         <Main open={open}>
           {/* full streamer page show this section  */}
           <Stream />
