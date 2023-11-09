@@ -17,6 +17,9 @@ import { useParams } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { getToken } from "../../services/LocalStorageService";
+import AgoraChat from "../AgoraChat/AgoraChat";
+import { setUserToken } from "../../features/authSlice";
+import { useDispatch } from "react-redux";
 
 const modalStyle = {
   position: "absolute",
@@ -75,7 +78,14 @@ export default function SingleStream() {
   const [amount, setAmount] = React.useState("");
   const handleModalOpen = () => setOpenModal(true);
   const handleModalClose = () => setOpenModal(false);
+  const dispatch = useDispatch();
+
+  // // after reload on this page redux state data will be present all time
   let { access_token } = getToken();
+  React.useEffect(() => {
+    dispatch(setUserToken({ access_token: access_token }));
+  }, [access_token, dispatch]);
+  
   const handleSentTip = async () => {
     const headers = {
       Authorization: `Bearer ${access_token}`,
@@ -253,6 +263,9 @@ export default function SingleStream() {
                     </Box>
                   );
                 })}
+
+                {/* agora chat implement  */}
+                <AgoraChat />
               </InfiniteScroll>
             </Box>
             <Box sx={{ position: "absolute", bottom: "70px" }}>

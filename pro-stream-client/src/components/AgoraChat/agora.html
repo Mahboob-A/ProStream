@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!-- {% load static %} -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+  </head>
+  <body>
+    <section class="main--container">
+      <br />
+      <br />
+      <button id="leave">Leave</button>
+      <form action="" id="chat-form">
+        <input
+          type="text"
+          name="chat_body"
+          id="chat_body"
+          placeholder="enter your message"
+        />
+      </form>
+
+      <br />
+      <div id="chat-lists">
+        <br />
+        <!-- {% for chat in chats %}
+        <div class="chat-inner">
+          <strong>Chat sent {{chat.createdAt|timesince}} </strong>
+          <p>{{chat.text}}</p>
+        </div>
+        {% endfor %} -->
+      </div>
+    </section>
+  </body>
+
+  <script
+    type="text/javascript"
+    src="{% static 'js/agora-rtm-sdk-1.5.1.js' %}"
+  ></script>
+
+  <script type="text/javascript">
+    const CHAT_APP_ID = "11103c7e74624c1fa0d6a9199c65b362";
+    let CHANNEL_NAME = sessionStorage.getItem("channel");
+    let UID = sessionStorage.getItem("uid");
+    let TOKEN = null;
+    let username = sessionStorage.getItem("username");
+
+    let client;
+    let channel;
+
+    let initRTMEngine = async () => {
+      client = await AgoraRTM.createInstance(CHAT_APP_ID);
+      await client.login({ uid: UID, token: TOKEN });
+
+      channel = await client.createChannel(CHANNEL_NAME);
+      await channel.join();
+
+      // listerer
+      channel.on("ChannelMessage", (message, peerId) => {
+        console.log("channel.on: ", message);
+        addMessageToChatList(message.text);
+      });
+    };
+
+    let form = document.getElementById("chat-form");
+    let chatInput = document.getElementById("chat_body");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let chatText = chatInput.value;
+      form.reset();
+      submitChatFormData(chatText);
+    });
+
+    let submitChatFormData = async (message) => {
+      console.log("submitChatFormData: ", message);
+
+      // seding the message to the channel
+      channel.sendMessage({ text: message, type: "text" });
+
+      addMessageToChatList(message);
+    };
+
+    let addMessageToChatList = async (message) => {
+      let allChats = document.getElementById("chat-lists");
+
+      console.log("addMessageToChatList: ", message);
+
+      let chatWrapper = `<div class="chat-inner">
+                                                        <strong>Chat sent </strong>
+                                                        <p>${message}</p>
+                                                </div>`;
+
+      allChats.insertAdjacentHTML("afterbegin", chatWrapper);
+    };
+
+    let deleteLocalStorage = () => {
+      localStorage.deleteItem();
+    };
+
+    const leaveButton = document.getElementById("leave");
+
+    leaveButton.addEventListener("click", function () {
+      client.logout();
+      window.open("/", "_self");
+    });
+    window.addEventListener("beforeunload", deleteLocalStorage);
+
+    initRTMEngine();
+  </script>
+</html>

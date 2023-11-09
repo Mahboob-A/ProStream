@@ -16,6 +16,7 @@ import SingleStream from "./components/Stream/SingleStream";
 import StreamForm from "./components/Stream/StreamForm";
 import BecomeStreamForm from "./components/Home/BecomeStreamForm";
 import Profile from "./components/Dashboard/Profile";
+import AgoraChat from "./components/AgoraChat/AgoraChat";
 
 function App() {
   // access access_token from redux state
@@ -32,12 +33,7 @@ function App() {
             element={<Home />}
           >
             <Route path="/" element={<AllStream />} />
-            <Route
-              path="video"
-              element={
-                access_token ? <SingleStream /> : <Navigate to="/signin" />
-              }
-            />
+            <Route path="video" element={<SingleStream />} />
           </Route>
           <Route path="stream-form" element={<StreamForm />} />
           <Route path="become-stream-form" element={<BecomeStreamForm />} />
@@ -83,6 +79,8 @@ function App() {
             path="dashboard/profile"
             element={access_token ? <Profile /> : <Navigate to="/signin" />}
           />
+          {/* agora chat  */}
+          <Route path="chat" element={<AgoraChat />} />
         </Routes>
       </BrowserRouter>
     </div>
