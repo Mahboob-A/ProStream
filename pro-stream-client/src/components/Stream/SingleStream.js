@@ -94,8 +94,10 @@ export default function SingleStream() {
         }
       );
       console.log("Tip Data sent:", response.data);
+      alert("Tip Sent Successfully");
     } catch (error) {
       console.error("Error sending tip data:", error);
+      alert(error.response.data.message);
     }
     handleModalClose();
   };

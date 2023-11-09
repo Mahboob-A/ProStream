@@ -222,7 +222,13 @@ const VideoStream = () => {
       sessionStorage.removeItem("token");
 
       window.open("/", "_self");
+      redirectUserHome();
     };
+
+    const redirectUserHome = () => {
+      window.open("/", "_self");
+    };
+
     // ------------------------------------
     document
       .getElementById("stream-button")

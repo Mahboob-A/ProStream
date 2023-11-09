@@ -148,7 +148,7 @@ class TipAPI(APIView):
         try: 
             streamer_wallet = StreamerWallet.objects.get(streamer = streamer)
         except StreamerWallet.DoesNotExist:
-            return Response({'status' : 'error','message': 'Streamer have no wallet'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status' : 'error','message': 'Streamer has not verified yet to receive tip amount'}, status=status.HTTP_400_BAD_REQUEST)
         
         # stream
         try: 
