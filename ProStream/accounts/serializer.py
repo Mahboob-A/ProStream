@@ -228,7 +228,7 @@ class ResetPasswordEmailOtpConfirmationSerializer(serializers.ModelSerializer):
 class UserDetailsSerializers(serializers.ModelSerializer):
         class Meta:
                 model = CustomUser
-                fields = "__all__"
+                exclude = ["password","user_permissions","groups"]
 
 
 
