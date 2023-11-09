@@ -204,9 +204,5 @@ class GetUserDetailsAPI(APIView):
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user
-                serializer = UserDetailsSerializers(data = user)
-                if serializer.is_valid():
-                        print(serializer.data)
-                        return Response({'status' : 'success', 'data' : serializer.data}, status=status.HTTP_200_OK)
-                return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-                        
+                serializer = UserDetailsSerializers(instance = user)
+                return Response({'status': 'success', 'data': serializer.data})                        
