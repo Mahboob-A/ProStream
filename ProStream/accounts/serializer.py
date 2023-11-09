@@ -223,5 +223,13 @@ class ResetPasswordEmailOtpConfirmationSerializer(serializers.ModelSerializer):
                                 raise serializers.ValidationError('Invalid OTP or OTP is expired!')
                 else : 
                         raise serializers.ValidationError('Invalid OTP or OTP is expired!')
+                
+
+class UserDetailsSerializers(serializers.ModelSerializer):
+        class Meta:
+                model = CustomUser
+                fields = "__all__"
+
+
 
                                                         
