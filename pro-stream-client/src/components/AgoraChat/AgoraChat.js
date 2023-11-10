@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+// it use for practice
+import React, { useEffect, useRef } from "react";
 import AgoraRTM from "agora-rtm-sdk";
-import { Box, Toolbar } from "@mui/material";
+import { Box } from "@mui/material";
 
 const AgoraChat = () => {
   const initiateRTMRef = useRef(false);
@@ -86,8 +85,6 @@ const AgoraChat = () => {
 
   return (
     <Box sx={{ backgroundColor: "gray" }}>
-      <Toolbar />
-      <Toolbar />
       <section className="main--container">
         <div id="chat-lists">
           <div className="chat-inner"></div>

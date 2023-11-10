@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useEffect, useRef } from "react";
+import AgoraRTM from "agora-rtm-sdk";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -13,11 +15,9 @@ import StartSharpIcon from "@mui/icons-material/StartSharp";
 import Footer from "../Common/Footer";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { useParams } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { getToken } from "../../services/LocalStorageService";
-import AgoraChat from "../AgoraChat/AgoraChat";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
 
@@ -85,7 +85,127 @@ export default function SingleStream() {
   React.useEffect(() => {
     dispatch(setUserToken({ access_token: access_token }));
   }, [access_token, dispatch]);
-  
+
+  // user data fetch
+  const [UserName, setUserName] = React.useState("");
+
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data.data.username);
+        setUserName(response.data.data.username);
+        sessionStorage.setItem("username", response.data.data.username);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  // agora chat main logic start
+  const initiateRTMRef = useRef(false);
+  useEffect(() => {
+    if (initiateRTMRef.current) return;
+    initiateRTMRef.current = true;
+    const CHAT_APP_ID = process.env.REACT_APP_CHAT_APP_ID;
+    let CHANNEL_NAME = sessionStorage.getItem("channel");
+    let UID = sessionStorage.getItem("uid");
+    console.log("chat channel and uid", CHANNEL_NAME, UID);
+    let TOKEN = null;
+
+    let client;
+    let channel;
+
+    let initRTMEngine = async () => {
+      client = await AgoraRTM.createInstance(CHAT_APP_ID);
+      await client.login({ uid: UID, token: TOKEN });
+
+      channel = await client.createChannel(CHANNEL_NAME);
+      await channel.join();
+
+      // listerer
+      channel.on("ChannelMessage", (message, peerId) => {
+        console.log("channel.on: ", message);
+        addMessageToChatList(message.text);
+      });
+    };
+
+    let form = document.getElementById("chat-form");
+    let chatInput = document.getElementById("chat_body");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      let chatText = chatInput.value;
+      form.reset();
+      submitChatFormData(chatText);
+    });
+
+    let submitChatFormData = async (message) => {
+      console.log("submitChatFormData: ", message);
+
+      // seding the message to the channel
+      channel.sendMessage({ text: message, type: "text" });
+
+      addMessageToChatList(message);
+    };
+
+    let addMessageToChatList = async (message) => {
+      let allChats = document.getElementById("chat-lists");
+
+      console.log("addMessageToChatList: ", message);
+
+      function getCurrentTime() {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        const ampm = hours >= 12 ? "pm" : "am";
+
+        // Convert hours to 12-hour format
+        hours = hours % 12 || 12;
+
+        // Add leading zero to minutes if necessary
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+
+        // Combine hours, minutes, and am/pm
+        const currentTime = `${hours}:${minutes}${ampm}`;
+
+        return currentTime;
+      }
+
+      // <strong>Chat sent </strong>
+      let chatWrapper = `<div class="chat-inner">
+                            <p>${sessionStorage.getItem(
+                              "username"
+                            )}-${UserName}: ${getCurrentTime()}</p>
+                            <p>${message}</p>
+                          </div>`;
+
+      allChats.insertAdjacentHTML("beforebegin", chatWrapper);
+    };
+
+    let deleteLocalStorage = () => {
+      localStorage.removeItem("token");
+      // localStorage.removeItem("uid");
+      localStorage.removeItem("channel");
+    };
+
+    // const leaveButton = document.getElementById("leave");
+
+    // leaveButton.addEventListener("click", function () {
+    //   client.logout();
+    //   window.open("/", "_self");
+    // });
+    window.addEventListener("beforeunload", deleteLocalStorage);
+
+    initRTMEngine();
+  }, []);
+  // agora chat main logic end
+
   const handleSentTip = async () => {
     const headers = {
       Authorization: `Bearer ${access_token}`,
@@ -111,27 +231,6 @@ export default function SingleStream() {
     }
     handleModalClose();
   };
-  let CHAT_CONTENT = [
-    "Hi",
-    "Hello",
-    "How are you?",
-    "I am fine. What's your name?",
-    "My name is atiq. you?",
-    "I am mahboob",
-  ];
-
-  const [inputValue, setInputValue] = React.useState("");
-  const [dataArray, setDataArray] = React.useState(CHAT_CONTENT);
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setDataArray([...dataArray, inputValue]);
-    setInputValue("");
-  };
 
   const handleDrawer = () => {
     setOpen(!open);
@@ -141,8 +240,8 @@ export default function SingleStream() {
     setOpen(true);
   };
 
-  const params = useParams();
-  console.log(params.id);
+  // const params = useParams();
+  // console.log(params.id);
 
   return (
     <Box sx={{ position: "relative" }}>
@@ -182,7 +281,7 @@ export default function SingleStream() {
       </Box>
 
       <Box sx={{ display: "flex" }}>
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <Main open={open}>
           {/* full streamer page show this section  */}
           <Stream />
@@ -252,20 +351,15 @@ export default function SingleStream() {
           <Box sx={{ height: "100%", position: "relative" }}>
             {/*  Chat Page */}
             <Box>
-              <InfiniteScroll dataLength={CHAT_CONTENT.length} height="700px">
-                {dataArray.map((item, index) => {
-                  return (
-                    <Box key={index}>
-                      <Typography variant="body" sx={{ color: "white" }}>
-                        {item}
-                      </Typography>
-                      <br />
-                    </Box>
-                  );
-                })}
-
-                {/* agora chat implement  */}
-                <AgoraChat />
+              <InfiniteScroll dataLength={1} height="500px">
+                <Box sx={{ backgroundColor: "gray" }}>
+                  <section className="main--container">
+                    <div id="chat-lists">
+                      <div className="chat-inner"></div>
+                    </div>
+                    {/* <button id="leave">Leave</button> */}
+                  </section>
+                </Box>
               </InfiniteScroll>
             </Box>
             <Box sx={{ position: "absolute", bottom: "70px" }}>
@@ -306,32 +400,20 @@ export default function SingleStream() {
                       </Button>
                     </Box>
                   </Modal>
-                  <form onSubmit={handleFormSubmit}>
+                  <form id="chat-form">
                     <Grid container columns={9.5} spacing={1}>
-                      <Grid item xs={7}>
+                      <Grid item xs={9.5}>
                         <TextField
                           required
                           size="small"
-                          id="outlined-basic"
+                          name="chat_body"
+                          id="chat_body"
                           variant="outlined"
                           sx={{
                             background: "white",
                             width: "100%",
                           }}
-                          value={inputValue}
-                          onChange={handleInputChange}
                           placeholder="Enter text"
-                        />
-                      </Grid>
-
-                      <Grid item xs={2.5}>
-                        <Button
-                          type="submit"
-                          variant="contained"
-                          sx={{ padding: "1px" }}
-                          endIcon={
-                            <SendIcon sx={{ width: "40px", height: "40px" }} />
-                          }
                         />
                       </Grid>
                     </Grid>

@@ -67,7 +67,7 @@ const StreamForm = () => {
     thumbnail: "",
     content_classification: "",
     language: "",
-    follower_goals: 0,
+    follower_goals: "",
     is_previously_recorded: false,
     has_branded_content: false,
   });
