@@ -19,7 +19,7 @@ from . import serializers
 
 ############################ Streamer Dashboard APIs ##################################
 
-#Prifile Section APIs 
+''' # Prifile Section APIs | Accounts APP '''
 
 class EditProfileAPI(APIView): 
         ''' API for editing CustomUser model attributes: email, profile_picture, phone_number, dob, and gender '''
@@ -68,6 +68,101 @@ class EditChannelAPI(APIView):
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
                 
         
-                        
+
+####################################################################
                 
+''' # Dashboard APIs For Finance Are In Finance APP  '''
+
+####################################################################
+
+''' # Team Section APIs | Streamer_Profile APP '''
+
+class TeamCRUDAPI(APIView): 
+        ''' Dashboard API for Team Model  '''
         
+        def get(self, request): 
+                try: 
+                        streamer = Streamer.objects.get(id = request.user.streamer_id)
+                        team = Team.objects.get(admin = streamer)
+                except Streamer.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : 'Streamer Does Not Found!'}, status=status.HTTP_400_BAD_REQUEST)
+                except Team.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : f'{streamer.original_user.username} Has Not Created Any Squad!'}, status=status.HTTP_200_OK)
+                
+                serializer = serializers.TeamSerializer(team)
+                return Response({'status' : 'success', 'data' : serializer.data}, status=status.HTTP_200_OK)
+                
+        def post(self, request): 
+                try: 
+                        streamer = Streamer.objects.get(id = request.user.streamer_id)
+                except Streamer.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : 'Streamer Does Not Found!'}, status=status.HTTP_400_BAD_REQUEST)
+                serializer = serializers.TeamSerializer(data=request.data) 
+                if serializer.is_valid(): 
+                        instance = serializer.save()
+                        instance.admin = streamer
+                        instance.save()
+                        return Response({'status' : 'success', 'data' : serializer.data}, status=status.HTTP_201_CREATED)
+                return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class TeamActionAPI(APIView): 
+        ''' Dashboard API for Add streamer , remove streamer, exit admin and change admin functionalities '''
+        permission_classes = [IsAuthenticated]
+        
+        def get(self, request): 
+                member_streamer_username_or_email = request.data.get('credential') # pass the member stremer's username or email as " credential " | this user cum stremaer will have Team Functionality 
+                action = request.data.get('action')  # aciton of the requst 
+                # getting the user first 
+                try : 
+                        try : 
+                                member_streamer_user = CustomUser.objects.get(email=member_streamer_username_or_email)
+                        except CustomUser.DoesNotExist: 
+                                member_streamer_user = CustomUser.objects.get(username=member_streamer_username_or_email)
+                except CustomUser.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : 'User with this email or username does not exist!'})
+                
+                print('member streamer: ', member_streamer_user)
+                print('admin streamer: ', request.user)
+                
+                try: 
+                        admin_streamer = Streamer.objects.get(id = request.user.streamer_id)  # This is streamer is the admin of the Team 
+                except Streamer.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : 'Admin streamer Is Not Found!'})
+                
+                try: 
+                        team = Team.objects.get(admin = admin_streamer)
+                except Team.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : f'{admin_streamer.original_user.username} Has Not Created Any Squad!'})
+                
+                try: 
+                        member_streamer = Streamer.objects.get(id = member_streamer_user.streamer_id) # this streamer will be aded or removed from the squad 
+                except Streamer.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : 'Member streamer Is Not Found!'})
+
+                if action == 'add': 
+                        result, message = team.add_member(streamer=member_streamer)
+                        if result: 
+                                return Response({'status' : 'success', 'data' : message}, status=status.HTTP_200_OK)
+                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_200_OK)
+                
+                elif action == 'remove': 
+                        result, message = team.remove_member(streamer=member_streamer)
+                        if result: 
+                                return Response({'status' : 'success', 'data' : message}, status=status.HTTP_200_OK)
+                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_200_OK)
+                
+                elif action == 'exit_admin': 
+                        result, message = team.exit_team_admin(admin=admin_streamer, new_admin=member_streamer)
+                        if result: 
+                                return Response({'status' : 'success', 'data' : message}, status=status.HTTP_200_OK)
+                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_200_OK)
+                
+                elif action == 'change_admin': 
+                        result, message = team.change_admin_selected(admin=admin_streamer, new_admin=member_streamer)
+                        if result: 
+                                return Response({'status' : 'success', 'data' : message}, status=status.HTTP_200_OK)
+                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_200_OK)
+                
+                else: 
+                        return Response({'status' : 'error', 'data' : 'The action is not correct to proceed this request. Please check the action.'}, status=status.HTTP_400_BAD_REQUEST)

@@ -190,7 +190,7 @@ class SocialMedia(models.Model):
 class Team(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         
-        admin = models.OneToOneField(Streamer, on_delete=models.CASCADE, related_name='created_team', help_text='Team Creator')
+        admin = models.OneToOneField(Streamer, on_delete=models.CASCADE, related_name='created_team', help_text='Team Creator', null=True, blank=True)
         members = models.ManyToManyField(Streamer, related_name='teams', blank=True)
         
         name = models.CharField(max_length=50, help_text='Team Name')
@@ -203,33 +203,49 @@ class Team(models.Model):
         def add_member(self, streamer):
                 
                 if streamer in self.members.all(): 
-                        return f'{streamer.original_user.username} is already in your Squad!'
+                        return False, f'{streamer.original_user.username} is already in your Squad!'
                 
                 if self.admin == streamer: 
-                        return f'This is your Squad and you are alrady in!'
+                        return False, f'This is your Squad and you are alrady in!'
                 
                 # add the streamer. | other validation if the streamer is already in other team validated in view using is_in_a_team of Streamer field. 
-                self.members.add(streamer)
-                return f'{streamer.original_user.username} is added in the Squad!'
-        
+                if not streamer.is_in_a_team:  
+                        streamer.is_in_a_team = True 
+                        streamer.save()
+                        self.total_team_members += 1
+                        self.members.add(streamer)
+                        self.save()
+                        return True,  f'{streamer.original_user.username} is added in your Squad!'
+                else : 
+                        return False, 'Member Streamer is alreay in another Squad!. Any streamer can join only a single Squad at a time! ' 
+                
         # if the admin wants to remove the member from his team | other validations will be done in the views if needed. 
         def remove_member(self, streamer):
-                
                 if streamer in self.members.all(): 
                         self.members.remove(streamer)
-                        return f'{streamer.original_user.username} is removed!'
+                        streamer.is_in_a_team = False 
+                        streamer.save()
+                        self.total_team_members -= 1 
+                        self.save()
+                        return True,  f'{streamer.original_user.username} is removed from your Squad!'
                 else: 
-                        return f'{streamer.original_user.username} is not found in your Squad!'
+                        return False,  f'{streamer.original_user.username} is not found in your Squad!'
                 
         # if the admin wants to exit the team, make the selected admin as new admin, and make the is_in_a_team field of the admin (Streamer Object) to False 
         def exit_team_admin(self, admin, new_admin): 
                 if self.admin == admin: 
                         if new_admin in self.members.all(): 
-                                self.admin = new_admin
-                                admin.is_in_a_team = False 
+                                admin.is_in_a_team = False # updating the old admin so that he can join other team 
                                 admin.save()
+                                self.admin = new_admin # making the new user as the admin 
+                                self.total_team_members -= 1 
+                                self.members.remove(new_admin)
+                                self.save()
+                                return True, 'Team admin exit is successfull!'
+                        else : 
+                                return False, f'New admin - {new_admin.original_user.username} is not a team member of your Squad!' 
                                 
-                return 'Team admin exit is successfull!'
+                return False,  'You are not admin of this squad!'
                                 
         # if the team wants to change the admin | change the admin to the selected admin 
         def  change_admin_selected(self, admin, new_admin):
@@ -237,7 +253,9 @@ class Team(models.Model):
                         if new_admin in self.members.all(): 
                                 self.admin = new_admin
                                 self.members.add(admin)
-                return 'New admin selection is successfull!'
+                                self.save()
+                                return True, f'New admin is successfully updated to {new_admin.original_user.username} !'
+                return False,  'You are not admin of this Squad'
                  
                 
 class Follow(models.Model): 
