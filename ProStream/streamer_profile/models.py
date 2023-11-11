@@ -17,7 +17,8 @@ from django.conf import settings
 class Streamer(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         original_user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-
+        channel_id = models.CharField(max_length=100, null=True, blank=True)
+        
         first_name = models.CharField(max_length=20, null=True, blank=True)
         last_name = models.CharField(max_length=20, null=True, blank=True)
         
@@ -54,8 +55,8 @@ class Channel(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         streamer = models.OneToOneField(Streamer, on_delete=models.CASCADE)
         
-        
-        channel_display_name = models.CharField(max_length=25, default='MyAwesomeChannel', null=True, blank=True)
+        bio = models.TextField(max_length=500, null=True, blank=True)
+        channel_display_name = models.CharField(max_length=25, default='My Awesome Channel', null=True, blank=True)
         display_picture = models.ImageField(upload_to='Streamer/Channel/DisplayPictures/', null=True, blank=True)
         channel_banner_picture = models.ImageField(upload_to='Streamer/Channel/ChannelBanners/', null=True, blank=True)
         total_followers = models.IntegerField(default=0)
