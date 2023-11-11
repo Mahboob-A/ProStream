@@ -3,26 +3,20 @@ import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Button, Grid, Link } from "@mui/material";
 import logo from "../../Images/prostream.png";
 import { useNavigate } from "react-router-dom";
-import { getToken, removeToken } from "../../services/LocalStorageService";
-import { setUserToken, unSetUserToken } from "../../features/authSlice";
+import { removeToken } from "../../services/LocalStorageService";
+import { unSetUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-
-// const access_token = localStorage.getItem("credential");
-// let { access_token } = getToken();
+import VideoCallIcon from "@mui/icons-material/VideoCall";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -72,6 +66,7 @@ export default function NavBar() {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const dispatch = useDispatch();
 
+  // access access_token from redux state
   const { access_token } = useSelector((state) => state.auth);
 
   const handleProfileMenuOpen = (event) => {
@@ -117,7 +112,10 @@ export default function NavBar() {
       onClose={handleMenuClose}
       sx={{ marginTop: "50px" }}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem>
+        <Button href="/dashboard/profile">Profile</Button>{" "}
+      </MenuItem>
+
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       {access_token && (
         <MenuItem onClick={() => navigate("/change-password")}>
@@ -149,9 +147,10 @@ export default function NavBar() {
         <Box>
           <MenuItem>
             <Button
+              variant="contained"
               sx={{
                 color: "white",
-                backgroundColor: "gray",
+                backgroundColor: "#9147ff",
                 paddingX: "10px",
                 marginRight: "5px",
                 textTransform: "capitalize",
@@ -163,9 +162,10 @@ export default function NavBar() {
           </MenuItem>
           <MenuItem>
             <Button
+              variant="contained"
               sx={{
                 color: "white",
-                backgroundColor: "gray",
+                backgroundColor: "#CB6D85",
                 paddingX: "10px",
                 textTransform: "capitalize",
               }}
@@ -178,22 +178,38 @@ export default function NavBar() {
       ) : (
         <Box>
           <Button
+            variant="contained"
             sx={{
-              color: "white",
-              backgroundColor: "gray",
+              color: "#ffffff",
+              backgroundColor: "red",
               paddingX: "10px",
               marginRight: "5px",
               textTransform: "capitalize",
             }}
-            onClick={() => navigate("/")}
+            startIcon={<VideoCallIcon sx={{ color: "white" }} />}
+            href="/stream-form"
+          >
+            Go Live
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              color: "white",
+              backgroundColor: "#CB6D85",
+              paddingX: "10px",
+              marginRight: "5px",
+              textTransform: "capitalize",
+            }}
+            onClick={() => navigate("/become-stream-form")}
           >
             Become Streamer
           </Button>
           <MenuItem>
             <Button
+              variant="contained"
               sx={{
                 color: "white",
-                backgroundColor: "gray",
+                backgroundColor: "#9147ff",
                 paddingX: "10px",
                 textTransform: "capitalize",
               }}
@@ -204,18 +220,20 @@ export default function NavBar() {
           </MenuItem>
         </Box>
       )}
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <PersonOutlineIcon />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      <Button href="/dashboard/profile">
+        <MenuItem>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="primary-search-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <PersonOutlineIcon />
+          </IconButton>
+          <p>Profile</p>
+        </MenuItem>
+      </Button>
     </Menu>
   );
 
@@ -258,9 +276,10 @@ export default function NavBar() {
               {!access_token ? (
                 <Box>
                   <Button
+                    variant="contained"
                     sx={{
                       color: "white",
-                      backgroundColor: "gray",
+                      backgroundColor: "#9147ff",
                       paddingX: "10px",
                       marginRight: "5px",
                       textTransform: "capitalize",
@@ -270,9 +289,10 @@ export default function NavBar() {
                     Sign In
                   </Button>
                   <Button
+                    variant="contained"
                     sx={{
                       color: "white",
-                      backgroundColor: "gray",
+                      backgroundColor: "#CB6D85",
                       paddingX: "10px",
                       textTransform: "capitalize",
                     }}
@@ -284,21 +304,37 @@ export default function NavBar() {
               ) : (
                 <Box>
                   <Button
+                    variant="contained"
                     sx={{
-                      color: "white",
-                      backgroundColor: "gray",
+                      color: "#ffffff",
+                      backgroundColor: "red",
                       paddingX: "10px",
                       marginRight: "5px",
                       textTransform: "capitalize",
                     }}
-                    href="#"
+                    startIcon={<VideoCallIcon sx={{ color: "white" }} />}
+                    href="/stream-form"
+                  >
+                    Go Live
+                  </Button>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      color: "white",
+                      backgroundColor: "#CB6D85",
+                      paddingX: "10px",
+                      marginRight: "5px",
+                      textTransform: "capitalize",
+                    }}
+                    href="/become-stream-form"
                   >
                     Become Streamer
                   </Button>
                   <Button
+                    variant="contained"
                     sx={{
                       color: "white",
-                      backgroundColor: "gray",
+                      backgroundColor: "#9147ff",
                       paddingX: "10px",
                       textTransform: "capitalize",
                     }}

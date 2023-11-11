@@ -9,45 +9,41 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signinbg from "../../Images/signinbg.jpg";
-import NavBar from "../Common/NavBar";
 import { Toolbar } from "@mui/material";
 import { useState } from "react";
-import axios from "axios"; // Import Axios
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Footer from "../Common/Footer";
 
 const defaultTheme = createTheme();
 
 const ChangePassword = ({ encoded_uuid, password_token }) => {
-  const [email, setEmail] = useState(""); // State for email or username
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      // Make an Axios POST request to your login endpoint
       const response = await axios.post(
         "http://127.0.0.1:8000/auth/reset-password/",
         {
           email,
         }
       );
-
-      // Handle the response (e.g., set user token or redirect to a dashboard)
       console.log("Login successful", response.data);
+
       if (response.data.status == "success") {
         alert("Email sent");
         // navigate(`/reset-password/${encoded_uuid}/${password_token}`);
       }
     } catch (error) {
-      // Handle any errors (e.g., display an error message)
       console.error("Login failed", error);
     }
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <NavBar />
       <Toolbar />
       <Box
         sx={{
@@ -107,6 +103,7 @@ const ChangePassword = ({ encoded_uuid, password_token }) => {
           </Box>
         </Container>
       </Box>
+      <Footer />
     </ThemeProvider>
   );
 };

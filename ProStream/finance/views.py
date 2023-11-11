@@ -17,8 +17,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 # sslcommerz_payment_gateway for payment method
 from .ssl import sslcommerz_payment_gateway
 from accounts.models import CustomUser
-from .models import UserWallet
-from .serializer import UserWalletRechargeSerializer
+from .models import UserWallet, Verification, StreamerWallet
+from streamer_profile.models import Streamer, Stream
+from .serializer import UserWalletRechargeSerializer, VerificationSerializer, BankAccountDetailsSerializer, TipSerializer
 # Create your views here.
 
 
@@ -82,3 +83,106 @@ class failedApi(APIView):
     '''Payment unsuccessfull'''
     def post(self, request):
         return Response({'status' : 'error','message': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
+
+class verificationAPI(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        user = request.user
+        streamer_id = user.streamer_id
+        try: 
+            streamer = Streamer.objects.get(id = streamer_id)
+        except Streamer.DoesNotExist:
+            return Response({'status' : 'error','message': 'streamer not found'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = VerificationSerializer(data = request.data)
+        if serializer.is_valid():
+            instance = serializer.save() 
+            instance.streamer = streamer
+            instance.save()
+            return Response({'status' : 'success','message': 'verification complete!'}, status=status.HTTP_200_OK)
+        return Response({'status' : 'error','message': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class AddBankAccountDetailsAPI(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        user = request.user
+        streamer_id = user.streamer_id
+        try: 
+            streamer = Streamer.objects.get(id = streamer_id)
+        except Streamer.DoesNotExist:
+            return Response({'status' : 'error','message': 'Streamer not found'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            streamer_verification = Verification.objects.get(streamer = streamer)
+        except Verification.DoesNotExist:
+            return Response({'status' : 'error','message': 'Verification not found'}, status=status.HTTP_400_BAD_REQUEST)
+        if streamer_verification.is_verification_approaved == False:
+            return Response({'status' : 'error','message': "Your verification didn't approve"}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = BankAccountDetailsSerializer(data = request.data)
+        if serializer.is_valid():
+            instance = serializer.save()
+            instance.streamer = streamer
+            instance.verification = streamer_verification
+            instance.save()
+            streamer_wallet = StreamerWallet.objects.create(streamer = streamer, bank_account = instance)
+            return Response({'status' : 'success','message': 'Bank details added and Streamer wallet created'}, status=status.HTTP_200_OK)
+        return Response({'status' : 'error','message': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class TipAPI(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        user = request.user
+        streamer_id = request.data.get('streamer_id', None)
+        stream_id = request.data.get('stream_id', None)
+        # user_wallet
+        try: 
+            user_wallet = UserWallet.objects.get(user = user)
+        except UserWallet.DoesNotExist:
+            return Response({'status' : 'error','message': 'user have not wallet'}, status=status.HTTP_400_BAD_REQUEST)
+        # streamer
+        try: 
+            streamer = Streamer.objects.get(id = streamer_id)
+        except Streamer.DoesNotExist:
+            return Response({'status' : 'error','message': 'Streamer not found'}, status=status.HTTP_400_BAD_REQUEST)    
+        # streamer Wallet
+        try: 
+            streamer_wallet = StreamerWallet.objects.get(streamer = streamer)
+        except StreamerWallet.DoesNotExist:
+            return Response({'status' : 'error','message': 'Streamer has not verified yet to receive tip amount'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # stream
+        try: 
+            stream = Stream.objects.get(id = stream_id)
+        except Stream.DoesNotExist:
+            return Response({'status' : 'error','message': 'No stream here'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # verification
+        try: 
+            verification = Verification.objects.get(streamer = streamer)
+        except Verification.DoesNotExist:
+            return Response({'status' : 'error','message': 'Streamer is not verified'}, status=status.HTTP_400_BAD_REQUEST)
+        if verification.is_verification_approaved == False:
+            return Response({'status' : 'error','message': 'Streamer is not verified, verification under proccess'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = TipSerializer(data = request.data)
+        if serializer.is_valid():
+            amount = serializer.validated_data['amount']
+            if user_wallet.available_amount < amount:
+                return Response({'status' : 'error','message': 'You have not sufficient money','available_amount': user_wallet.available_amount}, status=status.HTTP_400_BAD_REQUEST)
+            instance = serializer.save()
+            instance.wallet = streamer_wallet
+            instance.tipper = user
+            instance.stream = stream
+            # user wallet update
+            user_wallet.tip_money(amount=amount)
+            user_wallet.update_total_tipped_amount(amount=amount)
+
+            # streamer wallet update
+            streamer_wallet.update_available_amout(amount=amount)
+            streamer_wallet.update_total_tip_received(amount=amount)
+            instance.save()
+            return Response({'status' : 'success','message': 'Tip Successfully', 'available_amount': user_wallet.available_amount}, status=status.HTTP_200_OK)
+        return Response({'status' : 'error','message': 'Tip Unsuccessful'}, status=status.HTTP_400_BAD_REQUEST)
+         
+
+

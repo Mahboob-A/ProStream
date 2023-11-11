@@ -1,10 +1,8 @@
 import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -12,10 +10,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-
 import { navbarItems } from "./NavbarItems";
 import { Outlet, useNavigate } from "react-router-dom";
-import NavBar from "../Common/NavBar";
 import { Grid, Toolbar, Typography } from "@mui/material";
 import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
@@ -82,7 +78,6 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Home() {
-  const theme = useTheme();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
   const dispatch = useDispatch();
@@ -91,16 +86,15 @@ export default function Home() {
     setOpen(!open);
   };
 
+  // after reload on this page redux state data will be present all time
   let { access_token } = getToken();
   React.useEffect(() => {
     dispatch(setUserToken({ access_token: access_token }));
   }, [access_token, dispatch]);
+
   return (
     <Box>
-      <NavBar />
       <Box sx={{ display: "flex", background: "black" }}>
-        <CssBaseline />
-
         {/* drawer code */}
         <Drawer
           variant="permanent"
@@ -139,7 +133,6 @@ export default function Home() {
               )}
             </IconButton>
           </DrawerHeader>
-          {/* <Divider sx={{ backgroundColor: "white" }} /> */}
           <List>
             {navbarItems.map((text, index) => (
               <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
@@ -154,9 +147,11 @@ export default function Home() {
                   <ListItemIcon
                     sx={{
                       minWidth: 0,
-                      mr: open ? 3 : "auto",
+                      mr: open ? 2 : "auto",
                       justifyContent: "center",
                       color: "rgba(255,255,255)",
+                      border: "3px solid red",
+                      borderRadius: "50%",
                     }}
                   >
                     {text.icon}
@@ -164,7 +159,10 @@ export default function Home() {
                   <Grid
                     container
                     justifyContent="space-between"
-                    sx={{ opacity: open ? 1 : 0 }}
+                    sx={{
+                      // opacity: open ? 1 : 0,
+                      display: open ? "flex" : "none",
+                    }}
                   >
                     <Grid item>
                       <ListItemText primary={text.label} />

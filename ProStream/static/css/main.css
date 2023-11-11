@@ -1,0 +1,143 @@
+body{
+    background-color: lavender;
+}
+
+:root {
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+
+#chat-logo{
+    display: block;
+    width: 300px;
+    padding: 0px;
+    border-radius: 50px;
+    top: 10px;
+    left: 10px;
+    transform: translate(15%, 10%);
+
+    
+}
+
+#form-container{
+    width: 400px;
+    box-shadow: var(--shadow);
+    background-color: aliceblue;
+    padding: 30px;
+    border-radius: 5px;
+    position: fixed;
+    top: 50px;
+    left: 30px;
+    transform: translate(90%, 10%);
+}
+
+/*  Stream styles  */
+
+#room-name-wrapper {
+    text-align:  center;
+    font-size: 18px;
+}
+
+#video-stream{
+    display: flex;
+    flex-wrap: wrap;
+    height: 85vh;
+    width: 75%;
+    margin:  0 auth;
+}
+
+/* .video-container{
+    flex-basis: 500px;
+    flex-grow: 1;
+    max-height: 100%;
+    min-height: 350px;
+
+    border: 1px solid rgb(75, 95, 172, 1);
+    border-radius: 5px;
+    margin: 2px;
+    background-color: rgbs(198, 202, 219, 1);
+
+    position: relative;
+
+
+} */
+
+
+.video-container{
+    height:  100%;
+    width: 100%;
+
+}
+
+
+.video-player {
+    height: 100%;
+    width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.user-name-wrapper {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+    background-color: rgbs(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #fff;
+}
+
+/* .video-player {
+    height: 100%;
+    width: 100%;
+} */
+
+.video-player > * {
+    border-radius: 5px;
+}
+
+
+/*  control buttons design  */
+
+#controls-wrapper{
+    display: flex;
+    width:50%;
+    justify-content: center;
+    column-gap: 1em;
+    position: fixed;
+    bottom:  10px;
+}
+
+.control-icon {
+    height: 10px;
+    width:  10px;
+    box-shadow:  var(--shadow);
+    background-color:  #fff;
+    cursor: pointer;
+    padding:  10px;
+    border-radius: 5px;
+}
+
+#leave-button {
+    background-color: rgb(255, 80, 80, 1);
+
+}

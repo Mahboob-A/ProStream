@@ -9,7 +9,6 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signinbg from "../../Images/signinbg.jpg";
-import NavBar from "../Common/NavBar";
 import { Toolbar } from "@mui/material";
 import { useState } from "react";
 import axios from "axios"; // Import Axios
@@ -17,6 +16,9 @@ import { useNavigate } from "react-router-dom";
 import { getToken, storeToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
+import Footer from "../Common/Footer";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const defaultTheme = createTheme();
 
@@ -43,28 +45,28 @@ const ConfirmOTP = () => {
 
       // Handle the response (e.g., set user token or redirect to a dashboard)
       console.log("Login successful", response.data);
-      if (response.data.status == "success") {
+      if (response.data.status === "success") {
         storeToken(response.data.token);
         // set user token in redux store
         let { access_token } = getToken();
         dispatch(setUserToken({ access_token: access_token }));
         alert("You are successfully login. Go to home page.");
         navigate("/");
+        // after verifying email using credential we will remove credential from localstorage
         localStorage.removeItem("credential");
         // window.location.reload();
       } else {
         setError("Please, provide right OTP.");
       }
     } catch (error) {
-      // Handle any errors (e.g., display an error message)
       // console.error("Login failed", error);
-      if (error.response && error.response.data) {
-        setError("An error occurred. Please try again later.");
+      if (error.response && error.response.data && error.response.data.data) {
+        setError(error.response.data.data);
       }
     }
   };
 
-  // after reload on this (signin) page redux state data will be present all time
+  // after reload on this page redux state data will be present all time
   let { access_token } = getToken();
   React.useEffect(() => {
     dispatch(setUserToken({ access_token: access_token }));
@@ -72,7 +74,6 @@ const ConfirmOTP = () => {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <NavBar />
       <Toolbar />
       <Box
         sx={{
@@ -81,7 +82,7 @@ const ConfirmOTP = () => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           opacity: ".9",
-          height: "100vh",
+          height: "60vh",
           width: "100%",
         }}
       >
@@ -103,6 +104,12 @@ const ConfirmOTP = () => {
               <LockOutlinedIcon />
             </Avatar>
             <Typography variant="h5">Confirm Your OTP</Typography>
+            {error && (
+              <Alert severity="error" sx={{ marginY: "3px" }}>
+                <AlertTitle>error</AlertTitle>
+                {error}
+              </Alert>
+            )}
             <form onSubmit={handleSubmit}>
               <TextField
                 margin="normal"
@@ -131,6 +138,7 @@ const ConfirmOTP = () => {
           </Box>
         </Container>
       </Box>
+      <Footer />
     </ThemeProvider>
   );
 };

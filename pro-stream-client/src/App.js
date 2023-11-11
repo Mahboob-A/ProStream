@@ -2,8 +2,7 @@ import "./App.css";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import SignIn from "./components/SignIn/SignIn";
 import SignUp from "./components/SignUp/SignUp";
-import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
-import Stream from "./components/Stream/Stream";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./components/Home/Home";
 import AllStream from "./components/Home/AllStream";
 import ValidationPage from "./components/ForgotPassword/ValidationPage";
@@ -13,10 +12,16 @@ import ChangePassword from "./components/ForgotPassword/ChangePassword";
 import ConfirmChangePassword from "./components/ForgotPassword/ConfirmChangePassword";
 import { useSelector } from "react-redux";
 import NavBar from "./components/Common/NavBar";
-import Footer from "./components/Common/Footer";
+import SingleStream from "./components/Stream/SingleStream";
+import StreamForm from "./components/Stream/StreamForm";
+import BecomeStreamForm from "./components/Home/BecomeStreamForm";
+import Profile from "./components/Dashboard/Profile";
+import AgoraChat from "./components/AgoraChat/AgoraChat";
+
 function App() {
   // access access_token from redux state
   const { access_token } = useSelector((state) => state.auth);
+
   return (
     <div className="App" style={{ backgroundColor: "black" }}>
       <BrowserRouter>
@@ -28,8 +33,12 @@ function App() {
             element={<Home />}
           >
             <Route path="/" element={<AllStream />} />
-            <Route path="video" element={<Stream />} />
+            <Route path="video" element={<SingleStream />} />
           </Route>
+          <Route path="stream-form" element={<StreamForm />} />
+          <Route path="become-stream-form" element={<BecomeStreamForm />} />
+
+          {/* signin signup related route  */}
           <Route
             path="signup"
             element={!access_token ? <SignUp /> : <Navigate to="/" />}
@@ -64,8 +73,12 @@ function App() {
             path="login-with-otp-email-confirmation"
             element={!access_token ? <ConfirmOTP /> : <Navigate to="/" />}
           />
+
+          {/* dashboard all routes  */}
+          <Route path="dashboard/profile" element={<Profile />} />
+          {/* agora chat  */}
+          <Route path="chat" element={<AgoraChat />} />
         </Routes>
-        <Footer />
       </BrowserRouter>
     </div>
   );

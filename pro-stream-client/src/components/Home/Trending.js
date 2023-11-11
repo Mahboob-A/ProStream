@@ -57,10 +57,10 @@ const treadingItems = [
     id: 9,
     img: "https://i.ibb.co/FqJ0ZkD/chess.png",
   },
-  // {
-  //   id: 10,
-  //   img: "https://i.ibb.co/p1xyMsb/irl.png",
-  // },
+  {
+    id: 10,
+    img: "https://i.ibb.co/p1xyMsb/irl.png",
+  },
 ];
 
 const Trending = () => {

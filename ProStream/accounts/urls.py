@@ -13,4 +13,5 @@ urlpatterns = [
         path('reset-password-email-otp-confirmation/', ResetPasswordEmailOtpConfirmationAPI.as_view(), name='reset_password_email_otp_confirmation'), # takes 2 pass, + cached credential + otp from http body 
         path('login-with-otp-email/', LoginWithEmailOtpAPI.as_view(), name='login_with_otp_email'),
         path('login-with-otp-email-confirmation/', LoginWithEmailOtpConfirmationAPI.as_view(), name='login_with_otp_email_confirmation'),
+        path('get/user-all-details/', GetUserDetailsAPI.as_view(), name = 'get_user_details'),
 ]

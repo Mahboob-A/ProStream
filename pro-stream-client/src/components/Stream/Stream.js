@@ -8,25 +8,19 @@ import {
   MenuItem,
   Paper,
   Stack,
-  TextField,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import React from "react";
-import Video from "./Video";
-import Chat from "./Chat";
 import MoreVert from "@mui/icons-material/MoreVert";
 import AddReactionOutlinedIcon from "@mui/icons-material/AddReactionOutlined";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import SendIcon from "@mui/icons-material/Send";
-import stream1 from "../../Images/stream1.png";
-import stream2 from "../../Images/mickey_mouse.png";
-import stream3 from "../../Images/stream3.png";
+import mickeyMouse from "../../Images/mickey_mouse.png";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import VideoStream from "../VideoStream/VideoStream";
 
 const TikTokIcon = ({ color = "#ffffff" }) => {
   return (
@@ -55,15 +49,10 @@ const Stream = () => {
   return (
     <Box sx={{ marginTop: "20px", padding: "5px" }}>
       <Grid container spacing={1}>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={12}>
           <Paper elevation={1}>
-            <iframe
-              width="100%"
-              height="360"
-              src="https://www.youtube.com/embed/xjMP0hspNLE"
-              title="Video Player"
-              allowFullScreen
-            ></iframe>
+            {/* video player  */}
+            <VideoStream />
           </Paper>
           <Stack direction="column" spacing={1}>
             <Grid
@@ -190,7 +179,7 @@ const Stream = () => {
               </Button>
             </Stack>
             <Grid container spacing={2} alignItems="center">
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={8}>
                 <Stack direction="column">
                   <Typography variant="h5" sx={{ color: "white" }}>
                     Hi,
@@ -209,21 +198,13 @@ const Stream = () => {
                   </Typography>
                 </Stack>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <img
-                  style={{ width: "100%", height: "400px" }}
-                  src={stream2}
-                  alt=""
-                />
+              <Grid item xs={12} sm={4}>
+                <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <img
-                  style={{ width: "100%", height: "400px" }}
-                  src={stream2}
-                  alt=""
-                />
+              <Grid item xs={12} sm={4}>
+                <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} sm={8}>
                 <Stack direction="column">
                   <Typography variant="h5" sx={{ color: "white" }}>
                     All Videos
@@ -244,44 +225,6 @@ const Stream = () => {
               </Grid>
             </Grid>
           </Stack>
-        </Grid>
-
-        {/*  Chat Page */}
-        <Grid item xs={12} md={4}>
-          <Typography sx={{ color: "white", textAlign: "center" }} variant="h4">
-            Stream Chat
-          </Typography>
-          <Paper elevation={3} sx={{ height: "400px" }}>
-            <Typography variant="body">Hi</Typography>
-            <br />
-            <Typography variant="body">Hello</Typography>
-            <br />
-            <Typography variant="body">How are you?</Typography>
-            <br />
-            <Typography variant="body">
-              I am fine by the grace of allah. And you?
-            </Typography>
-            <br />
-          </Paper>
-          <Grid container paddingY={2} alignItems="center" spacing={2}>
-            <Grid item xs={8}>
-              <TextField
-                id="outlined-basic"
-                variant="outlined"
-                sx={{
-                  background: "white",
-                  width: "100%",
-                  marginRight: "10px",
-                }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <Button
-                variant="contained"
-                endIcon={<SendIcon sx={{ width: "50px", height: "40px" }} />}
-              />
-            </Grid>
-          </Grid>
         </Grid>
       </Grid>
     </Box>

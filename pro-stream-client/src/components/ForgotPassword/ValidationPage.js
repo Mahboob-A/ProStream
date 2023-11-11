@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Toolbar, Typography } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
@@ -9,6 +9,7 @@ import signinbg from "../../Images/signinbg.jpg";
 import { useDispatch } from "react-redux";
 import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
+import Footer from "../Common/Footer";
 
 const ValidationPage = () => {
   const [otp, setOTP] = useState("");
@@ -29,8 +30,8 @@ const ValidationPage = () => {
       // console.log(response);
       if (response.data.status === "success") {
         alert("Password Change Successfull");
-        navigate("/");
         localStorage.removeItem("credential");
+        navigate("/signin");
         // window.location.reload();
       } else {
         setError("User not found. Please check your email/username.");
@@ -48,106 +49,110 @@ const ValidationPage = () => {
     dispatch(setUserToken({ access_token: access_token }));
   }, [access_token, dispatch]);
   return (
-    <Box
-      sx={{
-        backgroundImage: `url(${signinbg})`,
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        opacity: ".9",
-        height: "100vh",
-        width: "100%",
-      }}
-    >
-      <Container component="main" maxWidth="xs" sx={{ padding: 4 }}>
-        <Box
-          sx={{
-            marginTop: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            background: "#cccccc",
-            padding: 3,
-            color: "black",
-            borderRadius: "10px",
-          }}
-        >
-          <Typography variant="h4">Please, give your information</Typography>
-          {error.non_field_errors && (
-            <Alert severity="error" sx={{ marginY: "15px" }}>
-              <AlertTitle>Error</AlertTitle>
-              {error.non_field_errors[0]}
-            </Alert>
-          )}
-          {error.password && (
-            <Alert severity="error" sx={{ marginY: "15px" }}>
-              <AlertTitle>1st Password Error</AlertTitle>
-              {error.password[0]}
-            </Alert>
-          )}
-          {error.password2 && (
-            <Alert severity="error" sx={{ marginY: "15px" }}>
-              <AlertTitle>2nd Password Error</AlertTitle>
-              {error.password2[0]}
-            </Alert>
-          )}
+    <Box>
+      <Toolbar />
+      <Box
+        sx={{
+          backgroundImage: `url(${signinbg})`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          opacity: ".9",
+          height: "70vh",
+          width: "100%",
+        }}
+      >
+        <Container component="main" maxWidth="xs" sx={{ padding: 4 }}>
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              marginTop: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              background: "#cccccc",
+              padding: 3,
+              color: "black",
+              borderRadius: "10px",
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="otp"
-              label="Enter your OTP"
-              name="otp"
-              autoComplete="off"
-              autoFocus
-              color="secondary"
-              value={otp}
-              onChange={(e) => setOTP(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="password"
-              label="Enter your new password"
-              name="password"
-              autoComplete="password"
-              autoFocus
-              color="secondary"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="password2"
-              label="Enter your password again"
-              name="password2"
-              autoComplete="password"
-              autoFocus
-              color="secondary"
-              value={password2}
-              onChange={(e) => setPassword2(e.target.value)}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="secondary"
-              sx={{ mt: 3, mb: 2 }}
+            <Typography variant="h4">Please, give your information</Typography>
+            {error.non_field_errors && (
+              <Alert severity="error" sx={{ marginY: "2px" }}>
+                <AlertTitle>Error</AlertTitle>
+                {error.non_field_errors[0]}
+              </Alert>
+            )}
+            {error.password && (
+              <Alert severity="error" sx={{ marginY: "2px" }}>
+                <AlertTitle>1st Password Error</AlertTitle>
+                {error.password[0]}
+              </Alert>
+            )}
+            {error.password2 && (
+              <Alert severity="error" sx={{ marginY: "2px" }}>
+                <AlertTitle>2nd Password Error</AlertTitle>
+                {error.password2[0]}
+              </Alert>
+            )}
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
             >
-              Continue
-            </Button>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="otp"
+                label="Enter your OTP"
+                name="otp"
+                autoComplete="off"
+                autoFocus
+                color="secondary"
+                value={otp}
+                onChange={(e) => setOTP(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="password"
+                label="Enter your new password"
+                name="password"
+                autoComplete="password"
+                autoFocus
+                color="secondary"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="password2"
+                label="Enter your password again"
+                name="password2"
+                autoComplete="password"
+                autoFocus
+                color="secondary"
+                value={password2}
+                onChange={(e) => setPassword2(e.target.value)}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="secondary"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Continue
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </Box>
+      <Footer />
     </Box>
   );
 };

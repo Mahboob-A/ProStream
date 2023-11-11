@@ -214,20 +214,24 @@ const Category = () => {
                 </Typography>
                 <Typography variant="text" sx={{ color: "white" }}>
                   <Button
-                    variant="outlined"
+                    variant="contained"
                     sx={{
-                      backgroundColor: "gray",
-                      color: "white",
-                      fontSize: 14,
+                      paddingY: "1px",
+                      paddingX: "2px",
                     }}
+                    color="primary"
                   >
                     {text.tag1}
                   </Button>
                 </Typography>{" "}
                 <Typography variant="text">
                   <Button
-                    variant="outlined"
-                    sx={{ backgroundColor: "gray", color: "white" }}
+                    variant="contained"
+                    sx={{
+                      paddingY: "1px",
+                      paddingX: "2px",
+                    }}
+                    color="secondary"
                   >
                     {text.tag2}
                   </Button>

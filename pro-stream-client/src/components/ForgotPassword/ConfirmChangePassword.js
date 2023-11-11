@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import Footer from "../Common/Footer";
 const theme = createTheme();
 
 const ConfirmChangePassword = ({ match }) => {
@@ -94,6 +95,7 @@ const ConfirmChangePassword = ({ match }) => {
           </form>
         </Box>
       </Container>
+      <Footer />
     </ThemeProvider>
   );
 };

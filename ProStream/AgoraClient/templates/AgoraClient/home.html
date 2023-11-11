@@ -1,0 +1,72 @@
+{% extends "AgoraClient/core.html" %}
+{% load static %}
+
+{% block title %}Home{% endblock title %}
+
+{% block content %}
+
+<main>
+
+    <section id="form-container">
+        <img id="chat-logo" src="{% static 'images/chat.png' %}" alt>
+        <div>
+            <h2 id="chat-logo">Welcome To ProChat</h2>
+            <p id="chat-logo">A Group Video Calling App</p>
+        </div>
+
+        <form id="form">
+
+            <div class="form-field">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Enter you name"
+                    style="text-transform:uppercase;" />
+            </div>
+
+            <div class="form-field">
+                {% csrf_token %}
+                <input type="text" name="room" placeholder="Enter room name"
+                    style="text-transform:uppercase;" />
+            </div>
+
+            <div class="form-field">
+                <input type="submit" value="Join Live Stream " />
+            </div>
+
+        </form>
+
+    </section>
+</main>
+
+<script type="text/javascript">
+
+        let form = document.getElementById('form')
+        let handleFromSubmit = async (e) => {
+                e.preventDefault()
+                
+                // getting the room name from the form 
+                let room = e.target.room.value.toUpperCase()
+
+                // getting the username from the form data
+                let userName = e.target.username.value
+
+                // getting the token and random uid with room name 
+                let response = await fetch(`/token/get-token/?channel=${room}`)
+
+                let data = await response.json()
+                let uid = data.uid 
+                let token = data.token 
+                let channel = data.channel 
+
+                sessionStorage.setItem('uid', uid)
+                sessionStorage.setItem('token', token)
+                sessionStorage.setItem('room', room)
+                sessionStorage.setItem('username', userName)
+
+                window.open('/token/stream/',)
+        }
+
+        form.addEventListener('submit', handleFromSubmit)
+        
+</script>
+
+{% endblock content %}

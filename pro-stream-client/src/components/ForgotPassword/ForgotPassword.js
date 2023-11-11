@@ -5,6 +5,7 @@ import {
   Button,
   Container,
   TextField,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -13,15 +14,12 @@ import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import signinbg from "../../Images/signinbg.jpg";
-import { getToken } from "../../services/LocalStorageService";
-import { setUserToken } from "../../features/authSlice";
-import { useDispatch } from "react-redux";
+import Footer from "../Common/Footer";
 
 const ForgotPassword = () => {
   const [credential, setCredential] = useState(""); // State for email
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const dispatch = useDispatch();
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -33,9 +31,8 @@ const ForgotPassword = () => {
           credential,
         }
       );
-
-      // Handle the response (e.g., set user token or redirect to a dashboard)
       console.log(response.data);
+
       if (response.data.status === "success") {
         localStorage.setItem("credential", credential);
         alert("Email send successfully. Please, check your email.");
@@ -44,7 +41,6 @@ const ForgotPassword = () => {
         setError("User not found. Please check your email/username.");
       }
     } catch (error) {
-      // Handle any errors (e.g., display an error message)
       // console.error("Login failed", error);
       setError("An error occurred. Please try again later.");
     }
@@ -57,82 +53,81 @@ const ForgotPassword = () => {
   //   });
   // };
 
-  let { access_token } = getToken();
-  useEffect(() => {
-    dispatch(setUserToken({ access_token: access_token }));
-  }, [access_token, dispatch]);
-
   return (
-    <Box
-      sx={{
-        backgroundImage: `url(${signinbg})`,
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        opacity: ".9",
-        height: "100vh",
-        width: "100%",
-      }}
-    >
-      <Container component="main" maxWidth="xs" sx={{ padding: 4 }}>
-        <Box
-          sx={{
-            marginTop: 1,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            background: "#cccccc",
-            padding: 3,
-            color: "black",
-            borderRadius: "10px",
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography variant="h6">
-            Getting back your ProStream account
-          </Typography>
-          <Typography variant="body">
-            Tell us some information about your account.
-          </Typography>
-          {error && (
-            <Alert severity="error" sx={{ marginY: "15px" }}>
-              <AlertTitle>Error</AlertTitle>
-              {error}
-            </Alert>
-          )}
+    <Box>
+      <Toolbar />
+      <Box
+        sx={{
+          backgroundImage: `url(${signinbg})`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          opacity: ".9",
+          height: "55vh",
+          width: "100%",
+        }}
+      >
+        <Container component="main" maxWidth="xs" sx={{ padding: 4 }}>
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              marginTop: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              background: "#cccccc",
+              padding: 3,
+              color: "black",
+              borderRadius: "10px",
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Enter your email or User name"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              color="secondary"
-              value={credential}
-              onChange={(e) => setCredential(e.target.value)}
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              color="secondary"
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography variant="h6">
+              Getting back your ProStream account
+            </Typography>
+            <Typography variant="body">
+              Tell us some information about your account.
+            </Typography>
+            {error && (
+              <Alert severity="error" sx={{ marginY: "2px" }}>
+                <AlertTitle>Error</AlertTitle>
+                {error}
+              </Alert>
+            )}
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
             >
-              Continue
-            </Button>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Enter your email or User name"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                color="secondary"
+                value={credential}
+                onChange={(e) => setCredential(e.target.value)}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                color="secondary"
+              >
+                Continue
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </Box>
+      <Footer />
     </Box>
   );
 };

@@ -19,6 +19,7 @@ from .renderer import AuthAPIRenderer
 from .serializer import * 
 # to send email 
 from .utils import EmailUser, format_email, generate_otp, get_tokens_for_user
+from finance.models import UserWallet
 
 
 
@@ -28,8 +29,9 @@ class RegistrationAPI(APIView):
                 serializer = RegistrationAPISerializer(data=request.data)
                 if serializer.is_valid(): # do not raise exception here, let the structured erros pass to the client 
                         user = serializer.save()
+                        user_wallet = UserWallet.objects.create(user = user)
                         token = get_tokens_for_user(user)
-                        return Response({'status' : 'success', 'token' : token}, status=status.HTTP_201_CREATED)
+                        return Response({'status' : 'success', 'token' : token, 'wallet_id': user_wallet.id}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
         
@@ -197,4 +199,10 @@ class LoginWithEmailOtpConfirmationAPI(APIView):
                                         
                                         
                 
-                
+
+class GetUserDetailsAPI(APIView):
+        permission_classes = [IsAuthenticated]
+        def get(self, request):
+                user = request.user
+                serializer = UserDetailsSerializers(instance = user)
+                return Response({'status': 'success', 'data': serializer.data})                        
