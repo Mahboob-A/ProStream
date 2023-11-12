@@ -16,8 +16,6 @@ from .models import *
 from .serializer import * 
 
 
-
-
 class CategoryCRUDAPI(APIView): 
         ''' CRUD of Category Model '''
         def get(self, request): 
