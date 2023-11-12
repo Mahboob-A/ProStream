@@ -16,6 +16,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         id = models.UUIDField(primary_key = True,default = uuid.uuid4, editable = False)
         username = models.CharField(_('username'), max_length=25, unique=True)
         email = models.EmailField(_('email address'), max_length=50, unique=True, default='abc@gmail.com')
+        profile_picture = models.ImageField(upload_to='CustomUser/ProfilePictures/', null=True, blank=True)
         phone_number = models.CharField(_('phone no'), unique=True, validators=[phone_regex],  max_length=15, null=True, blank=True)
         dob = models.DateField(_('date of birth'), null=True, blank=True)
         gender = models.CharField(_('gender'), max_length=3, choices=(('m', 'Male'), ('f', 'Female'), ('o', 'Other')), null=True, blank=True)

@@ -20,9 +20,11 @@ class StreamerCreateAPI(APIView):
                         user = request.user
                         user.streamer_id = instance.id
                         instance.original_user = user
-                        instance.save()
+                        streamer_channel = Channel.objects.create(streamer=instance)  # when a user registers as streamer, create a channel for that streamer 
+                        instance.channel_id = streamer_channel.id
                         user.save()
-                        return Response({'status' : 'success', 'data' : 'Streamer Created Successfully!'}, status=status.HTTP_201_CREATED)
+                        instance.save()
+                        return Response({'status' : 'success', 'data' : "Streamer and Streamer's Channel Created Successfully!"}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 

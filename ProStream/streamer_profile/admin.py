@@ -5,3 +5,5 @@ from .models import *
 
 admin.site.register(Streamer)
 admin.site.register(Stream)
+admin.site.register(Channel)
+admin.site.register(Team)

@@ -3,7 +3,7 @@ from django.urls import path
 
 # local import
 # from .views import recharge_wallet,success,failed
-from .views import rechargeWalletApi, successApi, failedApi, verificationAPI, AddBankAccountDetailsAPI, TipAPI
+from .views import rechargeWalletApi, successApi, failedApi, verificationAPI, BankAccountDetailsAPI, TipAPI
 
 urlpatterns = [
     # for DTL
@@ -15,7 +15,7 @@ urlpatterns = [
     path('success/',successApi.as_view(), name = 'payment_success'),
     path('failed/',failedApi.as_view(), name = 'payment_failed'),
     path('verification/', verificationAPI.as_view(), name = 'verification'),
-    path('add-bank-details/', AddBankAccountDetailsAPI.as_view(), name = 'add_bank_details'),
+    path('add-bank-details/', BankAccountDetailsAPI.as_view(), name = 'add_bank_details'),
     path('tip/', TipAPI.as_view(), name = 'tip-money'),
 
 ]
