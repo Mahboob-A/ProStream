@@ -11,7 +11,7 @@ class CustomUserAdmin(BaseUserAdmin):
         list_filter = ["email"]
         fieldsets = [
                 ('User Credentials' , {"fields": ["email",  "username", "is_a_user", "is_a_streamer"]}),
-                ("Personal info", {"fields": ['phone_number',"dob", "gender",]}),
+                ("Personal info", {"fields": ['phone_number',"dob", "gender", "profile_picture"]}),
                 ("Permissions", {"fields": ["is_staff", "is_email_verified", "is_temporarily_suspended", "is_permanently_banned"]}),
         ]
         add_fieldsets = [
