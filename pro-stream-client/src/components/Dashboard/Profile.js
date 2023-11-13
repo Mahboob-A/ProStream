@@ -1,12 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Avatar,
-  Button,
-  Container,
-  Grid,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Avatar, Button, Container, Grid, Typography } from "@mui/material";
 import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
@@ -18,14 +11,13 @@ const Profile = () => {
     dispatch(setUserToken({ access_token: access_token }));
   }, [access_token, dispatch]);
   return (
-    <Container maxWidth="md">
-      <Toolbar />
+    <Container>
       <Grid
         container
         spacing={3}
         padding={3}
         marginTop={4}
-        sx={{ backgroundColor: "white" }}
+        sx={{ backgroundColor: "black" }}
       >
         <Grid item xs={12} align="center">
           <Avatar

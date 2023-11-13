@@ -131,7 +131,8 @@ export default function SingleStream() {
       // listerer
       channel.on("ChannelMessage", (message, peerId) => {
         console.log("channel.on: ", message);
-        addMessageToChatList(message.text);
+        let chat = JSON.parse(message.text);
+        addMessageToChatList(chat);
       });
     };
 
@@ -147,11 +148,17 @@ export default function SingleStream() {
 
     let submitChatFormData = async (message) => {
       console.log("submitChatFormData: ", message);
+      let username = sessionStorage.getItem("username");
+      let data = {
+        text: message,
+        username: username,
+      };
+      channel.sendMessage({ text: JSON.stringify(data), type: "text" });
 
       // seding the message to the channel
-      channel.sendMessage({ text: message, type: "text" });
+      // channel.sendMessage({ text: message, type: "text" });
 
-      addMessageToChatList(message);
+      addMessageToChatList(data);
     };
 
     let addMessageToChatList = async (message) => {
@@ -179,10 +186,12 @@ export default function SingleStream() {
 
       // <strong>Chat sent </strong>
       let chatWrapper = `<div class="chat-inner">
-                            <p>${sessionStorage.getItem(
-                              "username"
-                            )}-${UserName}: ${getCurrentTime()}</p>
-                            <p>${message}</p>
+                            <p>${
+                              message.username
+                                ? message.username
+                                : "Unknown User"
+                            }: ${getCurrentTime()}</p>
+                            <p>${message.text}</p>
                           </div>`;
 
       allChats.insertAdjacentHTML("beforebegin", chatWrapper);

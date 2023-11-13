@@ -113,7 +113,7 @@ export default function NavBar() {
       sx={{ marginTop: "50px" }}
     >
       <MenuItem>
-        <Button href="/dashboard/profile">Profile</Button>{" "}
+        <Button href="/dashboard">Dashboard</Button>{" "}
       </MenuItem>
 
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
@@ -220,7 +220,7 @@ export default function NavBar() {
           </MenuItem>
         </Box>
       )}
-      <Button href="/dashboard/profile">
+      <Button href="/dashboard">
         <MenuItem>
           <IconButton
             size="large"
@@ -231,7 +231,7 @@ export default function NavBar() {
           >
             <PersonOutlineIcon />
           </IconButton>
-          <p>Profile</p>
+          <p>Dashboard</p>
         </MenuItem>
       </Button>
     </Menu>

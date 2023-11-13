@@ -17,13 +17,15 @@ import StreamForm from "./components/Stream/StreamForm";
 import BecomeStreamForm from "./components/Home/BecomeStreamForm";
 import Profile from "./components/Dashboard/Profile";
 import AgoraChat from "./components/AgoraChat/AgoraChat";
+import Dashboard from "./components/Dashboard/Dashboard";
+import ErrorPage from "./components/Common/ErrorPage";
 
 function App() {
   // access access_token from redux state
   const { access_token } = useSelector((state) => state.auth);
 
   return (
-    <div className="App" style={{ backgroundColor: "black" }}>
+    <div className="App" style={{ backgroundColor: "#0d0d0d" }}>
       <BrowserRouter>
         <NavBar />
         <Routes>
@@ -75,9 +77,13 @@ function App() {
           />
 
           {/* dashboard all routes  */}
-          <Route path="dashboard/profile" element={<Profile />} />
+          {/* <Route path="dashboard/profile" element={<Profile />} /> */}
+          <Route path="dashboard" element={<Dashboard />} />
           {/* agora chat  */}
           <Route path="chat" element={<AgoraChat />} />
+
+          {/* error page  */}
+          {/* <Route path="*" element={<ErrorPage />} /> */}
         </Routes>
       </BrowserRouter>
     </div>
