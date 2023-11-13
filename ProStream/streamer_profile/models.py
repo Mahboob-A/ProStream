@@ -259,9 +259,9 @@ class Team(models.Model):
                  
                 
 class Follow(models.Model): 
-        follower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following'),
-        follwoing = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='followers', null=True, blank=True),
-        category_follwing = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_follower', null=True, blank=True),
+        follower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='following')
+        following = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='followers', null=True, blank=True)
+        category_following = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='category_follower', null=True, blank=True)
         
         createdAt = models.DateTimeField(default=timezone.now)
         updatedAt = models.DateTimeField(auto_now=True) 
