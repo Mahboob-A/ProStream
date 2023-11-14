@@ -15,8 +15,8 @@ class EditProfileSerializer(ModelSerializer):
 class EditChannelSerializer(ModelSerializer): 
         class Meta: 
                 model = Channel
-                fields = [ 'bio', 'channel_display_name', 'display_picture', 'channel_banner_picture', 'streamer_about_1', 'streamer_about_2']
-                
+                fields = ['bio','channel_display_name','display_picture','channel_banner_picture','total_followers','streamer_about_1','streamer_about_2']
+                 
 
 
 ''' APIs For Team Section  '''

@@ -66,7 +66,7 @@ class EditChannelAPI(APIView):
                 try: 
                         streamer_id = request.user.streamer_id
                         serializer = serializers.EditChannelSerializer(streamer_id)
-                        return Response({'status' : 'success', 'data' : serializer.data}, status=status.HTTP_200_OK)
+                        return Response({'status': 'success', 'data': { **serializer.data,'streamer_username': request.user.username}}, status=status.HTTP_200_OK)
                 except Channel.DoesNotExist: 
                         return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
                 
@@ -141,7 +141,7 @@ class AddSocialLinksAPI(APIView):
 
 class StreamerWalletAPI(APIView):
         '''This API for get Streamer wallet status and withdraw money from streamer wallet'''
-        
+
 
 
 
