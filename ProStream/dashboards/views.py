@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from accounts.models import CustomUser
 from streamer_profile.models import * 
 from . import serializers
-from finance.models import UserWallet
+from finance.models import UserWallet,StreamerWallet
 
 
 ############################ User Dashboard APIs ##################################
@@ -63,13 +63,19 @@ class EditChannelAPI(APIView):
         permission_classes = [IsAuthenticated]
         
         def get(self, request):
-                try: 
-                        streamer_id = request.user.streamer_id
-                        serializer = serializers.EditChannelSerializer(streamer_id)
-                        return Response({'status' : 'success', 'data' : serializer.data}, status=status.HTTP_200_OK)
-                except Channel.DoesNotExist: 
-                        return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-                
+                user = request.user
+                try:
+                        streamer = Streamer.objects.get(id = user.streamer_id)
+                except Streamer.DoesNotExist:
+                        return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
+                try:
+                        channel = Channel.objects.get(streamer = streamer)
+                except Channel.DoesNotExist:
+                        return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
+                serializer = serializers.EditChannelSerializer(channel)
+                return Response({'status': 'success', 'data': { **serializer.data,'streamer_username': user.username}}, status=status.HTTP_200_OK)
+
+
         def patch(self, request): 
                 streamer_id = request.user.streamer_id        
                 try: 
@@ -86,18 +92,32 @@ class EditChannelAPI(APIView):
 class AddSocialLinksAPI(APIView):
         '''This API for streamer to update/add social links'''
         permission_classes = [IsAuthenticated]
+        def get(self, request):
+                user = request.user 
+                streamer_id = user.streamer_id
+                try:
+                        streamer = Streamer.objects.get(id = streamer_id)
+                except Streamer.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
+                try:
+                        social_media = SocialMedia.objects.get(streamer = streamer)
+                except SocialMedia.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No Social media instance found'}, status=status.HTTP_400_BAD_REQUEST)
+                serializer = serializers.SocialMediaSerializer(social_media)
+                return Response({'status' : 'success', 'data' : serializer.data}, status=status.HTTP_200_OK)
+
         def post(self, request):
                 user = request.user 
                 streamer_id = user.streamer_id
                 try:
                         streamer = Streamer.objects.get(id = streamer_id)
                 except Streamer.DoesNotExist:
-                        return Response({'status' : 'error','message': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
                 try:
                         social_media = SocialMedia.objects.get(streamer = streamer)
                 except SocialMedia.DoesNotExist:
-                        return Response({'status' : 'error','message': 'No Social media instance found'}, status=status.HTTP_400_BAD_REQUEST)
-                serializer = serializers.SocialMediaSerializer(social_media)
+                        return Response({'status' : 'error','data': 'No Social media instance found!'}, status=status.HTTP_400_BAD_REQUEST)
+                serializer = serializers.SocialMediaSerializer(social_media, data = request.data)
                 if serializer.is_valid():
                         serializer.save()
                         return Response({'status' : 'success', 'data' : 'Added Successfully!'}, status=status.HTTP_200_OK)
@@ -109,11 +129,11 @@ class AddSocialLinksAPI(APIView):
                 try:
                         streamer = Streamer.objects.get(id = streamer_id)
                 except Streamer.DoesNotExist:
-                        return Response({'status' : 'error','message': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
                 try:
                         social_media = SocialMedia.objects.get(streamer = streamer)
                 except SocialMedia.DoesNotExist:
-                        return Response({'status' : 'error','message': 'No Social media instance found'}, status=status.HTTP_400_BAD_REQUEST)
+                        return Response({'status' : 'error','data': 'No Social media instance found'}, status=status.HTTP_400_BAD_REQUEST)
                 serializer = serializers.SocialMediaSerializer(social_media, data=request.data, partial=True)
                 if serializer.is_valid():
                         serializer.save()
@@ -124,6 +144,37 @@ class AddSocialLinksAPI(APIView):
 ####################################################################
                 
 ''' # Dashboard APIs For Finance Are In Finance APP  '''
+
+class StreamerWalletAPI(APIView):
+        '''This API for get Streamer wallet status and withdraw money from streamer wallet'''
+        permission_classes = [IsAuthenticated]
+        def get(self, request):
+                user = request.user
+                
+                try:
+                        streamer = Streamer.objects.get(id = user.stream_id)
+                except Streamer.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
+                try:
+                        streamer_wallet = StreamerWallet.objects.get(streamer = streamer)
+                except StreamerWallet.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No streamer wallet found'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'status' : 'success', 'data' : {'available_amount': streamer_wallet.available_amount, 'total_tip_received':streamer_wallet.total_tip_received}}, status=status.HTTP_200_OK)
+
+        def post(self, request):
+                user = request.user
+                
+                try:
+                        streamer = Streamer.objects.get(id = user.stream_id)
+                except Streamer.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
+                try:
+                        streamer_wallet = StreamerWallet.objects.get(streamer = streamer)
+                except StreamerWallet.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No streamer wallet found'}, status=status.HTTP_400_BAD_REQUEST)
+                
+
+
 
 ####################################################################
 

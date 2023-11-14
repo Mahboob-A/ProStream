@@ -3,6 +3,7 @@ from rest_framework.serializers import ModelSerializer
 
 from accounts.models import CustomUser
 from streamer_profile.models import * 
+from finance.models import StreamerWallet
 
 
 ''' APIs For Edit Profile Section '''
@@ -15,8 +16,8 @@ class EditProfileSerializer(ModelSerializer):
 class EditChannelSerializer(ModelSerializer): 
         class Meta: 
                 model = Channel
-                fields = [ 'bio', 'channel_display_name', 'display_picture', 'channel_banner_picture', 'streamer_about_1', 'streamer_about_2']
-                
+                fields = ['bio','channel_display_name','display_picture','channel_banner_picture','total_followers','streamer_about_1','streamer_about_2']
+                 
 
 
 ''' APIs For Team Section  '''
@@ -34,5 +35,5 @@ class TeamSerializer(ModelSerializer):
 
 class SocialMediaSerializer(ModelSerializer):
         class Meta:
-                model = SocialMedia
+                model = StreamerWallet
                 fields = '__all__'
