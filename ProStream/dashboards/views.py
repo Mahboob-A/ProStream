@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from accounts.models import CustomUser
 from streamer_profile.models import * 
 from . import serializers
-from finance.models import UserWallet
+from finance.models import UserWallet,StreamerWallet
 
 
 ############################ User Dashboard APIs ##################################
@@ -138,6 +138,12 @@ class AddSocialLinksAPI(APIView):
 ####################################################################
                 
 ''' # Dashboard APIs For Finance Are In Finance APP  '''
+
+class StreamerWalletAPI(APIView):
+        '''This API for get Streamer wallet status and withdraw money from streamer wallet'''
+        
+
+
 
 ####################################################################
 

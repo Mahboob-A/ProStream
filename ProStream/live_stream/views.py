@@ -44,7 +44,7 @@ class GetCurrentStreamDetails(APIView):
                          
                 current_stream = Stream.objects.filter(streamer=streamer).order_by('-createdAt').first()
                 serializer = StreamSerializer(current_stream)
-                return Response({'status': 'success', 'data': serializer.data, 'streamer_username':user.username}, status=status.HTTP_200_OK)
+                return Response({'status': 'success', 'data': serializer.data}, status=status.HTTP_200_OK)
                 
 
 class GetChannelDetails(APIView):
@@ -59,3 +59,5 @@ class GetChannelDetails(APIView):
                         channel = Channel.objects.get(streamer = streamer)
                 except Channel.DoesNotExist:
                         return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
+                serializer = ChannelDetailsSerializer(channel)
+                return Response({'status': 'success', 'data': serializer.data, 'streamer_username':user.username}, status=status.HTTP_200_OK)
