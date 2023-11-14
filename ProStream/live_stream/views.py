@@ -47,17 +47,18 @@ class GetCurrentStreamDetails(APIView):
                 return Response({'status': 'success', 'data': serializer.data}, status=status.HTTP_200_OK)
                 
 
-class GetChannelDetails(APIView):
-        permission_classes = [IsAuthenticated]
-        def get(self, request):
-                user = request.user
-                try:
-                        streamer = Streamer.objects.get(id = user.streamer_id)
-                except Streamer.DoesNotExist:
-                        return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
-                try:
-                        channel = Channel.objects.get(streamer = streamer)
-                except Channel.DoesNotExist:
-                        return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
-                serializer = ChannelDetailsSerializer(channel)
-                return Response({'status': 'success', 'data': serializer.data, 'streamer_username':user.username}, status=status.HTTP_200_OK)
+# class GetChannelDetails(APIView):
+#         permission_classes = [IsAuthenticated]
+#         def get(self, request):
+#                 user = request.user
+#                 try:
+#                         streamer = Streamer.objects.get(id = user.streamer_id)
+#                 except Streamer.DoesNotExist:
+#                         return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
+#                 try:
+#                         channel = Channel.objects.get(streamer = streamer)
+#                 except Channel.DoesNotExist:
+#                         return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
+#                 serializer = ChannelDetailsSerializer(channel)
+#                 return Response({'status': 'success', 'data': { **serializer.data,'streamer_username': user.username}}, status=status.HTTP_200_OK)
+
