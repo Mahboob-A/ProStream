@@ -23,6 +23,8 @@ class StreamerCreateAPI(APIView):
                         instance.original_user = user
                         streamer_channel = Channel.objects.create(streamer=instance)  # when a user registers as streamer, create a channel for that streamer 
                         instance.channel_id = streamer_channel.id
+                        user.is_a_user = False
+                        user.is_a_streamer = True
                         user.save()
                         instance.save()
                         streamer_social_media = SocialMedia.objects.get_or_create(streamer = instance, channel = streamer_channel) # when a streamer register then create his social media instance

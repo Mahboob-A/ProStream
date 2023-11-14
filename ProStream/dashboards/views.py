@@ -147,7 +147,32 @@ class AddSocialLinksAPI(APIView):
 
 class StreamerWalletAPI(APIView):
         '''This API for get Streamer wallet status and withdraw money from streamer wallet'''
+        permission_classes = [IsAuthenticated]
+        def get(self, request):
+                user = request.user
+                
+                try:
+                        streamer = Streamer.objects.get(id = user.stream_id)
+                except Streamer.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
+                try:
+                        streamer_wallet = StreamerWallet.objects.get(streamer = streamer)
+                except StreamerWallet.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No streamer wallet found'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'status' : 'success', 'data' : {'available_amount': streamer_wallet.available_amount, 'total_tip_received':streamer_wallet.total_tip_received}}, status=status.HTTP_200_OK)
 
+        def post(self, request):
+                user = request.user
+                
+                try:
+                        streamer = Streamer.objects.get(id = user.stream_id)
+                except Streamer.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
+                try:
+                        streamer_wallet = StreamerWallet.objects.get(streamer = streamer)
+                except StreamerWallet.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No streamer wallet found'}, status=status.HTTP_400_BAD_REQUEST)
+                
 
 
 
