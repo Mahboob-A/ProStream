@@ -19,6 +19,7 @@ import Profile from "./components/Dashboard/Profile";
 import AgoraChat from "./components/AgoraChat/AgoraChat";
 import Dashboard from "./components/Dashboard/Dashboard";
 import ErrorPage from "./components/Common/ErrorPage";
+import UserDashboard from "./components/Dashboard/UserDashboard";
 
 function App() {
   // access access_token from redux state
@@ -79,6 +80,7 @@ function App() {
           {/* dashboard all routes  */}
           {/* <Route path="dashboard/profile" element={<Profile />} /> */}
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="user-dashboard" element={<UserDashboard />} />
           {/* agora chat  */}
           <Route path="chat" element={<AgoraChat />} />
 

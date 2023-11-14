@@ -11,8 +11,9 @@ import SocialMedia from "./SocialMedia";
 import WalletAndWithdrawl from "./WalletAndWithdrawl";
 import ScheduleStream from "./ScheduleStream";
 import PrivacyAndWarnings from "./PrivacyAndWarnings";
+import UserProfile from "./UserProfile";
 
-export default function Dashboard() {
+export default function UserDashboard() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -24,7 +25,7 @@ export default function Dashboard() {
       case 0:
         return (
           <Box sx={{ color: "white" }}>
-            <Profile />
+            <UserProfile />
           </Box>
         );
       case 1:
@@ -78,7 +79,7 @@ export default function Dashboard() {
     <Box sx={{ bgcolor: "black" }} padding={2}>
       <Toolbar />
       <Typography variant="h4" color="white">
-        Streamer Dashboard
+        User Dashboard
       </Typography>
       <Tabs
         value={value}
@@ -101,11 +102,11 @@ export default function Dashboard() {
         <Tab label="Edit Profile" sx={{ color: "white" }} />
         <Tab label="Verification and Bank Account" sx={{ color: "white" }} />
         <Tab label="Team" sx={{ color: "white" }} />
-        <Tab label="Analytics" sx={{ color: "white" }} />
+        {/* <Tab label="Analytics" sx={{ color: "white" }} />
         <Tab label="Social Media" sx={{ color: "white" }} />
         <Tab label="Wallet And Withdrawl" sx={{ color: "white" }} />
         <Tab label="Schedule Stream" sx={{ color: "white" }} />
-        <Tab label="Privacy And Warnings" sx={{ color: "white" }} />
+        <Tab label="Privacy And Warnings" sx={{ color: "white" }} /> */}
       </Tabs>
       {renderTabContent()}
     </Box>
