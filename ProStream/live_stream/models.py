@@ -25,7 +25,7 @@ class Category(models.Model):
         deletedAt = models.DateTimeField(blank=True, null=True) 
         
         def __str__(self): 
-                return self.name 
+                return self.name + " " + str(self.id)
         
 
 class Chat(models.Model): 
