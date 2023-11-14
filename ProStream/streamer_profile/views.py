@@ -25,7 +25,7 @@ class StreamerCreateAPI(APIView):
                         instance.channel_id = streamer_channel.id
                         user.save()
                         instance.save()
-                        streamer_social_media = SocialMedia.objects.create(streamer = instance, channel = streamer_channel) # when a streamer register then create his social media instance
+                        streamer_social_media = SocialMedia.objects.get_or_create(streamer = instance, channel = streamer_channel) # when a streamer register then create his social media instance
                         return Response({'status' : 'success', 'data' : "Streamer and Streamer's Channel Created Successfully!"}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -42,9 +42,14 @@ class StreamGoLiveAPI(APIView):
                 serializer = StreamCRUDSerializer(data=request.data)
                 print('data :  ', request.data)
                 print('user : ', user)
+                try:
+                        streamer = Streamer.objects.get(id = streamer_id)
+                except Streamer.DoesNotExist:
+                        return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_400_BAD_REQUEST)
+
                 if serializer.is_valid(): 
                         instance = serializer.save()
-                        instance.streamer = streamer_id
+                        instance.streamer = streamer
                         instance.save()
                         return Response({'status' : 'success', 'data' : 'Stream InstanceCreated Successfully!'}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

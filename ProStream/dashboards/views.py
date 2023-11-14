@@ -86,7 +86,7 @@ class EditChannelAPI(APIView):
 class AddSocialLinksAPI(APIView):
         '''This API for streamer to update/add social links'''
         permission_classes = [IsAuthenticated]
-        def post(self, request):
+        def get(self, request):
                 user = request.user 
                 streamer_id = user.streamer_id
                 try:
@@ -98,6 +98,20 @@ class AddSocialLinksAPI(APIView):
                 except SocialMedia.DoesNotExist:
                         return Response({'status' : 'error','message': 'No Social media instance found'}, status=status.HTTP_400_BAD_REQUEST)
                 serializer = serializers.SocialMediaSerializer(social_media)
+                return Response({'status' : 'success', 'data' : serializer.data}, status=status.HTTP_200_OK)
+
+        def post(self, request):
+                user = request.user 
+                streamer_id = user.streamer_id
+                try:
+                        streamer = Streamer.objects.get(id = streamer_id)
+                except Streamer.DoesNotExist:
+                        return Response({'status' : 'error','message': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
+                try:
+                        social_media = SocialMedia.objects.get(streamer = streamer)
+                except SocialMedia.DoesNotExist:
+                        return Response({'status' : 'error','message': 'No Social media instance found!'}, status=status.HTTP_400_BAD_REQUEST)
+                serializer = serializers.SocialMediaSerializer(social_media, data = request.data)
                 if serializer.is_valid():
                         serializer.save()
                         return Response({'status' : 'success', 'data' : 'Added Successfully!'}, status=status.HTTP_200_OK)

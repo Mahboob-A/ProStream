@@ -119,8 +119,8 @@ CONTENT_CLASSIFICATIONS = (
 class Stream(models.Model): 
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         
-        streamer = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='streams', null=True, blank=True),
-        category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='category_streams'),
+        streamer = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='streams', null=True, blank=True)
+        category = models.ForeignKey(Category, on_delete=models.SET_NULL, related_name='category_streams', null = True)
         stream_chat = models.OneToOneField(Chat, on_delete=models.CASCADE, null=True, blank=True)
         
         stream_title = models.CharField(max_length=150, validators=[MinLengthValidator(5, message='Your title is too short! Type at least 5 characters!')])
