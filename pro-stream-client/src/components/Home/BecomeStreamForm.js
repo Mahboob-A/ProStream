@@ -55,6 +55,8 @@ const BecomeStreamForm = () => {
       console.log("Become streamer form submitted:", response.data);
       if (response.data.status === "success") {
         alert(response.data.data);
+        localStorage.setItem("is_a_streamer", true);
+        window.location.reload();
         navigate("/stream-form");
       } else {
         setError(response.data.data);

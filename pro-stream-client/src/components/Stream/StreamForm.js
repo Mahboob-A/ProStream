@@ -71,7 +71,7 @@ const StreamForm = () => {
     is_previously_recorded: false,
     has_branded_content: false,
   });
-  console.log(formData);
+  // console.log(formData);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,7 +112,7 @@ const StreamForm = () => {
         formData,
         { headers: headers }
       );
-      console.log("Create Stream Form submitted:", response1.data);
+      // console.log("Create Stream Form submitted:", response1.data);
 
       // hosting video
       let response2 = await fetch(
@@ -120,7 +120,7 @@ const StreamForm = () => {
       );
 
       let data = await response2.json();
-      console.log("Host Stream:", data);
+      // console.log("Host Stream:", data);
 
       let uid = data.uid;
       let token = data.token;
@@ -133,12 +133,12 @@ const StreamForm = () => {
       // let userName = e.target.username.value;
       // sessionStorage.setItem("username", userName);
 
-      console.log({
-        uid: uid,
-        channel_name: channel,
-        token: token,
-        thumbnail: formData.thumbnail,
-      });
+      // console.log({
+      //   uid: uid,
+      //   channel_name: channel,
+      //   token: token,
+      //   thumbnail: formData.thumbnail,
+      // });
 
       // create stream model
       const response3 = await axios.post(
@@ -150,7 +150,7 @@ const StreamForm = () => {
           thumbnail: formData.thumbnail,
         }
       );
-      console.log("Create Stream:", response3.data);
+      // console.log("Create Stream:", response3.data);
 
       navigate("/video");
     } catch (error) {

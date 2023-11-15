@@ -86,27 +86,6 @@ export default function SingleStream() {
     dispatch(setUserToken({ access_token: access_token }));
   }, [access_token, dispatch]);
 
-  // user data fetch
-  const [UserName, setUserName] = React.useState("");
-
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data.data.username);
-        setUserName(response.data.data.username);
-        sessionStorage.setItem("username", response.data.data.username);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-
   // agora chat main logic start
   const initiateRTMRef = useRef(false);
   useEffect(() => {
@@ -215,6 +194,95 @@ export default function SingleStream() {
   }, []);
   // agora chat main logic end
 
+  const [streamerStreamData, setStreamerStreamData] = React.useState({});
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/live-chat/get/current-stream-details/api/", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        // console.log("Check", response.data.data);
+        setStreamerStreamData(response.data.data);
+        // localStorage.setItem("streamer_id", response.data.data.streamer);
+        // localStorage.setItem("stream_id", response.data.data.id);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        alert(error.response.data);
+      });
+  }, []);
+
+  const [streamerChannelData, setStreamerChannelData] = React.useState({});
+  useEffect(() => {
+    // axios
+    //   .get("http://127.0.0.1:8000/live-chat/get/channel-details/api/", {
+    axios
+      .get("http://127.0.0.1:8000/dashboard/edit-channel/api/", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        // console.log("Check", response.data.data);
+        setStreamerChannelData(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        alert(error.response.data);
+      });
+  }, []);
+  // console.log("streamerChannelData", streamerChannelData);
+
+  const [socialLink, setSocialLink] = React.useState({});
+  // useEffect(() => {
+  //   axios
+  //     .get("http://127.0.0.1:8000/dashboard/social-media-links/api/", {
+  //       headers: {
+  //         Authorization: `Bearer ${access_token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //     .then((response) => {
+  //       console.log("social", response.data.data);
+  //       setSocialLink(response.data.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //       alert(error.response.data);
+  //     });
+  // }, []);
+  // console.log("socialLink", socialLink);
+
+  // const [follow, setFollow] = React.useState(null);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       "http://127.0.0.1:8000/live-stream/follow-streamer-category/api/",
+  //       {
+  //         streamer_id: streamerStreamData.streamer,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${access_token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       console.log("social", response.data.data);
+  //       setSocialLink(response.data.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //       alert(error.response.data);
+  //     });
+  // }, []);
+  // console.log("socialLink", socialLink);
+
   const handleSentTip = async () => {
     const headers = {
       Authorization: `Bearer ${access_token}`,
@@ -224,9 +292,9 @@ export default function SingleStream() {
       const response = await axios.post(
         "http://127.0.0.1:8000/finance/tip/",
         {
-          stream_id: "80010b8a-778c-4640-9bc2-e8eb52bb1207",
+          stream_id: streamerStreamData.id,
           amount: amount,
-          streamer_id: "d5942890-411d-4210-a859-e96751889d46",
+          streamer_id: streamerStreamData.streamer,
         },
         {
           headers: headers,
@@ -236,7 +304,7 @@ export default function SingleStream() {
       alert("Tip Sent Successfully");
     } catch (error) {
       console.error("Error sending tip data:", error);
-      alert(error.response.data.message);
+      alert(error.response.data);
     }
     handleModalClose();
   };
@@ -293,7 +361,11 @@ export default function SingleStream() {
         {/* <CssBaseline /> */}
         <Main open={open}>
           {/* full streamer page show this section  */}
-          <Stream />
+          <Stream
+            streamerStreamData={streamerStreamData}
+            streamerChannelData={streamerChannelData}
+            socialLink={socialLink}
+          />
         </Main>
         <Drawer
           sx={{

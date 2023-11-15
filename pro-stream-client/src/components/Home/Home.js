@@ -16,6 +16,7 @@ import { Grid, Toolbar, Typography } from "@mui/material";
 import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -91,6 +92,31 @@ export default function Home() {
   React.useEffect(() => {
     dispatch(setUserToken({ access_token: access_token }));
   }, [access_token, dispatch]);
+
+  // user data fetch
+  const [UserAllInfo, setUserAllInfo] = React.useState({});
+
+  React.useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        // console.log("user data", response.data.data);
+        setUserAllInfo(response.data.data);
+        localStorage.setItem("username", response.data.data.username);
+        localStorage.setItem("email", response.data.data.email);
+        localStorage.setItem("streamer_id", response.data.data.streamer_id);
+        localStorage.setItem("is_a_user", response.data.data.is_a_user);
+        localStorage.setItem("is_a_streamer", response.data.data.is_a_streamer);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   return (
     <Box>

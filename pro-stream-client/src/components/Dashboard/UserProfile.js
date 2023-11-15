@@ -30,8 +30,9 @@ const UserProfile = () => {
     phone_number: "",
     dob: "",
     gender: "",
-    profile_picture: "",
+    profile_picture: null,
   });
+  console.log("UserData", userData);
 
   const headers = {
     Authorization: `Bearer ${access_token}`,
@@ -53,11 +54,13 @@ const UserProfile = () => {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
+  const handleFileChange = (event) => {
+    setUserData({
+      ...userData,
+      profile_picture: event.target.files[0],
+    });
   };
 
   const handleSubmit = (e) => {
@@ -69,7 +72,7 @@ const UserProfile = () => {
       .patch("http://127.0.0.1:8000/dashboard/edit-profile/api/", userData, {
         headers: {
           Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
@@ -168,9 +171,9 @@ const UserProfile = () => {
                   value={userData.gender || ""}
                   disabled
                 >
-                  <MenuItem value="male">Male</MenuItem>
-                  <MenuItem value="female">Female</MenuItem>
-                  <MenuItem value="other">Other</MenuItem>
+                  <MenuItem value="m">Male</MenuItem>
+                  <MenuItem value="f">Female</MenuItem>
+                  <MenuItem value="o">Other</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -226,9 +229,9 @@ const UserProfile = () => {
                     value={userData.gender || ""}
                     onChange={handleChange}
                   >
-                    <MenuItem value="male">Male</MenuItem>
-                    <MenuItem value="female">Female</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
+                    <MenuItem value="m">Male</MenuItem>
+                    <MenuItem value="f">Female</MenuItem>
+                    <MenuItem value="o">Other</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
@@ -242,6 +245,11 @@ const UserProfile = () => {
                 ) : (
                   <Typography>No profile picture available</Typography>
                 )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
               </Grid>
               <Grid item xs={12}>
                 <Button type="submit" variant="contained" color="primary">

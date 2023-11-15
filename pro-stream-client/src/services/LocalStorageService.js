@@ -1,6 +1,6 @@
 const storeToken = (value) => {
   if (value) {
-    console.log("Store Token", value);
+    // console.log("Store Token", value);
     const { access, refresh } = value;
     localStorage.setItem("access_token", access);
     localStorage.setItem("refresh_token", refresh);

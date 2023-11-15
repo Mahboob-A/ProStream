@@ -64,14 +64,15 @@ const Profile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Send streamer data to the server using Axios
     axios
       .patch(
         "http://127.0.0.1:8000/dashboard/edit-channel/api/",
         streamerData,
         {
-          headers: headers,
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
         }
       )
       .then((response) => {
@@ -154,6 +155,7 @@ const Profile = () => {
 
         <Grid item xs={12}>
           <Typography variant="h6">Followers</Typography>
+          
           {/* Display followers */}
           {/* You can display a list of followers here */}
         </Grid>
