@@ -35,5 +35,5 @@ class TeamSerializer(ModelSerializer):
 
 class SocialMediaSerializer(ModelSerializer):
         class Meta:
-                model = StreamerWallet
-                fields = '__all__'
+                model = SocialMedia 
+                fields = '__all__' 

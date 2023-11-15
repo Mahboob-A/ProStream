@@ -109,8 +109,8 @@ class BankAccountDetails(models.Model):
 
 class StreamerWallet(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        streamer = models.OneToOneField(Streamer, on_delete=models.CASCADE) 
-        bank_account = models.OneToOneField(BankAccountDetails, on_delete=models.CASCADE)
+        streamer = models.OneToOneField(Streamer, on_delete=models.CASCADE, null=True, blank=True) 
+        bank_account = models.OneToOneField(BankAccountDetails, on_delete=models.CASCADE,  null=True, blank=True)
         
         available_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # total amount of the streamer 
         ready_to_withdrawal_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # this money will be transferred into bank account 
@@ -142,8 +142,8 @@ class StreamerWallet(models.Model):
                 if self.available_amount >= amount:
                         self.available_amount -= amount
                         self.ready_to_withdrawal_amount += amount
-                        self.bank_account.balance += amount
-                        self.bank_account.save()
+                        # self.bank_account.balance += amount
+                        # self.bank_account.save()
                         self.save()
                 else:
                         raise Exception("Insufficient balance to withdraw.")
