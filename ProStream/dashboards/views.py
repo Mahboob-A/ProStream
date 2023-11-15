@@ -7,13 +7,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from decimal import Decimal
 
 
 # local imports 
 from accounts.models import CustomUser
 from streamer_profile.models import * 
 from . import serializers
-from finance.models import UserWallet,StreamerWallet
+from finance.models import *
 
 
 ############################ User Dashboard APIs ##################################
@@ -150,9 +151,10 @@ class StreamerWalletAPI(APIView):
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user
-                
-                try:
-                        streamer = Streamer.objects.get(id = user.stream_id)
+                if user.is_a_streamer == False:
+                        return Response({'status' : 'error','data': 'You are not streamer'}, status=status.HTTP_400_BAD_REQUEST)
+                try:    
+                        streamer = Streamer.objects.get(id = user.streamer_id)
                 except Streamer.DoesNotExist:
                         return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
                 try:
@@ -164,15 +166,47 @@ class StreamerWalletAPI(APIView):
         def post(self, request):
                 user = request.user
                 
-                try:
-                        streamer = Streamer.objects.get(id = user.stream_id)
+                if user.is_a_streamer == False:
+                        return Response({'status' : 'error','data': 'You are not streamer'}, status=status.HTTP_400_BAD_REQUEST)
+                try: #streamer
+                        streamer = Streamer.objects.get(id = user.streamer_id)
                 except Streamer.DoesNotExist:
                         return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
-                try:
+                try: #streamer wallet
                         streamer_wallet = StreamerWallet.objects.get(streamer = streamer)
                 except StreamerWallet.DoesNotExist:
                         return Response({'status' : 'error','data': 'No streamer wallet found'}, status=status.HTTP_400_BAD_REQUEST)
-                
+                try: # verification
+                        streamer_verification = Verification.objects.get(streamer = streamer)
+                except Verification.DoesNotExist:
+                        return Response({'status' : 'error','data': 'You are not verified'}, status=status.HTTP_400_BAD_REQUEST)
+                if streamer_verification.is_verification_approaved == False:
+                        return Response({'status' : 'error','data': 'Your application is under proccess'}, status=status.HTTP_400_BAD_REQUEST)
+                amount = request.data.get('amount')
+                if amount == None:
+                        return Response({'status' : 'error','data': 'You do not type amount'}, status=status.HTTP_400_BAD_REQUEST)
+
+                if streamer_wallet.available_amount < Decimal(amount):
+                        return Response({'status' : 'error','data': 'You have not sufficient money in your wallet'}, status=status.HTTP_400_BAD_REQUEST)                
+                streamer_wallet.withdraw(amount) #withdraw function
+                return Response({'status' : 'success', 'data' : 'Successfully Withdraw money'}, status=status.HTTP_200_OK)
+
+
+
+class StreamerAnalytics(APIView):
+        permission_classes = [IsAuthenticated]
+        def get(self, request):
+                user = request.user
+                if user.is_a_streamer == False:
+                        return Response({'status' : 'error','data': 'You are not streamer'}, status=status.HTTP_400_BAD_REQUEST)
+                try: #streamer
+                        streamer = Streamer.objects.get(id = user.streamer_id)
+                except Streamer.DoesNotExist:
+                        return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
 
 
 
