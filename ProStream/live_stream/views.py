@@ -37,7 +37,7 @@ class GetCurrentStreamDetails(APIView):
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user
-                streamer_id = request.data.get('streamer_id')
+                streamer_id = user.streamer_id
                 try:
                         streamer = Streamer.objects.get(id = streamer_id)
                 except Streamer.DoesNotExist:
