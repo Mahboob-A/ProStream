@@ -102,11 +102,14 @@ class verificationAPI(APIView):
     def post(self, request):
         user = request.user
         streamer_id = user.streamer_id
+        if Verification.objects.filter(streamer = streamer_id).exists(): 
+            return Response({'status' : 'error', 'data' : 'You have already initiated Verification process. Please wait till we verify your details.'}, status=status.HTTP_400_BAD_REQUEST)
+                
         try: 
             streamer = Streamer.objects.get(id = streamer_id)
         except Streamer.DoesNotExist:
-            return Response({'status' : 'error','data': 'Streamer Not Found'}, status=status.HTTP_400_BAD_REQUEST)
-        
+            return Response({'status' : 'error','data': 'You are not a streamer. Please regiester as streamer to proceed.'}, status=status.HTTP_400_BAD_REQUEST)
+         
         serializer = VerificationSerializer(data = request.data)
         if serializer.is_valid():
             instance = serializer.save() 
@@ -164,6 +167,10 @@ class BankAccountDetailsAPI(APIView):
     def post(self, request):
         user = request.user
         streamer_id = user.streamer_id
+        
+        if BankAccountDetails.objects.filter(streamer = streamer_id).exists():
+            return Response({'status' : 'error', 'data' : 'You have already added yourt Bank Account Details. If you want to updated any details, please update from Update Bank Account Details Section.'}, status=status.HTTP_400_BAD_REQUEST)
+        
         try: 
             streamer = Streamer.objects.get(id = streamer_id)
         except Streamer.DoesNotExist:
@@ -173,7 +180,7 @@ class BankAccountDetailsAPI(APIView):
         except Verification.DoesNotExist:
             return Response({'status' : 'error','data': 'Please add details in Verification Stage in order to add Bank Account!'}, status=status.HTTP_400_BAD_REQUEST)
         if streamer_verification.is_verification_approaved == False:
-            return Response({'status' : 'error','data': "Your verification is under process. You can add bank account once your verification is completed."}, status=status.HTTP_200_OK)
+            return Response({'status' : 'error','data': "Your verification is under process. You can add bank account once your verification is completed."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = BankAccountDetailsSerializer(data = request.data)
         if serializer.is_valid():
             instance = serializer.save()
@@ -184,6 +191,12 @@ class BankAccountDetailsAPI(APIView):
             try:  # send email to streamer that bank account is created. 
                 email_data = updated_email_formatter(user, bank_account_created = True)
                 EmailUser.send_email(email_data)
+                
+                # deleting the user wallet that was created when the user signed up 
+                old_uer_wallet = UserWallet.objects.get(user=request.user)
+                old_uer_wallet.delete()
+                
+                # creating a wallet that is for streamers
                 streamer_wallet = StreamerWallet.objects.create(streamer = streamer, bank_account = instance)  # creating a wallter for streamer 
                 return Response({'status' : 'success','data': 'Bank Account, Streamer Wallet Created! You will receive email shortly!'}, status=status.HTTP_200_OK)
             
