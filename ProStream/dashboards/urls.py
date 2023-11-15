@@ -14,4 +14,5 @@ urlpatterns = [
         path('get/user-wallet-status/', views.UserWalletStatusAPI.as_view(), name='user_wallet_status'),
         path('social-media-links/api/', views.AddSocialLinksAPI.as_view(), name = 'social_media_links'),
         path('streamer-wallet-status/', views.StreamerWalletAPI.as_view(), name='streamer_wallet_status'),
+        path('streamer-analytics/', views.StreamerAnalytics.as_view(), name='streamer-analytics'),
 ]

@@ -203,6 +203,20 @@ class StreamerAnalytics(APIView):
                         streamer = Streamer.objects.get(id = user.streamer_id)
                 except Streamer.DoesNotExist:
                         return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
+                follower_count = Follow.objects.filter(following = streamer).count() # total follower
+                try:
+                        streamer_wallet = StreamerWallet.objects.get(streamer = streamer)
+                except StreamerWallet.DoesNotExist:
+                        return Response({'status' : 'error','data': 'streamer have no wallet and streamer need to verified'}, status=status.HTTP_400_BAD_REQUEST)
+                total_tip_recieved = streamer_wallet.total_tip_received # total tip recieved
+                biggest_tipper = Tip.objects.filter(wallet = streamer_wallet).order_by('-amount').first()
+                if biggest_tipper:
+                        biggest_tipper_username = biggest_tipper.tipper.username
+                else:
+                        biggest_tipper_username = None         
+                return Response({'status' : 'success', 'data' : {'follower_count':follower_count,'total_tip_recieved': total_tip_recieved, 'username':biggest_tipper_username}}, status=status.HTTP_200_OK)
+
+
 
 
 
