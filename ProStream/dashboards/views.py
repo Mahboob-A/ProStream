@@ -65,8 +65,9 @@ class EditChannelAPI(APIView):
         
         def get(self, request):
                 user = request.user
+                streamer_id = request.data.get('streamer_id')
                 try:
-                        streamer = Streamer.objects.get(id = user.streamer_id)
+                        streamer = Streamer.objects.get(id = streamer_id)
                 except Streamer.DoesNotExist:
                         return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
                 try:
@@ -95,7 +96,7 @@ class AddSocialLinksAPI(APIView):
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user 
-                streamer_id = user.streamer_id
+                streamer_id = request.data.get('streamer_id')
                 try:
                         streamer = Streamer.objects.get(id = streamer_id)
                 except Streamer.DoesNotExist:
@@ -110,15 +111,13 @@ class AddSocialLinksAPI(APIView):
         def post(self, request):
                 user = request.user 
                 streamer_id = user.streamer_id
+                if SocialMedia.objects.filter(streamer__id = streamer_id).exists():
+                        return Response({'status' : 'error','data': 'Social media links already added, you can update'}, status=status.HTTP_400_BAD_REQUEST)
                 try:
                         streamer = Streamer.objects.get(id = streamer_id)
                 except Streamer.DoesNotExist:
                         return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
-                try:
-                        social_media = SocialMedia.objects.get(streamer = streamer)
-                except SocialMedia.DoesNotExist:
-                        return Response({'status' : 'error','data': 'No Social media instance found!'}, status=status.HTTP_400_BAD_REQUEST)
-                serializer = serializers.SocialMediaSerializer(social_media, data = request.data)
+                serializer = serializers.SocialMediaSerializer(data = request.data)
                 if serializer.is_valid():
                         serializer.save()
                         return Response({'status' : 'success', 'data' : 'Added Successfully!'}, status=status.HTTP_200_OK)
@@ -317,3 +316,6 @@ class TeamActionAPI(APIView):
                 
                 else: 
                         return Response({'status' : 'error', 'data' : 'The action is not correct to proceed this request. Please check the action.'}, status=status.HTTP_400_BAD_REQUEST)
+                
+
+# class Schedule
