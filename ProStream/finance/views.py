@@ -173,7 +173,7 @@ class BankAccountDetailsAPI(APIView):
         except Verification.DoesNotExist:
             return Response({'status' : 'error','data': 'Please add details in Verification Stage in order to add Bank Account!'}, status=status.HTTP_400_BAD_REQUEST)
         if streamer_verification.is_verification_approaved == False:
-            return Response({'status' : 'error','data': "Your verification is under process. You can add bank account once your verification is completed."}, status=status.HTTP_200_OK)
+            return Response({'status' : 'error','data': "Your verification is under process. You can add bank account once your verification is completed."}, status=status.HTTP_400_BAD_REQUEST)
         serializer = BankAccountDetailsSerializer(data = request.data)
         if serializer.is_valid():
             instance = serializer.save()
