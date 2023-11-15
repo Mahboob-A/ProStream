@@ -15,6 +15,8 @@ class StreamerCreateAPI(APIView):
         ''' Creates An Instance Of Streamer '''
         permission_classes = [IsAuthenticated]
         def post(self, request): 
+                if request.user.is_a_streamer == True:
+                        return Response({'status' : 'error', 'data' : "You are already a Streamer"}, status=status.HTTP_201_CREATED)
                 serializer = StreamerCRUDSerializer(data=request.data)
                 if serializer.is_valid(): 
                         instance = serializer.save()
@@ -68,7 +70,7 @@ class UserFollowAPI(APIView):
                         try:
                                 Follow.objects.get(follower=user, following__id = following_id)
                         except Follow.DoesNotExist:
-                                return Response({'status' : 'error', 'data' : 'User did not follow the streamer'}, status=status.HTTP_400_BAD_REQUEST)
+                                return Response({'status' : 'error', 'data' : False}, status=status.HTTP_400_BAD_REQUEST) # this user has not followed the streamer
 
                 elif category_name:
                         try:
@@ -86,11 +88,23 @@ class UserFollowAPI(APIView):
                 category_name = request.data.get('category')
 
                 if following_id:
+                        if user.streamer_id == following_id:
+                                return Response({'status': 'error', 'data': 'Streamer can not himself'}, status=status.HTTP_400_BAD_REQUEST)
+
                         try:
                                 streamer = Streamer.objects.get(id = following_id)
                         except Streamer.DoesNotExist:
                                 return Response({'status': 'error', 'data': 'Invalid Streamer id!'}, status=status.HTTP_400_BAD_REQUEST)
-                        Follow.objects.get_or_create(follower=user, following_id = following_id)
+                        try:
+                                channel = Channel.objects.get(streamer = streamer)
+                        except:
+                                return Response({'status': 'error', 'data': 'Channel not found'}, status=status.HTTP_400_BAD_REQUEST)
+                        if Follow.objects.filter(follower=user, following = streamer).exists(): 
+                                return Response({'status' : 'error', 'data' : 'You have already followed'}, status=status.HTTP_400_BAD_REQUEST)
+                        channel.total_followers += 1
+                        channel.save()
+                        Follow.objects.get_or_create(follower=user, following = streamer)
+
                 elif category_name:
                         try:
                                 category = Category.objects.get(name = category_name)
@@ -119,5 +133,13 @@ class UserFollowAPI(APIView):
                                 
                 else:
                         return Response({'status': 'error', 'data': 'Invalid streamer id or category name'}, status=status.HTTP_400_BAD_REQUEST)
+                
+                try:
+                        channel = Channel.objects.get(streamer__id = streamer_id)
+                except:
+                        return Response({'status': 'error', 'data': 'Channel not found'}, status=status.HTTP_400_BAD_REQUEST)
+                       
+                channel.total_followers -= 1
+                channel.save()
                 return Response({'status': 'success', 'data': 'Unfollowed successfully'}, status=status.HTTP_204_NO_CONTENT)
         

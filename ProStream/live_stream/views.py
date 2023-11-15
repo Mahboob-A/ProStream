@@ -37,8 +37,9 @@ class GetCurrentStreamDetails(APIView):
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user
+                streamer_id = request.data.get('streamer_id')
                 try:
-                        streamer = Streamer.objects.get(id = user.streamer_id)
+                        streamer = Streamer.objects.get(id = streamer_id)
                 except Streamer.DoesNotExist:
                         return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
                          
