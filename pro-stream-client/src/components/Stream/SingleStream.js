@@ -79,6 +79,7 @@ export default function SingleStream() {
   const handleModalOpen = () => setOpenModal(true);
   const handleModalClose = () => setOpenModal(false);
   const dispatch = useDispatch();
+  // const streamer_token = sessionStorage.getItem("token");
 
   // // after reload on this page redux state data will be present all time
   let { access_token } = getToken();
@@ -214,18 +215,25 @@ export default function SingleStream() {
         alert(error.response.data);
       });
   }, []);
+  console.log("streamerStreamData", streamerStreamData);
 
   const [streamerChannelData, setStreamerChannelData] = React.useState({});
   useEffect(() => {
     // axios
     //   .get("http://127.0.0.1:8000/live-chat/get/channel-details/api/", {
     axios
-      .get("http://127.0.0.1:8000/dashboard/edit-channel/api/", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
+      .get(
+        "http://127.0.0.1:8000/dashboard/edit-channel/api/",
+        {
+          streamer_id: streamerStreamData.streamer,
         },
-      })
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
         // console.log("Check", response.data.data);
         setStreamerChannelData(response.data.data);
@@ -235,52 +243,32 @@ export default function SingleStream() {
         alert(error.response.data);
       });
   }, []);
-  // console.log("streamerChannelData", streamerChannelData);
+  console.log("streamerChannelData", streamerChannelData);
 
   const [socialLink, setSocialLink] = React.useState({});
-  // useEffect(() => {
-  //   axios
-  //     .get("http://127.0.0.1:8000/dashboard/social-media-links/api/", {
-  //       headers: {
-  //         Authorization: `Bearer ${access_token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //     })
-  //     .then((response) => {
-  //       console.log("social", response.data.data);
-  //       setSocialLink(response.data.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //       alert(error.response.data);
-  //     });
-  // }, []);
-  // console.log("socialLink", socialLink);
-
-  // const [follow, setFollow] = React.useState(null);
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       "http://127.0.0.1:8000/live-stream/follow-streamer-category/api/",
-  //       {
-  //         streamer_id: streamerStreamData.streamer,
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${access_token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     )
-  //     .then((response) => {
-  //       console.log("social", response.data.data);
-  //       setSocialLink(response.data.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //       alert(error.response.data);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get(
+        "http://127.0.0.1:8000/dashboard/social-media-links/api/",
+        {
+          streamer_id: streamerStreamData.streamer,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log("social", response.data.data);
+        setSocialLink(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        alert(error.response.data);
+      });
+  }, []);
   // console.log("socialLink", socialLink);
 
   const handleSentTip = async () => {
@@ -365,6 +353,7 @@ export default function SingleStream() {
             streamerStreamData={streamerStreamData}
             streamerChannelData={streamerChannelData}
             socialLink={socialLink}
+            streamer_id={streamerStreamData.streamer}
           />
         </Main>
         <Drawer

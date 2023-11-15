@@ -32,7 +32,7 @@ const UserProfile = () => {
     gender: "",
     profile_picture: null,
   });
-  console.log("UserData", userData);
+  // console.log("UserData", userData);
 
   const headers = {
     Authorization: `Bearer ${access_token}`,

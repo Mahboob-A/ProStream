@@ -11,7 +11,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import MoreVert from "@mui/icons-material/MoreVert";
 import AddReactionOutlinedIcon from "@mui/icons-material/AddReactionOutlined";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -22,6 +22,9 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import VideoStream from "../VideoStream/VideoStream";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import axios from "axios";
+import { getToken } from "../../services/LocalStorageService";
 
 const TikTokIcon = ({ color = "#ffffff" }) => {
   return (
@@ -37,10 +40,16 @@ const TikTokIcon = ({ color = "#ffffff" }) => {
   );
 };
 
-const Stream = ({ streamerStreamData, streamerChannelData, socialLink }) => {
+const Stream = ({
+  streamerStreamData,
+  streamerChannelData,
+  socialLink,
+  streamer_id,
+}) => {
   // console.log("from stream page", streamerStreamData);
   // console.log("from stream page", streamerChannelData);
   // console.log("from stream page", socialLink);
+  console.log("from stream page", streamer_id);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -49,6 +58,33 @@ const Stream = ({ streamerStreamData, streamerChannelData, socialLink }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const { access_token } = getToken();
+
+  const [follow, setFollow] = React.useState(null);
+  useEffect(() => {
+    axios
+      .get(
+        "http://127.0.0.1:8000/live-stream/follow-streamer-category/api/",
+        {
+          streamer_id: streamer_id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log("follow", response.data.data);
+        setFollow(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error follow data:", error);
+        alert(error.response.data);
+      });
+  }, []);
 
   return (
     <Box sx={{ marginTop: "20px", padding: "5px" }}>
@@ -228,6 +264,17 @@ const Stream = ({ streamerStreamData, streamerChannelData, socialLink }) => {
                     color="white"
                   >
                     TikTok
+                  </Link>
+                </Button>
+              ) : null}
+              {socialLink.x_link ? (
+                <Button
+                  variant="outlined"
+                  sx={{ color: "white" }}
+                  startIcon={<TwitterIcon />}
+                >
+                  <Link href={socialLink.x_link} underline="none" color="white">
+                    Twitter
                   </Link>
                 </Button>
               ) : null}

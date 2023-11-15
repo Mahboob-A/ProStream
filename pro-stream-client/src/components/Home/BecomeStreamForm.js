@@ -36,7 +36,7 @@ const BecomeStreamForm = () => {
   };
 
   formData.original_user = sessionStorage.getItem("credential");
-  console.log(formData.original_user);
+  // console.log(formData.original_user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,8 +56,8 @@ const BecomeStreamForm = () => {
       if (response.data.status === "success") {
         alert(response.data.data);
         localStorage.setItem("is_a_streamer", true);
-        window.location.reload();
         navigate("/stream-form");
+        window.location.reload();
       } else {
         setError(response.data.data);
       }

@@ -12,11 +12,13 @@ import {
   MenuItem,
   Card,
   CardContent,
+  Box,
 } from "@mui/material";
 import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import UserProfile from "./UserProfile";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -33,6 +35,7 @@ const Profile = () => {
     streamer_about_1: "",
     streamer_about_2: "",
   });
+  console.log("Streamer data:", streamerData);
 
   const headers = {
     Authorization: `Bearer ${access_token}`,
@@ -155,7 +158,7 @@ const Profile = () => {
 
         <Grid item xs={12}>
           <Typography variant="h6">Followers</Typography>
-          
+
           {/* Display followers */}
           {/* You can display a list of followers here */}
         </Grid>
@@ -176,6 +179,10 @@ const Profile = () => {
           </Typography>
         </Grid>
       </Grid>
+      <Box>
+        {/* user profile here */}
+        <UserProfile />
+      </Box>
       <Grid container>
         <Grid item xs={12} align="center" sx={{ backgroundColor: "red" }}>
           <Card>
