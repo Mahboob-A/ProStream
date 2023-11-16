@@ -12,11 +12,12 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import { Button, Grid, Link } from "@mui/material";
 import logo from "../../Images/prostream.png";
 import { useNavigate } from "react-router-dom";
-import { removeToken } from "../../services/LocalStorageService";
+import { getToken, removeToken } from "../../services/LocalStorageService";
 import { unSetUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import VideoCallIcon from "@mui/icons-material/VideoCall";
+import axios from "axios";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -65,9 +66,34 @@ export default function NavBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const dispatch = useDispatch();
-
   // access access_token from redux state
-  const { access_token } = useSelector((state) => state.auth);
+  // const { access_token } = useSelector((state) => state.auth);
+  const { access_token } = getToken();
+
+  const [UserAllInfo, setUserAllInfo] = React.useState({});
+  // user data fetch
+  React.useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        // console.log("user data", response.data.data);
+        setUserAllInfo(response.data.data);
+        // localStorage.setItem("username", response.data.data.username);
+        // localStorage.setItem("email", response.data.data.email);
+        // localStorage.setItem("streamer_id", response.data.data.streamer_id);
+        // localStorage.setItem("is_a_user", response.data.data.is_a_user);
+        // localStorage.setItem("is_a_streamer", response.data.data.is_a_streamer);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+  // console.log("user data", UserAllInfo);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -90,7 +116,13 @@ export default function NavBar() {
     // localStorage.removeItem("credential");
     dispatch(unSetUserToken({ access_token: null }));
     removeToken();
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+    localStorage.removeItem("streamer_id");
+    localStorage.removeItem("is_a_user");
+    localStorage.removeItem("is_a_streamer");
     navigate("/signin");
+
     // window.location.reload();
   };
 
@@ -112,9 +144,15 @@ export default function NavBar() {
       onClose={handleMenuClose}
       sx={{ marginTop: "50px" }}
     >
-      <MenuItem>
-        <Button href="/dashboard/profile">Profile</Button>{" "}
-      </MenuItem>
+      {UserAllInfo?.is_a_streamer ? (
+        <MenuItem>
+          <Button href="/dashboard">Dashboard</Button>{" "}
+        </MenuItem>
+      ) : (
+        <MenuItem>
+          <Button href="/user-dashboard">Dashboard</Button>{" "}
+        </MenuItem>
+      )}
 
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       {access_token && (
@@ -177,33 +215,40 @@ export default function NavBar() {
         </Box>
       ) : (
         <Box>
-          <Button
-            variant="contained"
-            sx={{
-              color: "#ffffff",
-              backgroundColor: "red",
-              paddingX: "10px",
-              marginRight: "5px",
-              textTransform: "capitalize",
-            }}
-            startIcon={<VideoCallIcon sx={{ color: "white" }} />}
-            href="/stream-form"
-          >
-            Go Live
-          </Button>
-          <Button
-            variant="contained"
-            sx={{
-              color: "white",
-              backgroundColor: "#CB6D85",
-              paddingX: "10px",
-              marginRight: "5px",
-              textTransform: "capitalize",
-            }}
-            onClick={() => navigate("/become-stream-form")}
-          >
-            Become Streamer
-          </Button>
+          {UserAllInfo?.is_a_streamer ? (
+            <MenuItem>
+              <Button
+                variant="contained"
+                sx={{
+                  color: "#ffffff",
+                  backgroundColor: "red",
+                  paddingX: "10px",
+                  marginRight: "5px",
+                  textTransform: "capitalize",
+                }}
+                startIcon={<VideoCallIcon sx={{ color: "white" }} />}
+                href="/stream-form"
+              >
+                Go Live
+              </Button>
+            </MenuItem>
+          ) : (
+            <MenuItem>
+              <Button
+                variant="contained"
+                sx={{
+                  color: "white",
+                  backgroundColor: "#CB6D85",
+                  paddingX: "10px",
+                  marginRight: "5px",
+                  textTransform: "capitalize",
+                }}
+                onClick={() => navigate("/become-stream-form")}
+              >
+                Become Streamer
+              </Button>
+            </MenuItem>
+          )}
           <MenuItem>
             <Button
               variant="contained"
@@ -220,20 +265,37 @@ export default function NavBar() {
           </MenuItem>
         </Box>
       )}
-      <Button href="/dashboard/profile">
-        <MenuItem>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <PersonOutlineIcon />
-          </IconButton>
-          <p>Profile</p>
-        </MenuItem>
-      </Button>
+      {UserAllInfo?.is_a_streamer ? (
+        <Button href="/dashboard">
+          <MenuItem>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <PersonOutlineIcon />
+            </IconButton>
+            <p>Dashboard</p>
+          </MenuItem>
+        </Button>
+      ) : (
+        <Button href="/user-dashboard">
+          <MenuItem>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <PersonOutlineIcon />
+            </IconButton>
+            <p>Dashboard</p>
+          </MenuItem>
+        </Button>
+      )}
     </Menu>
   );
 
@@ -303,33 +365,36 @@ export default function NavBar() {
                 </Box>
               ) : (
                 <Box>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      color: "#ffffff",
-                      backgroundColor: "red",
-                      paddingX: "10px",
-                      marginRight: "5px",
-                      textTransform: "capitalize",
-                    }}
-                    startIcon={<VideoCallIcon sx={{ color: "white" }} />}
-                    href="/stream-form"
-                  >
-                    Go Live
-                  </Button>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      color: "white",
-                      backgroundColor: "#CB6D85",
-                      paddingX: "10px",
-                      marginRight: "5px",
-                      textTransform: "capitalize",
-                    }}
-                    href="/become-stream-form"
-                  >
-                    Become Streamer
-                  </Button>
+                  {UserAllInfo?.is_a_streamer ? (
+                    <Button
+                      variant="contained"
+                      sx={{
+                        color: "#ffffff",
+                        backgroundColor: "red",
+                        paddingX: "10px",
+                        marginRight: "5px",
+                        textTransform: "capitalize",
+                      }}
+                      startIcon={<VideoCallIcon sx={{ color: "white" }} />}
+                      href="/stream-form"
+                    >
+                      Go Live
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      sx={{
+                        color: "white",
+                        backgroundColor: "#CB6D85",
+                        paddingX: "10px",
+                        marginRight: "5px",
+                        textTransform: "capitalize",
+                      }}
+                      href="/become-stream-form"
+                    >
+                      Become Streamer
+                    </Button>
+                  )}
                   <Button
                     variant="contained"
                     sx={{

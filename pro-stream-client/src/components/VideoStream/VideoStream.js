@@ -52,7 +52,7 @@ const VideoStream = () => {
           config.token,
           config.uid
         );
-        console.log("Inside Client", client);
+        // console.log("Inside Client", client);
 
         // handle the remote users that are joined in the stream
         client.on("user-published", handleUserPublished);

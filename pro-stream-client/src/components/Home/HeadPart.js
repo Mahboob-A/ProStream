@@ -31,7 +31,7 @@ const HeadPart = () => {
     // console.log(channel_name);
 
     try {
-      // get hosting video info 
+      // get hosting video info
       let res = await fetch(
         `http://127.0.0.1:8000/token/get-token-for-viewer/api/?channel=${channel_name}`
       );

@@ -45,7 +45,7 @@ class GetCurrentStreamDetails(APIView):
                          
                 current_stream = Stream.objects.filter(streamer=streamer).order_by('-createdAt').first()
                 serializer = StreamSerializer(current_stream)
-                return Response({'status': 'success', 'data': serializer.data}, status=status.HTTP_200_OK)
+                return Response({'status': 'success', 'data': serializer.data, "streamer_id":streamer_id}, status=status.HTTP_200_OK)
                 
 
 

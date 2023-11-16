@@ -41,7 +41,7 @@ export default function SignIn() {
         credential,
         password,
       });
-      console.log("Login responese", response.data);
+      // console.log("Login responese", response.data);
 
       if (response.data.status === "success") {
         // localStorage.setItem("credential", credential);

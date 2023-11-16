@@ -79,33 +79,13 @@ export default function SingleStream() {
   const handleModalOpen = () => setOpenModal(true);
   const handleModalClose = () => setOpenModal(false);
   const dispatch = useDispatch();
+  // const streamer_token = sessionStorage.getItem("token");
 
   // // after reload on this page redux state data will be present all time
   let { access_token } = getToken();
   React.useEffect(() => {
     dispatch(setUserToken({ access_token: access_token }));
   }, [access_token, dispatch]);
-
-  // user data fetch
-  const [UserName, setUserName] = React.useState("");
-
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data.data.username);
-        setUserName(response.data.data.username);
-        sessionStorage.setItem("username", response.data.data.username);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
 
   // agora chat main logic start
   const initiateRTMRef = useRef(false);
@@ -131,7 +111,8 @@ export default function SingleStream() {
       // listerer
       channel.on("ChannelMessage", (message, peerId) => {
         console.log("channel.on: ", message);
-        addMessageToChatList(message.text);
+        let chat = JSON.parse(message.text);
+        addMessageToChatList(chat);
       });
     };
 
@@ -147,11 +128,17 @@ export default function SingleStream() {
 
     let submitChatFormData = async (message) => {
       console.log("submitChatFormData: ", message);
+      let username = sessionStorage.getItem("username");
+      let data = {
+        text: message,
+        username: username,
+      };
+      channel.sendMessage({ text: JSON.stringify(data), type: "text" });
 
       // seding the message to the channel
-      channel.sendMessage({ text: message, type: "text" });
+      // channel.sendMessage({ text: message, type: "text" });
 
-      addMessageToChatList(message);
+      addMessageToChatList(data);
     };
 
     let addMessageToChatList = async (message) => {
@@ -179,10 +166,12 @@ export default function SingleStream() {
 
       // <strong>Chat sent </strong>
       let chatWrapper = `<div class="chat-inner">
-                            <p>${sessionStorage.getItem(
-                              "username"
-                            )}-${UserName}: ${getCurrentTime()}</p>
-                            <p>${message}</p>
+                            <p>${
+                              message.username
+                                ? message.username
+                                : "Unknown User"
+                            }: ${getCurrentTime()}</p>
+                            <p>${message.text}</p>
                           </div>`;
 
       allChats.insertAdjacentHTML("beforebegin", chatWrapper);
@@ -206,6 +195,87 @@ export default function SingleStream() {
   }, []);
   // agora chat main logic end
 
+  const [streamerStreamData, setStreamerStreamData] = React.useState("");
+  const [streamerStreamDataAll, setStreamerStreamDataAll] = React.useState({});
+  const [streamerChannelData, setStreamerChannelData] = React.useState({});
+  useEffect(() => {
+    console.log(access_token);
+
+    axios
+      .get("http://127.0.0.1:8000/live-chat/get/current-stream-details/api/", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        // console.log("check", response.data.data);
+        console.log("check5", response.data.streamer_id);
+        setStreamerStreamData(response.data.streamer_id);
+        setStreamerStreamDataAll(response.data.data);
+        // localStorage.setItem("streamer_id", response.data.data.streamer);
+        // localStorage.setItem("stream_id", response.data.data.id);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        alert(error.response.data);
+      });
+  }, []);
+  console.log("streamerStreamData", streamerStreamData);
+  // console.log("check3", streamerStreamData.streamer);
+  let val = streamerStreamData;
+  console.log("val", val);
+  useEffect(() => {
+    if (streamerStreamData !== "") {
+      console.log("check1", access_token);
+      // console.log("check2", streamerStreamData.streamer);
+      axios
+        .get("http://127.0.0.1:8000/dashboard/edit-channel/api/", {
+          params: {
+            streamer_id: val,
+          },
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log("val store", response);
+          setStreamerChannelData(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          alert(error.response.data);
+        });
+    }
+  }, [streamerStreamData]);
+  console.log("streamerChannelData", streamerChannelData);
+
+  const [socialLink, setSocialLink] = React.useState({});
+  useEffect(() => {
+    if (streamerStreamData !== "") {
+      axios
+        .get("http://127.0.0.1:8000/dashboard/social-media-links/api/", {
+          params: {
+            streamer_id: val,
+          },
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log("social", response.data.data);
+          setSocialLink(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          alert(error.response.data);
+        });
+    }
+  }, [streamerStreamData]);
+  console.log("socialLink", socialLink);
+
   const handleSentTip = async () => {
     const headers = {
       Authorization: `Bearer ${access_token}`,
@@ -215,9 +285,9 @@ export default function SingleStream() {
       const response = await axios.post(
         "http://127.0.0.1:8000/finance/tip/",
         {
-          stream_id: "80010b8a-778c-4640-9bc2-e8eb52bb1207",
+          stream_id: streamerStreamDataAll.id,
           amount: amount,
-          streamer_id: "d5942890-411d-4210-a859-e96751889d46",
+          streamer_id: streamerStreamDataAll.streamer,
         },
         {
           headers: headers,
@@ -227,7 +297,7 @@ export default function SingleStream() {
       alert("Tip Sent Successfully");
     } catch (error) {
       console.error("Error sending tip data:", error);
-      alert(error.response.data.message);
+      alert(error.response.data);
     }
     handleModalClose();
   };
@@ -284,7 +354,12 @@ export default function SingleStream() {
         {/* <CssBaseline /> */}
         <Main open={open}>
           {/* full streamer page show this section  */}
-          <Stream />
+          <Stream
+            streamerStreamData={streamerStreamDataAll}
+            streamerChannelData={streamerChannelData}
+            socialLink={socialLink}
+            streamer_id={streamerStreamData}
+          />
         </Main>
         <Drawer
           sx={{
