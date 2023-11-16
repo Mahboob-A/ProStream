@@ -4,13 +4,14 @@ import {
   Button,
   Grid,
   IconButton,
+  Link,
   Menu,
   MenuItem,
   Paper,
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import MoreVert from "@mui/icons-material/MoreVert";
 import AddReactionOutlinedIcon from "@mui/icons-material/AddReactionOutlined";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -21,6 +22,9 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import VideoStream from "../VideoStream/VideoStream";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import axios from "axios";
+import { getToken } from "../../services/LocalStorageService";
 
 const TikTokIcon = ({ color = "#ffffff" }) => {
   return (
@@ -36,7 +40,17 @@ const TikTokIcon = ({ color = "#ffffff" }) => {
   );
 };
 
-const Stream = () => {
+const Stream = ({
+  streamerStreamData,
+  streamerChannelData,
+  socialLink,
+  streamer_id,
+}) => {
+  console.log("from stream page", streamerStreamData);
+  console.log("from stream page", streamerChannelData);
+  console.log("from stream page", socialLink);
+  console.log("from stream page", streamer_id);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -44,6 +58,67 @@ const Stream = () => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const { access_token } = getToken();
+
+  const [follow, setFollow] = React.useState(null);
+  useEffect(() => {
+    if (streamer_id !== "") {
+      axios
+        .get(
+          "http://127.0.0.1:8000/live-stream/follow-streamer-category/api/",
+          {
+            params: {
+              streamer_id: streamer_id,
+            },
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log("follow check", response);
+          setFollow(response.data.status);
+        })
+        .catch((error) => {
+          console.error("Error follow data:", error);
+          // alert(error.response.data);
+        });
+    }
+  }, []);
+  console.log("follow", follow);
+
+  const handleFollow = async (event) => {
+    event.preventDefault();
+    // if (streamer_id !== "") {
+    //   try {
+    //     const response = await axios.post(
+    //       "http://127.0.0.1:8000/live-stream/follow-streamer-category/api/",
+    //       {
+    //         streamer_id: streamer_id,
+    //       },
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${access_token}`,
+    //           "Content-Type": "application/json",
+    //         },
+    //       }
+    //     );
+
+    //     console.log("follow check", response.data);
+    //     if (response.data.status === "success") {
+    //       console.log("follow check", response);
+    //       // setFollow(response.data.status);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error follow data:", error);
+    //     if (error.response && error.response.data) {
+    //       // alert(error.response.data);
+    //     }
+    //   }
+    // }
   };
 
   return (
@@ -71,13 +146,20 @@ const Stream = () => {
                   </Grid>
                   <Grid item>
                     <Typography variant="h5" sx={{ color: "white" }}>
-                      Atiqur Rahman
+                      {streamerChannelData.channel_display_name
+                        ? streamerChannelData.channel_display_name
+                        : streamerChannelData.streamer_username}
                     </Typography>
                     <Typography variant="body2" sx={{ color: "white" }}>
-                      [Drops] New battle item inventory
+                      {streamerStreamData.stream_title
+                        ? streamerStreamData.stream_title
+                        : "Stream Title not given"}
                     </Typography>
                     <Typography variant="h6" sx={{ color: "white" }}>
-                      Category name
+                      Category:{" "}
+                      {streamerStreamData.category
+                        ? streamerStreamData.category
+                        : "Category name not given"}
                     </Typography>
                     <Typography variant="body" sx={{ color: "white" }}>
                       tag1
@@ -96,13 +178,24 @@ const Stream = () => {
                 >
                   React
                 </Button>
-                <Button
-                  variant="contained"
-                  sx={{ marginRight: "5px" }}
-                  startIcon={<FavoriteBorderIcon />}
-                >
-                  Follow
-                </Button>
+                {follow === "error" ? (
+                  <Button
+                    variant="contained"
+                    sx={{ marginRight: "5px" }}
+                    startIcon={<FavoriteBorderIcon />}
+                    onClick={handleFollow}
+                  >
+                    Follow check
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    sx={{ marginRight: "5px" }}
+                    startIcon={<FavoriteBorderIcon />}
+                  >
+                    UnFollow
+                  </Button>
+                )}
                 <Button variant="contained" startIcon={<StarBorderIcon />}>
                   Subscribe
                 </Button>
@@ -135,48 +228,102 @@ const Stream = () => {
             </Grid>
             <Stack padding={2}>
               <Typography variant="h5" color="white">
-                About Atiqur Rahman <VerifiedIcon />
+                About{" "}
+                {streamerChannelData.channel_display_name
+                  ? streamerChannelData.channel_display_name
+                  : streamerChannelData.streamer_username}
+                <VerifiedIcon />
               </Typography>
               <Typography variant="body2" color="white">
-                <b>5.4M</b> followers
+                <b>
+                  {streamerChannelData.total_followers
+                    ? streamerChannelData.total_followers
+                    : "0"}
+                </b>{" "}
+                followers
               </Typography>
               <br />
+              <Typography variant="h6" color="white">
+                Bio:
+              </Typography>
               <Typography variant="text2" color="white">
-                Welcome to the Riot Games channel, home of LoL Esports and other
-                livestreams related to our games. For LoL Esports broadcasts,
-                schedules, standings and advanced viewing features, head to
-                http://lolesports.com.
+                {streamerChannelData.bio
+                  ? streamerChannelData.bio
+                  : "No Bio Data Available"}
               </Typography>
             </Stack>
             <Stack direction="row" spacing={2} padding={2}>
-              <Button
-                variant="outlined"
-                sx={{ color: "white" }}
-                startIcon={<FacebookIcon />}
-              >
-                Facebook
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{ color: "white" }}
-                startIcon={<YouTubeIcon />}
-              >
-                YouTube
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{ color: "white" }}
-                startIcon={<InstagramIcon />}
-              >
-                Instagram
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{ color: "white" }}
-                startIcon={<TikTokIcon />}
-              >
-                TikTok
-              </Button>
+              {socialLink.fb_link ? (
+                <Button
+                  variant="outlined"
+                  sx={{ color: "white" }}
+                  startIcon={<FacebookIcon />}
+                >
+                  <Link
+                    href={socialLink.fb_link}
+                    underline="none"
+                    color="white"
+                  >
+                    Facebook
+                  </Link>
+                </Button>
+              ) : null}
+              {socialLink.yt_link ? (
+                <Button
+                  variant="outlined"
+                  sx={{ color: "white" }}
+                  startIcon={<YouTubeIcon />}
+                >
+                  <Link
+                    href={socialLink.yt_link}
+                    underline="none"
+                    color="white"
+                  >
+                    YouTube
+                  </Link>
+                </Button>
+              ) : null}
+              {socialLink.ig_link ? (
+                <Button
+                  variant="outlined"
+                  sx={{ color: "white" }}
+                  startIcon={<InstagramIcon />}
+                >
+                  <Link
+                    href={socialLink.ig_link}
+                    underline="none"
+                    color="white"
+                  >
+                    Instagram
+                  </Link>
+                </Button>
+              ) : null}
+              {socialLink.tiktok_link ? (
+                <Button
+                  variant="outlined"
+                  sx={{ color: "white" }}
+                  startIcon={<TikTokIcon />}
+                >
+                  <Link
+                    href={socialLink.tiktok_link}
+                    underline="none"
+                    color="white"
+                  >
+                    TikTok
+                  </Link>
+                </Button>
+              ) : null}
+              {socialLink.x_link ? (
+                <Button
+                  variant="outlined"
+                  sx={{ color: "white" }}
+                  startIcon={<TwitterIcon />}
+                >
+                  <Link href={socialLink.x_link} underline="none" color="white">
+                    Twitter
+                  </Link>
+                </Button>
+              ) : null}
             </Stack>
             <Grid container spacing={2} alignItems="center">
               <Grid item xs={12} sm={8}>
@@ -185,24 +332,42 @@ const Stream = () => {
                     Hi,
                   </Typography>
                   <Typography variant="h5" sx={{ color: "white" }}>
-                    My name is Atiqur Rahman
+                    My name is{" "}
+                    {streamerChannelData.channel_display_name
+                      ? streamerChannelData.channel_display_name
+                      : streamerChannelData.streamer_username}
                   </Typography>
                   <Typography
                     variant="text"
                     sx={{ color: "white", marginTop: "20px" }}
                   >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Est
-                    dolores enim consequuntur, alias sapiente voluptates
-                    consectetur, ipsam possimus qui eum hic ipsum amet ipsa
-                    distinctio assumenda laboriosam ullam ea molestias.
+                    {streamerChannelData.streamer_about_1
+                      ? streamerChannelData.streamer_about_1
+                      : "No Data Available"}
                   </Typography>
                 </Stack>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
+                {streamerChannelData.channel_banner_picture ? (
+                  <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
+                ) : (
+                  <img
+                    style={{ width: "50%" }}
+                    src={streamerChannelData.channel_banner_picture}
+                    alt=""
+                  />
+                )}
               </Grid>
               <Grid item xs={12} sm={4}>
-                <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
+                {streamerChannelData.channel_display_name ? (
+                  <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
+                ) : (
+                  <img
+                    style={{ width: "50%" }}
+                    src={streamerChannelData.channel_display_name}
+                    alt=""
+                  />
+                )}
               </Grid>
               <Grid item xs={12} sm={8}>
                 <Stack direction="column">
@@ -216,10 +381,9 @@ const Stream = () => {
                     variant="text"
                     sx={{ color: "white", marginTop: "20px" }}
                   >
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Est
-                    dolores enim consequuntur, alias sapiente voluptates
-                    consectetur, ipsam possimus qui eum hic ipsum amet ipsa
-                    distinctio assumenda laboriosam ullam ea molestias.
+                    {streamerChannelData.streamer_about_2
+                      ? streamerChannelData.streamer_about_2
+                      : "No Data Available"}
                   </Typography>
                 </Stack>
               </Grid>

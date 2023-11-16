@@ -64,13 +64,13 @@ class UserFollowAPI(APIView):
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user
-                following_id = request.data.get('streamer_id')
+                following_id = request.query_params.get('streamer_id')
                 category_name = request.data.get('category')
                 if following_id and category_name == None:
                         try:
                                 Follow.objects.get(follower=user, following__id = following_id)
                         except Follow.DoesNotExist:
-                                return Response({'status' : 'error', 'data' : False}, status=status.HTTP_400_BAD_REQUEST) # this user has not followed the streamer
+                                return Response({'status' : 'error', 'data' : "Does not follow streamer"}, status=status.HTTP_200_OK) # this user has not followed the streamer
 
                 elif category_name:
                         try:
