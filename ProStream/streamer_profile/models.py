@@ -273,8 +273,8 @@ class Follow(models.Model):
         
 class ScheduleLiveStream(models.Model): 
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-        streamer = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='scheduled_streams')
-        followers  = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='followed_scheduled_streams')
+        streamer = models.ForeignKey(Streamer, on_delete=models.CASCADE, related_name='scheduled_streams', null = True, blank = True)
+        followers  = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='followed_scheduled_streams', blank=True)
         
         stream_title = models.CharField(max_length=50, help_text='Title for scheduling notification')
         scheduled_time = models.DateTimeField(help_text='Time for the scheduled stream')
