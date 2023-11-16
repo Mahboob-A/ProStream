@@ -55,7 +55,7 @@ class StreamGoLiveAPI(APIView):
                         instance = serializer.save()
                         instance.streamer = streamer
                         instance.save()
-                        return Response({'status' : 'success', 'data' : 'Stream InstanceCreated Successfully!'}, status=status.HTTP_201_CREATED)
+                        return Response({'status' : 'success', 'data' : {'streamer_id' : streamer_id}}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
 

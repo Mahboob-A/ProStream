@@ -38,14 +38,18 @@ class GetCurrentStreamDetails(APIView):
         def get(self, request):
                 user = request.user
                 streamer_id = user.streamer_id
-                try:
-                        streamer = Streamer.objects.get(id = streamer_id)
-                except Streamer.DoesNotExist:
-                        return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
-                         
-                current_stream = Stream.objects.filter(streamer=streamer).order_by('-createdAt').first()
-                serializer = StreamSerializer(current_stream)
-                return Response({'status': 'success', 'data': serializer.data, "streamer_id":streamer_id}, status=status.HTTP_200_OK)
-                
+                query_streamer_id = request.query_params.get('streamer_id')
+                if streamer_id == query_streamer_id:
+                        try:
+                                streamer = Streamer.objects.get(id = streamer_id)
+                        except Streamer.DoesNotExist:
+                                return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
+                                
+                        current_stream = Stream.objects.filter(streamer=streamer).order_by('-createdAt').first()
+                        serializer = StreamSerializer(current_stream)
+                        return Response({'status': 'success', 'data': serializer.data, "streamer_id":streamer_id}, status=status.HTTP_200_OK)
+                else:
+                        return Response({'status' : 'error', 'data' : 'Streamer id mis match'}, status=status.HTTP_201_CREATED)
+
 
 

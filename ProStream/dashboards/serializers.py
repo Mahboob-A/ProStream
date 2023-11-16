@@ -37,3 +37,8 @@ class SocialMediaSerializer(ModelSerializer):
         class Meta:
                 model = SocialMedia 
                 fields = '__all__' 
+
+class ScheduleLiveStreamCRUIDSerizlizer(ModelSerializer):
+        class Meta:
+                model = ScheduleLiveStream
+                fields = '__all__'

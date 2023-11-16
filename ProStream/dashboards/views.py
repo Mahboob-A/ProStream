@@ -322,4 +322,36 @@ class TeamActionAPI(APIView):
                         return Response({'status' : 'error', 'data' : 'The action is not correct to proceed this request. Please check the action.'}, status=status.HTTP_400_BAD_REQUEST)
                 
 
-# class Schedule
+class ScheduleLiveStreamCRUIDAPI(APIView):
+        permission_classes = [IsAuthenticated]
+        def post(self, request):
+                if request.user.is_a_streamer == False:
+                        return Response({'status' : 'error', 'data' : 'You are not a streamer.'}, status=status.HTTP_200_OK)
+                try:
+                        streamer = Streamer.objects.get(id = request.user.streamer_id)
+                except:
+                        return Response({'status' : 'error', 'data' : 'Streamer not found.'}, status=status.HTTP_200_OK)
+                followers = Follow.objects.filter(following = streamer)
+                serializer = serializers.ScheduleLiveStreamCRUIDSerizlizer(data=request.data)
+                if serializer.is_valid():
+                        instance = serializer.save()
+                        instance.streamer = streamer
+                        instance.followers.add(*followers)
+                        instance.save()
+                        return Response({'status' : 'success', 'data' : 'Scedule live stream created.'}, status=status.HTTP_201_CREATED)
+                return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+               
+        def patch(self, request):
+                if request.user.is_a_streamer == False:
+                        return Response({'status' : 'error', 'data' : 'You are not a streamer.'}, status=status.HTTP_200_OK)
+                try:
+                        streamer = Streamer.objects.get(id = request.user.streamer_id)
+                except:
+                        return Response({'status' : 'error', 'data' : 'Streamer not found.'}, status=status.HTTP_200_OK)
+                followers = Follow.objects.filter(following = streamer)
+                serializer = serializers.ScheduleLiveStreamCRUIDSerizlizer(streamer, data=request.data, partial = True)
+                if serializer.is_valid():
+                        serializer.save()
+                        return Response({'status' : 'success', 'data' : 'Scedule live stream Updated Successfully.'}, status=status.HTTP_200_OK)
+                return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+               
