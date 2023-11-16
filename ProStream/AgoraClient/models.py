@@ -28,6 +28,7 @@ class TempStremData(models.Model):
         channel_name = models.CharField(max_length=25, null=True, blank=True)
         token = models.CharField(max_length=255, null=True, blank=True)
         thumbnail = models.URLField(max_length=500, null=True, blank=True)
+        streamer_id = models.CharField(max_length=255, null = True, blank = True)
         
         def __str__(self): 
                 return f"Deporary data for {self.channel_name} channel "
