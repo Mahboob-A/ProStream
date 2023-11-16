@@ -195,8 +195,12 @@ export default function SingleStream() {
   }, []);
   // agora chat main logic end
 
-  const [streamerStreamData, setStreamerStreamData] = React.useState({});
+  const [streamerStreamData, setStreamerStreamData] = React.useState("");
+  const [streamerStreamDataAll, setStreamerStreamDataAll] = React.useState({});
+  const [streamerChannelData, setStreamerChannelData] = React.useState({});
   useEffect(() => {
+    console.log(access_token);
+
     axios
       .get("http://127.0.0.1:8000/live-chat/get/current-stream-details/api/", {
         headers: {
@@ -205,8 +209,10 @@ export default function SingleStream() {
         },
       })
       .then((response) => {
-        // console.log("Check", response.data.data);
-        setStreamerStreamData(response.data.data);
+        // console.log("check", response.data.data);
+        console.log("check5", response.data.streamer_id);
+        setStreamerStreamData(response.data.streamer_id);
+        setStreamerStreamDataAll(response.data.data);
         // localStorage.setItem("streamer_id", response.data.data.streamer);
         // localStorage.setItem("stream_id", response.data.data.id);
       })
@@ -216,60 +222,59 @@ export default function SingleStream() {
       });
   }, []);
   console.log("streamerStreamData", streamerStreamData);
-
-  const [streamerChannelData, setStreamerChannelData] = React.useState({});
+  // console.log("check3", streamerStreamData.streamer);
+  let val = streamerStreamData;
+  console.log("val", val);
   useEffect(() => {
-    // axios
-    //   .get("http://127.0.0.1:8000/live-chat/get/channel-details/api/", {
-    axios
-      .get(
-        "http://127.0.0.1:8000/dashboard/edit-channel/api/",
-        {
-          streamer_id: streamerStreamData.streamer,
-        },
-        {
+    if (streamerStreamData !== "") {
+      console.log("check1", access_token);
+      // console.log("check2", streamerStreamData.streamer);
+      axios
+        .get("http://127.0.0.1:8000/dashboard/edit-channel/api/", {
+          params: {
+            streamer_id: val,
+          },
           headers: {
             Authorization: `Bearer ${access_token}`,
             "Content-Type": "application/json",
           },
-        }
-      )
-      .then((response) => {
-        // console.log("Check", response.data.data);
-        setStreamerChannelData(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        alert(error.response.data);
-      });
-  }, []);
+        })
+        .then((response) => {
+          console.log("val store", response);
+          setStreamerChannelData(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          alert(error.response.data);
+        });
+    }
+  }, [streamerStreamData]);
   console.log("streamerChannelData", streamerChannelData);
 
   const [socialLink, setSocialLink] = React.useState({});
   useEffect(() => {
-    axios
-      .get(
-        "http://127.0.0.1:8000/dashboard/social-media-links/api/",
-        {
-          streamer_id: streamerStreamData.streamer,
-        },
-        {
+    if (streamerStreamData !== "") {
+      axios
+        .get("http://127.0.0.1:8000/dashboard/social-media-links/api/", {
+          params: {
+            streamer_id: val,
+          },
           headers: {
             Authorization: `Bearer ${access_token}`,
             "Content-Type": "application/json",
           },
-        }
-      )
-      .then((response) => {
-        console.log("social", response.data.data);
-        setSocialLink(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        alert(error.response.data);
-      });
-  }, []);
-  // console.log("socialLink", socialLink);
+        })
+        .then((response) => {
+          console.log("social", response.data.data);
+          setSocialLink(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          alert(error.response.data);
+        });
+    }
+  }, [streamerStreamData]);
+  console.log("socialLink", socialLink);
 
   const handleSentTip = async () => {
     const headers = {
@@ -280,9 +285,9 @@ export default function SingleStream() {
       const response = await axios.post(
         "http://127.0.0.1:8000/finance/tip/",
         {
-          stream_id: streamerStreamData.id,
+          stream_id: streamerStreamDataAll.id,
           amount: amount,
-          streamer_id: streamerStreamData.streamer,
+          streamer_id: streamerStreamDataAll.streamer,
         },
         {
           headers: headers,
@@ -350,10 +355,10 @@ export default function SingleStream() {
         <Main open={open}>
           {/* full streamer page show this section  */}
           <Stream
-            streamerStreamData={streamerStreamData}
+            streamerStreamData={streamerStreamDataAll}
             streamerChannelData={streamerChannelData}
             socialLink={socialLink}
-            streamer_id={streamerStreamData.streamer}
+            streamer_id={streamerStreamData}
           />
         </Main>
         <Drawer

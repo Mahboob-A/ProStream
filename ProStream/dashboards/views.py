@@ -65,17 +65,21 @@ class EditChannelAPI(APIView):
         
         def get(self, request):
                 user = request.user
-                streamer_id = request.data.get('streamer_id')
+                streamer_id = request.query_params.get('streamer_id')
+                print("Streamer id: ",streamer_id)
                 try:
                         streamer = Streamer.objects.get(id = streamer_id)
+                        print("Streamer : ",streamer)
                 except Streamer.DoesNotExist:
                         return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
                 try:
                         channel = Channel.objects.get(streamer = streamer)
+                        print("Channel: ",channel)
                 except Channel.DoesNotExist:
                         return Response({'status' : 'error', 'data' : 'Streamer not found'}, status=status.HTTP_201_CREATED)
                 serializer = serializers.EditChannelSerializer(channel)
-                return Response({'status': 'success', 'data': { **serializer.data,'streamer_username': user.username}}, status=status.HTTP_200_OK)
+                print("Data: ",serializer.data)
+                return Response({'status': 'success', 'data': { **serializer.data,'streamer_username': user.username,"streamer_id":streamer.id}}, status=status.HTTP_200_OK)
 
 
         def patch(self, request): 
@@ -96,7 +100,7 @@ class AddSocialLinksAPI(APIView):
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user 
-                streamer_id = request.data.get('streamer_id')
+                streamer_id = request.query_params.get('streamer_id')
                 try:
                         streamer = Streamer.objects.get(id = streamer_id)
                 except Streamer.DoesNotExist:
@@ -187,7 +191,7 @@ class StreamerWalletAPI(APIView):
 
                 if streamer_wallet.available_amount < Decimal(amount):
                         return Response({'status' : 'error','data': 'You have not sufficient money in your wallet'}, status=status.HTTP_400_BAD_REQUEST)                
-                streamer_wallet.withdraw(amount) #withdraw function
+                streamer_wallet.withdraw(Decimal(amount)) #withdraw function
                 return Response({'status' : 'success', 'data' : 'Successfully Withdraw money'}, status=status.HTTP_200_OK)
 
 

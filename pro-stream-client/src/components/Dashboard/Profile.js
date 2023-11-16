@@ -27,35 +27,42 @@ const Profile = () => {
     dispatch(setUserToken({ access_token: access_token }));
   }, [access_token, dispatch]);
 
+  let streamer_id = localStorage.getItem("streamer_id");
+
   const [streamerData, setStreamerData] = useState({
     bio: "",
     channel_display_name: "",
-    display_picture: "",
-    channel_banner_picture: "",
+    display_picture: null,
+    channel_banner_picture: null,
     streamer_about_1: "",
     streamer_about_2: "",
   });
   console.log("Streamer data:", streamerData);
 
-  const headers = {
-    Authorization: `Bearer ${access_token}`,
-    "Content-Type": "application/json",
-  };
-
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/dashboard/edit-channel/api/", {
-        headers: headers,
-      })
-      .then((response) => {
-        console.log("Streamer data fetched:", response.data);
-        setStreamerData(response.data);
-      })
-      .catch((error) => {
-        console.log("Streamer data fetched error: ", error.response.data);
-        alert("Error fetching streamer data!");
-      });
-  }, []);
+    if (streamer_id !== "") {
+      // console.log("check1", access_token);
+      // console.log("check2", streamerStreamData.streamer);
+      axios
+        .get("http://127.0.0.1:8000/dashboard/edit-channel/api/", {
+          params: {
+            streamer_id: streamer_id,
+          },
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log("val store", response);
+          setStreamerData(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          alert(error.response.data);
+        });
+    }
+  }, [streamer_id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,17 +71,29 @@ const Profile = () => {
       [name]: value,
     }));
   };
+  const handleDisplayPicture = (event) => {
+    setStreamerData({
+      ...streamerData,
+      display_picture: event.target.files[0],
+    });
+  };
+  const handleBannerPicture = (event) => {
+    setStreamerData({
+      ...streamerData,
+      channel_banner_picture: event.target.files[0],
+    });
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
+    await axios
       .patch(
         "http://127.0.0.1:8000/dashboard/edit-channel/api/",
         streamerData,
         {
           headers: {
             Authorization: `Bearer ${access_token}`,
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         }
       )
@@ -89,12 +108,12 @@ const Profile = () => {
   };
 
   return (
-    <Container>
+    <Box>
       <Grid
         container
-        spacing={3}
-        padding={3}
-        marginTop={4}
+        spacing={1}
+        padding={1}
+        marginTop={2}
         sx={{ backgroundColor: "black" }}
       >
         <Grid item xs={12}>
@@ -103,7 +122,7 @@ const Profile = () => {
           </Typography>
           {streamerData.display_picture ? (
             <Avatar
-              src={streamerData.display_picture}
+              src={`http://127.0.0.1:8000/${streamerData.display_picture}`}
               alt="Profile Picture"
               sx={{ width: 150, height: 150 }}
             />
@@ -114,9 +133,6 @@ const Profile = () => {
               sx={{ width: 150, height: 150 }}
             />
           )}
-          <Button variant="contained" color="primary">
-            Edit Profile Picture
-          </Button>
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h4" gutterBottom>
@@ -124,7 +140,7 @@ const Profile = () => {
           </Typography>
           {streamerData.channel_banner_picture ? (
             <img
-              src={streamerData.channel_banner_picture}
+              src={`http://127.0.0.1:8000/${streamerData.channel_banner_picture}`}
               alt="Profile Picture"
               width="350px"
               height="200px"
@@ -137,12 +153,16 @@ const Profile = () => {
               height="200px"
             />
           )}
-
-          <Button variant="contained" color="primary">
-            Edit Banner Picture
-          </Button>
         </Grid>
 
+        <Grid item xs={12}>
+          <Typography variant="h6" color="red">
+            Streamer Username:{" "}
+            {streamerData.streamer_username
+              ? streamerData.streamer_username
+              : "Please update your username"}
+          </Typography>
+        </Grid>
         <Grid item xs={12}>
           <Typography variant="h6">Bio</Typography>
           <Typography variant="body1">
@@ -153,13 +173,19 @@ const Profile = () => {
         <Grid item xs={12}>
           <Typography variant="h6">Recent Streams</Typography>
           {/* Display recent streams */}
-          {/* You can map through recent streams and display them here */}
+          <Typography variant="body">No Recent Stream</Typography>
         </Grid>
 
         <Grid item xs={12}>
           <Typography variant="h6">Followers</Typography>
-
           {/* Display followers */}
+          {streamerData.total_followers ? (
+            <Typography variant="body">
+              {streamerData.total_followers}
+            </Typography>
+          ) : (
+            <Typography variant="body">No Followers</Typography>
+          )}
           {/* You can display a list of followers here */}
         </Grid>
         <Grid item xs={12}>
@@ -212,20 +238,39 @@ const Profile = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h6">Display Picture</Typography>
-                    <img
-                      src="https://i.ibb.co/k81m8xT/image-1.png"
-                      alt="Profile Picture"
-                      height={150}
-                      width={150}
+                    {streamerData.display_picture ? (
+                      <Avatar
+                        src={`http://127.0.0.1:8000/${streamerData.display_picture}`}
+                        alt="Profile Picture"
+                        sx={{ width: 150, height: 150 }}
+                      />
+                    ) : (
+                      <Typography>No display picture available</Typography>
+                    )}
+                    <input
+                      name="display_picture"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleDisplayPicture}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <Typography variant="h6">Channel Banner Picture</Typography>
-                    <img
-                      src="https://i.ibb.co/ccT1Mmd/stream-4.png"
-                      alt="Profile Picture"
-                      height="100%"
-                      width="100%"
+                    {streamerData.channel_display_name ? (
+                      <img
+                        src={`http://127.0.0.1:8000/${streamerData.channel_banner_picture}`}
+                        alt="Profile Picture"
+                        width="350px"
+                        height="200px"
+                      />
+                    ) : (
+                      <Typography>No banner picture available</Typography>
+                    )}
+                    <input
+                      name="channel_banner_picture"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleBannerPicture}
                     />
                   </Grid>
 
@@ -258,7 +303,7 @@ const Profile = () => {
           </Card>
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

@@ -12,6 +12,7 @@ import {
   MenuItem,
   Card,
   CardContent,
+  Box,
 } from "@mui/material";
 import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
@@ -86,7 +87,7 @@ const UserProfile = () => {
   };
 
   return (
-    <Container>
+    <Box padding={2}>
       <Grid
         container
         spacing={3}
@@ -260,7 +261,7 @@ const UserProfile = () => {
           </form>
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 

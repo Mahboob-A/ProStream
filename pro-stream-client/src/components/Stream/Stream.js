@@ -46,10 +46,11 @@ const Stream = ({
   socialLink,
   streamer_id,
 }) => {
-  // console.log("from stream page", streamerStreamData);
-  // console.log("from stream page", streamerChannelData);
-  // console.log("from stream page", socialLink);
+  console.log("from stream page", streamerStreamData);
+  console.log("from stream page", streamerChannelData);
+  console.log("from stream page", socialLink);
   console.log("from stream page", streamer_id);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -63,28 +64,62 @@ const Stream = ({
 
   const [follow, setFollow] = React.useState(null);
   useEffect(() => {
-    axios
-      .get(
-        "http://127.0.0.1:8000/live-stream/follow-streamer-category/api/",
-        {
-          streamer_id: streamer_id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log("follow", response.data.data);
-        setFollow(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error follow data:", error);
-        alert(error.response.data);
-      });
+    if (streamer_id !== "") {
+      axios
+        .get(
+          "http://127.0.0.1:8000/live-stream/follow-streamer-category/api/",
+          {
+            params: {
+              streamer_id: streamer_id,
+            },
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log("follow check", response);
+          setFollow(response.data.status);
+        })
+        .catch((error) => {
+          console.error("Error follow data:", error);
+          // alert(error.response.data);
+        });
+    }
   }, []);
+  console.log("follow", follow);
+
+  const handleFollow = async (event) => {
+    event.preventDefault();
+    // if (streamer_id !== "") {
+    //   try {
+    //     const response = await axios.post(
+    //       "http://127.0.0.1:8000/live-stream/follow-streamer-category/api/",
+    //       {
+    //         streamer_id: streamer_id,
+    //       },
+    //       {
+    //         headers: {
+    //           Authorization: `Bearer ${access_token}`,
+    //           "Content-Type": "application/json",
+    //         },
+    //       }
+    //     );
+
+    //     console.log("follow check", response.data);
+    //     if (response.data.status === "success") {
+    //       console.log("follow check", response);
+    //       // setFollow(response.data.status);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error follow data:", error);
+    //     if (error.response && error.response.data) {
+    //       // alert(error.response.data);
+    //     }
+    //   }
+    // }
+  };
 
   return (
     <Box sx={{ marginTop: "20px", padding: "5px" }}>
@@ -143,13 +178,24 @@ const Stream = ({
                 >
                   React
                 </Button>
-                <Button
-                  variant="contained"
-                  sx={{ marginRight: "5px" }}
-                  startIcon={<FavoriteBorderIcon />}
-                >
-                  Follow
-                </Button>
+                {follow === "error" ? (
+                  <Button
+                    variant="contained"
+                    sx={{ marginRight: "5px" }}
+                    startIcon={<FavoriteBorderIcon />}
+                    onClick={handleFollow}
+                  >
+                    Follow check
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    sx={{ marginRight: "5px" }}
+                    startIcon={<FavoriteBorderIcon />}
+                  >
+                    UnFollow
+                  </Button>
+                )}
                 <Button variant="contained" startIcon={<StarBorderIcon />}>
                   Subscribe
                 </Button>

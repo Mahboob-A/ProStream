@@ -1,29 +1,144 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { getToken } from "../../services/LocalStorageService";
+import {
+  Avatar,
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 const SocialMedia = () => {
-  const [socialLink, setSocialLink] = React.useState({});
   let { access_token } = getToken();
+  let streamer_id = localStorage.getItem("streamer_id");
+  const [socialLink, setSocialLink] = React.useState({
+    fb_link: "",
+    ig_link: "",
+    tiktok_link: "",
+    x_link: "",
+    yt_link: "",
+  });
   useEffect(() => {
+    if (streamer_id !== "") {
+      axios
+        .get("http://127.0.0.1:8000/dashboard/social-media-links/api/", {
+          params: {
+            streamer_id: streamer_id,
+          },
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log("social", response.data.data);
+          setSocialLink(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          alert(error.response.data);
+        });
+    }
+  }, [streamer_id]);
+  console.log("socialLink", socialLink);
+  const handleChange = (e) => {
+    setSocialLink({ ...socialLink, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Form submitted:", socialLink);
     axios
-      .get("http://127.0.0.1:8000/dashboard/social-media-links/api/", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      })
+      .patch(
+        "http://127.0.0.1:8000/dashboard/social-media-links/api/",
+        socialLink,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((response) => {
-        console.log("social", response.data.data);
-        setSocialLink(response.data.data);
+        console.log("User data updated successfully:", response.data);
+        // setSocialLink(response.data.data);
+        alert("User data updated successfully!");
       })
       .catch((error) => {
-        console.error("Error fetching data:", error);
-        alert(error.response.data);
+        console.error("Error updating user data:", error);
+        alert("Error updating user data!");
       });
-  }, []);
-  console.log("socialLink", socialLink);
-  return <div>Social Media</div>;
+  };
+  return (
+    <Box padding={2}>
+      <Grid container>
+        <Grid item xs={6} align="center" sx={{ backgroundColor: "red" }}>
+          {/* set profile data  */}
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  label="FB Link"
+                  fullWidth
+                  name="fb_link"
+                  value={socialLink.fb_link || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="FB Link"
+                  fullWidth
+                  name="fb_link"
+                  value={socialLink.fb_link || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Instagram Link"
+                  fullWidth
+                  name="ig_link"
+                  value={socialLink.ig_link || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Youtube Link"
+                  fullWidth
+                  name="yt_link"
+                  value={socialLink.yt_link || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  label="Tiktok Link"
+                  fullWidth
+                  name="tiktok_link"
+                  value={socialLink.tiktok_link || ""}
+                  onChange={handleChange}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Button type="submit" variant="contained" color="primary">
+                  Save
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+      </Grid>
+    </Box>
+  );
 };
 
 export default SocialMedia;
