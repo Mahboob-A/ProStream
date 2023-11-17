@@ -27,6 +27,7 @@ const Profile = () => {
     dispatch(setUserToken({ access_token: access_token }));
   }, [access_token, dispatch]);
 
+  const [visibility, setVisibility] = useState(false);
   let streamer_id = localStorage.getItem("streamer_id");
 
   const [streamerData, setStreamerData] = useState({
@@ -100,23 +101,50 @@ const Profile = () => {
       .then((response) => {
         console.log("Streamer data updated successfully:", response.data);
         setStreamerData(response.data);
+        axios
+          .get("http://127.0.0.1:8000/dashboard/edit-channel/api/", {
+            params: {
+              streamer_id: streamer_id,
+            },
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            console.log("val store", response);
+            setStreamerData(response.data.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            alert(error.response.data);
+          });
       })
       .catch((error) => {
         console.error("Error updating streamer data:", error);
         alert("Error updating streamer data!");
       });
+    setVisibility(!visibility);
   };
 
   return (
     <Box>
+      <Box>
+        {/* user profile here */}
+        <UserProfile />
+      </Box>
       <Grid
         container
         spacing={1}
         padding={1}
         marginTop={2}
         sx={{ backgroundColor: "black" }}
+        align="center"
       >
         <Grid item xs={12}>
+          <Typography variant="h2" gutterBottom>
+            Channel Information
+          </Typography>
           <Typography variant="h4" gutterBottom>
             Profile Picture
           </Typography>
@@ -127,11 +155,7 @@ const Profile = () => {
               sx={{ width: 150, height: 150 }}
             />
           ) : (
-            <Avatar
-              src="https://i.ibb.co/k81m8xT/image-1.png"
-              alt="Profile Picture"
-              sx={{ width: 150, height: 150 }}
-            />
+            <Typography color="orange">No display picture available</Typography>
           )}
         </Grid>
         <Grid item xs={12}>
@@ -146,12 +170,7 @@ const Profile = () => {
               height="200px"
             />
           ) : (
-            <img
-              src="https://i.ibb.co/rtVgz2Q/signinbg.jpg"
-              alt="Profile Picture"
-              width="350px"
-              height="200px"
-            />
+            <Typography color="orange">No banner picture available</Typography>
           )}
         </Grid>
 
@@ -163,55 +182,46 @@ const Profile = () => {
               : "Please update your username"}
           </Typography>
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Bio</Typography>
-          <Typography variant="body1">
+        <Grid item xs={12} marginTop={1}>
+          <Typography variant="h5">Bio</Typography>
+          <Typography variant="body">
             {streamerData.bio ? streamerData.bio : "No bio available"}
           </Typography>
         </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h6">Recent Streams</Typography>
-          {/* Display recent streams */}
-          <Typography variant="body">No Recent Stream</Typography>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="h6">Followers</Typography>
-          {/* Display followers */}
-          {streamerData.total_followers ? (
-            <Typography variant="body">
-              {streamerData.total_followers}
-            </Typography>
-          ) : (
-            <Typography variant="body">No Followers</Typography>
-          )}
-          {/* You can display a list of followers here */}
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">About 1</Typography>
-          <Typography variant="body1">
+        <Grid item xs={12} marginTop={1}>
+          <Typography variant="h5">About 1</Typography>
+          <Typography variant="body">
             {streamerData.streamer_about_1
               ? streamerData.streamer_about_1
               : "No About found"}
           </Typography>
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body1">About 2</Typography>
-          <Typography variant="body1">
+        <Grid item xs={12} marginTop={1}>
+          <Typography variant="h5">About 2</Typography>
+          <Typography variant="body">
             {streamerData.streamer_about_2
               ? streamerData.streamer_about_2
               : "No About found"}
           </Typography>
         </Grid>
+        <Grid item xs={12} marginTop={1}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setVisibility(!visibility)}
+          >
+            Edit Channel
+          </Button>
+        </Grid>
       </Grid>
-      <Box>
-        {/* user profile here */}
-        <UserProfile />
-      </Box>
-      <Grid container>
-        <Grid item xs={12} align="center" sx={{ backgroundColor: "red" }}>
-          <Card>
+
+      <Grid
+        container
+        display={visibility ? "visible" : "none"}
+        justifyContent="center"
+      >
+        <Grid item xs={6} align="center">
+          <Card sx={{ backgroundColor: "gray", padding: 3 }}>
             <CardContent>
               <Typography variant="h5" component="div" gutterBottom>
                 Streamer Profile
@@ -252,6 +262,7 @@ const Profile = () => {
                       type="file"
                       accept="image/*"
                       onChange={handleDisplayPicture}
+                      placeholder="Upload Display Picture"
                     />
                   </Grid>
                   <Grid item xs={12}>
@@ -271,6 +282,7 @@ const Profile = () => {
                       type="file"
                       accept="image/*"
                       onChange={handleBannerPicture}
+                      placeholder="Upload Banner Picture"
                     />
                   </Grid>
 

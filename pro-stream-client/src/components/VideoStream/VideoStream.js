@@ -203,13 +203,16 @@ const VideoStream = () => {
     // };
     // handle when the user clicks exit buttom
     let handleUserLeave = async () => {
-      try {
-        const response = await axios.delete(
-          `http://127.0.0.1:8000/token/stream-temp-data/api/?channel_name=${CHANNEL}`
-        );
-        console.log("Stream temporary data deleted:", response.data);
-      } catch (error) {
-        console.error("Error deleting stream temporary data:", error);
+      let streamer = localStorage.getItem("is_a_streamer");
+      if (streamer === "true") {
+        try {
+          const response = await axios.delete(
+            `http://127.0.0.1:8000/token/stream-temp-data/api/?channel_name=${CHANNEL}`
+          );
+          console.log("Stream temporary data deleted:", response.data);
+        } catch (error) {
+          console.error("Error deleting stream temporary data:", error);
+        }
       }
 
       for (let i = 0; localTracks.length > i; i++) {

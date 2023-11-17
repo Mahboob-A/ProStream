@@ -12,6 +12,7 @@ import WalletAndWithdrawl from "./WalletAndWithdrawl";
 import ScheduleStream from "./ScheduleStream";
 import PrivacyAndWarnings from "./PrivacyAndWarnings";
 import UserProfile from "./UserProfile";
+import UserWallet from "./UserWallet";
 
 export default function UserDashboard() {
   const [value, setValue] = React.useState(0);
@@ -31,19 +32,20 @@ export default function UserDashboard() {
       case 1:
         return (
           <Box sx={{ color: "white" }}>
-            <VerifyAndBankAcc />
+            <UserWallet />
           </Box>
         );
       case 2:
         return (
           <Box sx={{ color: "white" }}>
-            <Team />
+            <VerifyAndBankAcc />
           </Box>
         );
       case 3:
         return (
           <Box sx={{ color: "white" }}>
-            <Analytics />
+            <Team />
+            {/* <Analytics /> */}
           </Box>
         );
       case 4:
@@ -100,11 +102,11 @@ export default function UserDashboard() {
         }}
       >
         <Tab label="Edit Profile" sx={{ color: "white" }} />
-        <Tab label="Verification and Bank Account" sx={{ color: "white" }} />
-        <Tab label="Team" sx={{ color: "white" }} />
+        <Tab label="Wallet And Withdrawl" sx={{ color: "white" }} />
+        {/* <Tab label="Verification and Bank Account" sx={{ color: "white" }} />
+        <Tab label="Team" sx={{ color: "white" }} /> */}
         {/* <Tab label="Analytics" sx={{ color: "white" }} />
         <Tab label="Social Media" sx={{ color: "white" }} />
-        <Tab label="Wallet And Withdrawl" sx={{ color: "white" }} />
         <Tab label="Schedule Stream" sx={{ color: "white" }} />
         <Tab label="Privacy And Warnings" sx={{ color: "white" }} /> */}
       </Tabs>

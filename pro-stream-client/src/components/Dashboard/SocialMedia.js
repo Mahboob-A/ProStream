@@ -77,8 +77,13 @@ const SocialMedia = () => {
   };
   return (
     <Box padding={2}>
-      <Grid container>
-        <Grid item xs={6} align="center" sx={{ backgroundColor: "red" }}>
+      <Grid container justifyContent="center">
+        <Grid
+          item
+          xs={6}
+          align="center"
+          sx={{ backgroundColor: "gray", padding: 2, borderRadius: 2 }}
+        >
           {/* set profile data  */}
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
@@ -93,10 +98,10 @@ const SocialMedia = () => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  label="FB Link"
+                  label="Twiter Link"
                   fullWidth
-                  name="fb_link"
-                  value={socialLink.fb_link || ""}
+                  name="x_link"
+                  value={socialLink.x_link || ""}
                   onChange={handleChange}
                 />
               </Grid>

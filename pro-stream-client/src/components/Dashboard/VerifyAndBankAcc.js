@@ -31,6 +31,8 @@ const VerifyAndBankAcc = () => {
     document_type: "",
     document: null,
   });
+  const [visibility, setVisibility] = React.useState(false);
+  const [edit, setEdit] = React.useState(true);
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/finance/verification/", {
@@ -74,6 +76,20 @@ const VerifyAndBankAcc = () => {
         console.log("User data updated successfully:", response.data);
         // setSocialLink(response.data.data);
         alert("User data updated successfully!");
+        axios
+          .get("http://127.0.0.1:8000/finance/verification/", {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            console.log("VerifyAndBankAcc", response.data.data);
+            setVerificationInfo(response.data.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
       })
       .catch((error) => {
         console.error("Error updating user data:", error);
@@ -89,6 +105,7 @@ const VerifyAndBankAcc = () => {
     passbook_img: null,
   });
   console.log("bankAccount", bankAccount);
+
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/finance/add-bank-details/", {
@@ -122,32 +139,89 @@ const VerifyAndBankAcc = () => {
   const handleSubmit2 = (e) => {
     e.preventDefault();
     axios
-      .patch(
-        "http://127.0.0.1:8000/finance/add-bank-details/",
-        verificationInfo,
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      )
+      .patch("http://127.0.0.1:8000/finance/add-bank-details/", bankAccount, {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
         console.log("User data updated successfully:", response.data);
         // setSocialLink(response.data.data);
         alert("User data updated successfully!");
+        axios
+          .get("http://127.0.0.1:8000/finance/add-bank-details/", {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            console.log("VerifyAndBankAcc", response.data.data);
+            setBankAccount(response.data.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
       })
       .catch((error) => {
         console.error("Error updating user data:", error);
         alert("Error updating user data!");
       });
+    setEdit(!edit);
   };
   return (
     <Box>
-      <Box sx={{ backgroundColor: "red" }}>
-        <Typography variant="h4">Verification </Typography>
-        <Grid container>
-          <Grid item xs={6} align="center" sx={{ backgroundColor: "red" }}>
+      <Box>
+        <Typography variant="h3" marginBottom={2}>
+          Verification
+        </Typography>
+        <Typography variant="h6">
+          First Name:{" "}
+          {verificationInfo.first_name
+            ? verificationInfo.first_name
+            : "Edit your verification information"}
+        </Typography>
+        <Typography variant="h6">
+          Last Name:{" "}
+          {verificationInfo.last_name
+            ? verificationInfo.last_name
+            : "Edit your verification information"}
+        </Typography>
+        <Typography variant="h6" gutterBottom>
+          Document Type:{" "}
+          {verificationInfo.document_type
+            ? verificationInfo.document_type
+            : "Edit your verification information"}
+        </Typography>
+        {verificationInfo.document ? (
+          <img
+            src={`http://127.0.0.1:8000/${verificationInfo.document}`}
+            alt="document"
+            style={{ width: "300px", height: "200px" }}
+          />
+        ) : (
+          <Typography>No document available</Typography>
+        )}
+        <br />
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setVisibility(!visibility)}
+        >
+          Edit Profile
+        </Button>
+        <Grid
+          container
+          display={visibility ? "visible" : "none"}
+          justifyContent="center"
+        >
+          <Grid
+            item
+            xs={6}
+            align="center"
+            sx={{ backgroundColor: "gray", padding: 3 }}
+          >
             {/* set profile data  */}
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>
@@ -222,61 +296,73 @@ const VerifyAndBankAcc = () => {
           </Grid>
         </Grid>
       </Box>
-      <Box sx={{ backgroundColor: "yellow" }}>
-        <Typography variant="h4">Bank Account</Typography>
+      <Box sx={{ marginTop: 2, backgroundColor: "gray" }}>
+        <Typography variant="h3" marginBottom={2}>
+          Bank Account Information
+        </Typography>
         <Grid container>
-          <Grid item xs={6} align="center">
+          <Grid item xs={12}>
             {/* set profile data  */}
-            <form onSubmit={handleSubmit2}>
+            <form>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
+                    color="secondary"
                     label="First Name"
                     fullWidth
                     name="first_name"
                     value={bankAccount.first_name || ""}
                     onChange={handleChange2}
+                    disabled={edit}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    color="secondary"
                     label="Last Name"
                     fullWidth
                     name="last_name"
                     value={bankAccount.last_name || ""}
                     onChange={handleChange2}
+                    disabled={edit}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    color="secondary"
                     label="Bank Name"
                     fullWidth
                     name="bank_name"
                     value={bankAccount.bank_name || ""}
                     onChange={handleChange2}
+                    disabled={edit}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    color="secondary"
                     label="Account Number"
                     fullWidth
                     name="account_no"
                     value={bankAccount.account_no || ""}
                     onChange={handleChange2}
+                    disabled={edit}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    color="secondary"
                     label="IFSC Code"
                     fullWidth
                     name="ifsc_code"
                     value={bankAccount.ifsc_code || ""}
                     onChange={handleChange2}
+                    disabled={edit}
                   />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Typography variant="h6">Display Picture</Typography>
+                  <Typography variant="h6">Passbook Image</Typography>
                   {bankAccount.passbook_img ? (
                     <Avatar
                       src={`http://127.0.0.1:8000/${bankAccount.passbook_img}`}
@@ -291,13 +377,29 @@ const VerifyAndBankAcc = () => {
                     name="passbook_img"
                     accept="image/*"
                     onChange={handleFileChange2}
+                    disabled={edit}
                   />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Button type="submit" variant="contained" color="primary">
-                    Save
-                  </Button>
+                  {edit && (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => setEdit(!edit)}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                  {!edit && (
+                    <Button
+                      onClick={handleSubmit2}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Save
+                    </Button>
+                  )}
                 </Grid>
               </Grid>
             </form>

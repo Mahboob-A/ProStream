@@ -41,9 +41,9 @@ class rechargeWalletApi(APIView):
     def post(self, request): 
         serializer = UserWalletRechargeSerializer(data = request.data)
         if serializer.is_valid():
-            name = serializer.validated_data['name']
+            # name = serializer.validated_data['name']
             amount = serializer.validated_data['amount']
-            return Response({'status' : 'success','redirect_url': sslcommerz_payment_gateway(request, name, amount)}, status=status.HTTP_200_OK)
+            return Response({'status' : 'success','redirect_url': sslcommerz_payment_gateway(request, amount)}, status=status.HTTP_200_OK)
         return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
      

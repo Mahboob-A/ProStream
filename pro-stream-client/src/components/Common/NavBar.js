@@ -73,6 +73,7 @@ export default function NavBar() {
   const [UserAllInfo, setUserAllInfo] = React.useState({});
   // user data fetch
   React.useEffect(() => {
+    if (!access_token) return;
     axios
       .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
         headers: {

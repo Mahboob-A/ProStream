@@ -112,7 +112,11 @@ const StreamForm = () => {
         formData,
         { headers: headers }
       );
-      // console.log("Create Stream Form submitted:", response1.data);
+      console.log(
+        "Create Stream Form submitted:",
+        response1.data.data.streamer_id
+      );
+      sessionStorage.setItem("streamer_id", response1.data.data.streamer_id);
 
       // hosting video
       let response2 = await fetch(
@@ -148,6 +152,7 @@ const StreamForm = () => {
           channel_name: channel,
           token: token,
           thumbnail: formData.thumbnail,
+          streamer_id: response1.data.data.streamer_id,
         }
       );
       // console.log("Create Stream:", response3.data);

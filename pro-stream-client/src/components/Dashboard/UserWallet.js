@@ -1,41 +1,41 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { getToken } from "../../services/LocalStorageService";
-import { Box, TextField, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import UserWallet from "./UserWallet";
+import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 
-const WalletAndWithdrawl = () => {
+const UserWallet = () => {
   const { access_token } = getToken();
-  const [wallet, setWallet] = React.useState({});
+
+  const [currentAmount, setCurrentAmount] = React.useState("");
+  const [amount, setAmount] = React.useState("");
+  const [error, setError] = React.useState("");
+  const handleChange = (e) => {
+    setAmount(e.target.value);
+  };
+
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/dashboard/streamer-wallet-status/", {
+      .get("http://127.0.0.1:8000/dashboard/get/user-wallet-status/", {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
         },
       })
       .then((response) => {
-        console.log("WalletAndWithdrawl", response.data.data);
-        setWallet(response.data.data);
+        setCurrentAmount(response.data.available_amount);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setError(error.response.data.message);
       });
   }, []);
-
-  const [amount, setAmount] = React.useState("");
-  const handleChange = (e) => {
-    setAmount(e.target.value);
-  };
 
   console.log("amount", amount);
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post(
-        "http://127.0.0.1:8000/dashboard/streamer-wallet-status/",
+        "http://127.0.0.1:8000/finance/recharge/",
         { amount: amount },
         {
           headers: {
@@ -45,8 +45,9 @@ const WalletAndWithdrawl = () => {
         }
       )
       .then((response) => {
-        console.log("WalletAndWithdrawl", response.data.data);
+        console.log("WalletAndWithdrawl", response.data);
         alert("Withdrawl money sent successfully!");
+        window.location.href = response.data.redirect_url;
       })
       .catch((error) => {
         console.error("Error updating user data:", error);
@@ -55,29 +56,29 @@ const WalletAndWithdrawl = () => {
   };
 
   return (
-    <Box sx={{ marginTop: "20px" }}>
-      {/* <Box>
-        <UserWallet />
-      </Box> */}
+    <Box>
+      {error && <Alert severity="error">{error}</Alert>}
       <Box
         sx={{
           backgroundColor: "gray",
-          width: "500px",
-          marginX: "auto",
-          borderRadius: "10px",
+          width: "400px",
+          height: "200px",
+          margin: "auto",
+          marginTop: "20px",
+          marginBottom: "20px",
           padding: "20px",
+          borderRadius: "10px",
         }}
       >
-        <Typography variant="h4">Wallet</Typography>
-        <Typography variant="h6">
-          Available amount: {wallet.available_amount}
+        <Typography variant="h4" marginBottom={2}>
+          User Wallet
         </Typography>
-        <Typography variant="h6">
-          Total Tip Received: {wallet.total_tip_received}
+        <Typography variant="h6" marginBottom={2}>
+          Available Amount: {currentAmount}
         </Typography>
-        <Typography variant="h4">Withdrawl</Typography>
         <form action="" method="post" onSubmit={handleSubmit}>
           <TextField
+            matginBottom={2}
             label="Amount"
             fullWidth
             type="number"
@@ -86,8 +87,13 @@ const WalletAndWithdrawl = () => {
             onChange={handleChange}
             required
           />
-          <Button type="submit" variant="contained">
-            Submit
+          <Button
+            color="primary"
+            variant="contained"
+            type="submit"
+            marginTop={2}
+          >
+            Recharge now
           </Button>
         </form>
       </Box>
@@ -95,4 +101,4 @@ const WalletAndWithdrawl = () => {
   );
 };
 
-export default WalletAndWithdrawl;
+export default UserWallet;
