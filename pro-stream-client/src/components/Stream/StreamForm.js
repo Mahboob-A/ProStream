@@ -112,7 +112,11 @@ const StreamForm = () => {
         formData,
         { headers: headers }
       );
-      console.log("Create Stream Form submitted:", response1.data.data.streamer_id);
+      console.log(
+        "Create Stream Form submitted:",
+        response1.data.data.streamer_id
+      );
+      sessionStorage.setItem("streamer_id", response1.data.data.streamer_id);
 
       // hosting video
       let response2 = await fetch(

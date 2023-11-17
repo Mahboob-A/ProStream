@@ -30,7 +30,8 @@ const HeadPart = () => {
 
   const handleClick = async (channel_name, streamer_id) => {
     console.log("streamer_id", streamer_id);
-    localStorage.setItem("streamer_id", streamer_id);
+    // localStorage.setItem("streamer_id", streamer_id);
+    sessionStorage.setItem("streamer_id", streamer_id);
 
     try {
       // get hosting video info
