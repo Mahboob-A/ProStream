@@ -55,10 +55,10 @@ const WalletAndWithdrawl = () => {
   };
 
   return (
-    <Box>
-      <Box>
+    <Box sx={{ marginTop: "20px" }}>
+      {/* <Box>
         <UserWallet />
-      </Box>
+      </Box> */}
       <Box
         sx={{
           backgroundColor: "gray",

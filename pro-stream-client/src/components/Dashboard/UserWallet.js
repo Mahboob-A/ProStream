@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { getToken } from "../../services/LocalStorageService";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Alert, Box, Button, TextField, Typography } from "@mui/material";
 
 const UserWallet = () => {
   const { access_token } = getToken();
 
   const [currentAmount, setCurrentAmount] = React.useState("");
   const [amount, setAmount] = React.useState("");
+  const [error, setError] = React.useState("");
   const handleChange = (e) => {
     setAmount(e.target.value);
   };
@@ -25,6 +26,7 @@ const UserWallet = () => {
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setError(error.response.data.message);
       });
   }, []);
 
@@ -54,39 +56,47 @@ const UserWallet = () => {
   };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "gray",
-        width: "400px",
-        height: "200px",
-        margin: "auto",
-        marginTop: "20px",
-        marginBottom: "20px",
-        padding: "20px",
-        borderRadius: "10px",
-      }}
-    >
-      <Typography variant="h4" marginBottom={2}>
-        User Wallet
-      </Typography>
-      <Typography variant="h6" marginBottom={2}>
-        Available Amount: {currentAmount}
-      </Typography>
-      <form action="" method="post" onSubmit={handleSubmit}>
-        <TextField
-          matginBottom={2}
-          label="Amount"
-          fullWidth
-          type="number"
-          name="amount"
-          value={amount}
-          onChange={handleChange}
-          required
-        />
-        <Button color="primary" variant="contained" type="submit" marginTop={2}>
-          Recharge now
-        </Button>
-      </form>
+    <Box>
+      {error && <Alert severity="error">{error}</Alert>}
+      <Box
+        sx={{
+          backgroundColor: "gray",
+          width: "400px",
+          height: "200px",
+          margin: "auto",
+          marginTop: "20px",
+          marginBottom: "20px",
+          padding: "20px",
+          borderRadius: "10px",
+        }}
+      >
+        <Typography variant="h4" marginBottom={2}>
+          User Wallet
+        </Typography>
+        <Typography variant="h6" marginBottom={2}>
+          Available Amount: {currentAmount}
+        </Typography>
+        <form action="" method="post" onSubmit={handleSubmit}>
+          <TextField
+            matginBottom={2}
+            label="Amount"
+            fullWidth
+            type="number"
+            name="amount"
+            value={amount}
+            onChange={handleChange}
+            required
+          />
+          <Button
+            color="primary"
+            variant="contained"
+            type="submit"
+            marginTop={2}
+          >
+            Recharge now
+          </Button>
+        </form>
+      </Box>
     </Box>
   );
 };
