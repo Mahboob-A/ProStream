@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { getToken } from "../../services/LocalStorageService";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 
 const Analytics = () => {
   const { access_token } = getToken();
@@ -24,7 +24,17 @@ const Analytics = () => {
       });
   }, []);
   return (
-    <Box sx={{ backgroundColor: "red" }}>
+    <Box
+      sx={{
+        backgroundColor: "gray",
+        width: "400px",
+        height: "300px",
+        marginX: "auto",
+        marginTop: "30px",
+        padding: "20px",
+        borderRadius: "10px",
+      }}
+    >
       <Typography variant="h3">Analytics</Typography>
       <Typography variant="h6">
         Total Tip Received :{" "}
@@ -43,12 +53,23 @@ const Analytics = () => {
         {analytics.username ? analytics.username : "No tip received yet"}
       </Typography>
       <form action="" method="post">
-        <input
-          placeholder="Say thanks and text biggest tipper"
-          type="text"
+        <TextField
+          color="secondary"
+          label="Say thanks and text biggest tipper"
+          fullWidth
           name="text"
+          sx={{
+            input: {
+              color: "white",
+              borderRadius: "5px",
+            },
+            marginTop: "20px",
+            marginBottom: "20px",
+          }}
         />
-        <button type="submit">submit</button>
+        <Button variant="contained" color="primary" type="submit">
+          submit
+        </Button>
       </form>
     </Box>
   );

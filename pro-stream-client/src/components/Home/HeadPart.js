@@ -17,7 +17,8 @@ const HeadPart = () => {
         const response = await axios.get(
           "http://127.0.0.1:8000/token/stream-temp-data/api/"
         );
-        console.log(response.data.data);
+
+        console.log("user data", response.data.data);
         setCurrentStream(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -27,8 +28,9 @@ const HeadPart = () => {
     fetchData();
   }, []);
 
-  const handleClick = async (channel_name) => {
-    // console.log(channel_name);
+  const handleClick = async (channel_name, streamer_id) => {
+    console.log("streamer_id", streamer_id);
+    localStorage.setItem("streamer_id", streamer_id);
 
     try {
       // get hosting video info
@@ -69,7 +71,12 @@ const HeadPart = () => {
               style={{ width: "100%" }}
               src={currentStream[0]?.thumbnail}
               alt=""
-              onClick={() => handleClick(currentStream[0]?.channel_name)}
+              onClick={() =>
+                handleClick(
+                  currentStream[0]?.channel_name,
+                  currentStream[0]?.streamer_id
+                )
+              }
             />
           )}
         </Grid>
@@ -83,7 +90,12 @@ const HeadPart = () => {
                   style={{ width: "100%" }}
                   src={currentStream[1]?.thumbnail}
                   alt=""
-                  onClick={() => handleClick(currentStream[1]?.channel_name)}
+                  onClick={() =>
+                    handleClick(
+                      currentStream[1]?.channel_name,
+                      currentStream[1]?.streamer_id
+                    )
+                  }
                 />
               )}
             </Grid>
@@ -98,7 +110,10 @@ const HeadPart = () => {
                       src={currentStream[2]?.thumbnail}
                       alt=""
                       onClick={() =>
-                        handleClick(currentStream[2]?.channel_name)
+                        handleClick(
+                          currentStream[2]?.channel_name,
+                          currentStream[2]?.streamer_id
+                        )
                       }
                     />
                   )}
@@ -113,7 +128,10 @@ const HeadPart = () => {
                       src={currentStream[3]?.thumbnail}
                       alt=""
                       onClick={() =>
-                        handleClick(currentStream[3]?.channel_name)
+                        handleClick(
+                          currentStream[3]?.channel_name,
+                          currentStream[3]?.streamer_id
+                        )
                       }
                     />
                   )}

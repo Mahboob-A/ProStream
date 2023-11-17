@@ -1,4 +1,4 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { getToken } from "../../services/LocalStorageService";
 import axios from "axios";
@@ -65,60 +65,74 @@ const ScheduleStream = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: "red" }}>
-      <div>Schedule Stream</div>;
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              label="Stream Title"
-              fullWidth
-              name="stream_title"
-              value={schedule.stream_title || ""}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Scheduled Time"
-              fullWidth
-              name="scheduled_time"
-              value={schedule.scheduled_time || ""}
-              onChange={handleChange}
-            />
-          </Grid>
-          {/* <MuiPickersUtilsProvider utils={DateFnsUtils}> */}
-          {/* <DatePicker
+    <Box>
+      <Box
+        sx={{
+          backgroundColor: "gray",
+          width: "500px",
+          padding: "20px",
+          marginX: "auto",
+          borderRadius: "10px",
+          marginTop: "20px",
+        }}
+      >
+        <Typography variant="h4">Schedule Stream</Typography>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                label="Stream Title"
+                fullWidth
+                name="stream_title"
+                value={schedule.stream_title || ""}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Scheduled Time"
+                fullWidth
+                type="datetime-local"
+                // type="date"
+                name="scheduled_time"
+                value={schedule.scheduled_time || ""}
+                onChange={handleChange}
+              />
+            </Grid>
+
+            {/* <MuiPickersUtilsProvider utils={DateFnsUtils}> */}
+            {/* <DatePicker
             label="Select Date"
             value={selectedDate}
             onChange={(date) => handleDateChange(date)}
             renderInput={(params) => <TextField {...params} />}
           /> */}
-          {/* </MuiPickersUtilsProvider> */}
-          {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
-          <DatePicker
-            label="Select Date"
-            value={selectedDate}
-            onChange={(date) => handleDateChange(date)}
-            renderInput={(params) => (
-              <TextField {...params} variant="standard" />
-            )}
-          />
-          <TextField
-            fullWidth
-            label="Selected Date"
-            value={selectedDate.toISOString().split("T")[0]} // Format the date as per your requirement
-            variant="standard"
-            readOnly
-          />
-          {/* </LocalizationProvider> */}
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary">
-              Save
-            </Button>
+            {/* </MuiPickersUtilsProvider> */}
+            {/* <LocalizationProvider dateAdapter={AdapterDateFns}> */}
+            {/* <DatePicker
+              label="Select Date"
+              value={selectedDate}
+              onChange={(date) => handleDateChange(date)}
+              renderInput={(params) => (
+                <TextField {...params} variant="standard" />
+              )}
+            />
+            <TextField
+              fullWidth
+              label="Selected Date"
+              value={selectedDate.toISOString().split("T")[0]} // Format the date as per your requirement
+              variant="standard"
+              readOnly
+            /> */}
+            {/* </LocalizationProvider> */}
+            <Grid item xs={12}>
+              <Button type="submit" variant="contained" color="primary">
+                Save
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      </form>
+        </form>
+      </Box>
     </Box>
   );
 };

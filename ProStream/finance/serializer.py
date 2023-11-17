@@ -6,7 +6,7 @@ from .models import UserWallet, Verification, BankAccountDetails, Tip
 
 class UserWalletRechargeSerializer(serializers.Serializer):
     '''Name, amount validation'''
-    name = serializers.CharField(max_length = 255)
+    # name = serializers.CharField(max_length = 255)
     amount = serializers.DecimalField(max_digits=10, decimal_places=2)
 
 

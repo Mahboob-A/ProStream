@@ -39,6 +39,8 @@ class GetCurrentStreamDetails(APIView):
                 user = request.user
                 streamer_id = user.streamer_id
                 query_streamer_id = request.query_params.get('streamer_id')
+                print("streamer_id", streamer_id)
+                print("query_streamer_id", query_streamer_id)
                 if streamer_id == query_streamer_id:
                         try:
                                 streamer = Streamer.objects.get(id = streamer_id)

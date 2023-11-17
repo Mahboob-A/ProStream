@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { getToken } from "../../services/LocalStorageService";
 import { Box, TextField, Typography } from "@mui/material";
-import { Button } from "@mui/base";
+import Button from "@mui/material/Button";
+import UserWallet from "./UserWallet";
 
 const WalletAndWithdrawl = () => {
   const { access_token } = getToken();
@@ -54,27 +55,42 @@ const WalletAndWithdrawl = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: "red" }}>
-      <Typography variant="h4">Wallet</Typography>
-      <Typography variant="h6">
-        Available amount: {wallet.available_amount}
-      </Typography>
-      <Typography variant="h6">
-        Total Tip Received: {wallet.total_tip_received}
-      </Typography>
-      <Typography variant="h4">Withdrawl</Typography>
-      <form action="" method="post" onSubmit={handleSubmit}>
-        <TextField
-          label="Amount"
-          fullWidth
-          type="number"
-          name="amount"
-          value={amount}
-          onChange={handleChange}
-          required
-        />
-        <Button type="submit">Submit</Button>
-      </form>
+    <Box>
+      <Box>
+        <UserWallet />
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: "gray",
+          width: "500px",
+          marginX: "auto",
+          borderRadius: "10px",
+          padding: "20px",
+        }}
+      >
+        <Typography variant="h4">Wallet</Typography>
+        <Typography variant="h6">
+          Available amount: {wallet.available_amount}
+        </Typography>
+        <Typography variant="h6">
+          Total Tip Received: {wallet.total_tip_received}
+        </Typography>
+        <Typography variant="h4">Withdrawl</Typography>
+        <form action="" method="post" onSubmit={handleSubmit}>
+          <TextField
+            label="Amount"
+            fullWidth
+            type="number"
+            name="amount"
+            value={amount}
+            onChange={handleChange}
+            required
+          />
+          <Button type="submit" variant="contained">
+            Submit
+          </Button>
+        </form>
+      </Box>
     </Box>
   );
 };
