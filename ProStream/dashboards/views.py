@@ -356,3 +356,5 @@ class ScheduleLiveStreamCRUIDAPI(APIView):
                         return Response({'status' : 'success', 'data' : 'Scedule live stream Updated Successfully.'}, status=status.HTTP_200_OK)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
                
+
+
