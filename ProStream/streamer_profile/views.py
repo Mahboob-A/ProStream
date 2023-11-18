@@ -68,11 +68,18 @@ class StreamGoLiveAPI(APIView):
                         instance = serializer.save()
                         instance.streamer = streamer
                         instance.save()
-                        data = {
-                                'streamer_id' : streamer.id,  
-                                'user_username' : streamer.original_user.username,  # to store in temp data model, so that these can be shown in For You sectuion with the Temp Data GET API 
-                                'user_profile_image_url' : streamer.original_user.profile_picture, 
-                        }
+                        if streamer.original_user.profile_picture: 
+                                data = {
+                                        'streamer_id' : streamer.id,  
+                                        'user_username' : streamer.original_user.username,  # to store in temp data model, so that these can be shown in For You sectuion with the Temp Data GET API 
+                                        'profile_image_url' : streamer.original_user.profile_picture, 
+                                }
+                        else : 
+                                data = {
+                                        'streamer_id' : streamer.id,  
+                                        'user_username' : streamer.original_user.username,  # to store in temp data model, so that these can be shown in For You sectuion with the Temp Data GET API 
+                                        'profile_image_url' : None 
+                                }
                         return Response({'status' : 'success', 'data' : data}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -172,7 +179,9 @@ class StreamerDetailsAPI(APIView):
                 try: 
                         user = CustomUser.objects.get(username=username)
                         streamer = user.streamer # reverse relationship 
-                        channel = streamer.channel_id 
+                        # channel_id = streamer.channel_id  no use here 
+                        channel = Channel.objects.get(streamer=streamer)
+                        
                         streamer_serializer = StreamerInfoSerialiser(streamer)
                         channel_serializer = EditChannelSerializer(channel)
                         data = {
