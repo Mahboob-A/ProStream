@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 
 from .models import * 
+from accounts.models import CustomUser
 
 
 class StreamerCRUDSerializer(serializers.ModelSerializer): 
@@ -28,3 +29,8 @@ class CategorySerializer(serializers.ModelSerializer):
         class Meta: 
                 model = Category
                 exclude = ['createdAt', 'updatedAt', 'deletedAt']
+                
+class ImageSerializer(serializers.ModelSerializer):
+        class Meta:  
+                model = CustomUser
+                fields = ['profile_picture',]
