@@ -15,5 +15,8 @@ urlpatterns = [
         
         # category api - fetches category based on tags if tags in query param, or passes all categorues 
         path('get-categories/api/', views.CategoryAPI.as_view(), name='category_api'),
+        
+        # get all the streamer details 
+        path('get-all-streamer-details/api/', views.GetAllStreamersAPI.as_view(), name='get_all_streamer_details'),
 
 ]
