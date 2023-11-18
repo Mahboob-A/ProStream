@@ -233,6 +233,7 @@ class StreamerAnalytics(APIView):
 
 class TeamCRUDAPI(APIView): 
         ''' Dashboard API for Team Model  '''
+        permission_classes = [IsAuthenticated]
         
         def get(self, request): 
                 try: 
@@ -274,7 +275,7 @@ class TeamActionAPI(APIView):
                         except CustomUser.DoesNotExist: 
                                 member_streamer_user = CustomUser.objects.get(username=member_streamer_username_or_email)
                 except CustomUser.DoesNotExist: 
-                        return Response({'status' : 'error', 'data' : 'User with this email or username does not exist!'})
+                        return Response({'status' : 'error', 'data' : 'User with this email or username does not exist!'}, status=status.HTTP_400_BAD_REQUEST)
                 
                 print('member streamer: ', member_streamer_user)
                 print('admin streamer: ', request.user)
@@ -298,25 +299,25 @@ class TeamActionAPI(APIView):
                         result, message = team.add_member(streamer=member_streamer)
                         if result: 
                                 return Response({'status' : 'success', 'data' : message}, status=status.HTTP_200_OK)
-                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_200_OK)
+                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_400_BAD_REQUEST)
                 
                 elif action == 'remove': 
                         result, message = team.remove_member(streamer=member_streamer)
                         if result: 
                                 return Response({'status' : 'success', 'data' : message}, status=status.HTTP_200_OK)
-                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_200_OK)
+                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_400_BAD_REQUEST)
                 
                 elif action == 'exit_admin': 
                         result, message = team.exit_team_admin(admin=admin_streamer, new_admin=member_streamer)
                         if result: 
                                 return Response({'status' : 'success', 'data' : message}, status=status.HTTP_200_OK)
-                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_200_OK)
+                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_400_BAD_REQUEST)
                 
                 elif action == 'change_admin': 
                         result, message = team.change_admin_selected(admin=admin_streamer, new_admin=member_streamer)
                         if result: 
                                 return Response({'status' : 'success', 'data' : message}, status=status.HTTP_200_OK)
-                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_200_OK)
+                        return Response({'status' : 'error', 'data' : message}, status=status.HTTP_400_BAD_REQUEST)
                 
                 else: 
                         return Response({'status' : 'error', 'data' : 'The action is not correct to proceed this request. Please check the action.'}, status=status.HTTP_400_BAD_REQUEST)
