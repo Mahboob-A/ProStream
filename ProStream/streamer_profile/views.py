@@ -69,10 +69,12 @@ class StreamGoLiveAPI(APIView):
                         instance.streamer = streamer
                         instance.save()
                         if streamer.original_user.profile_picture: 
+                                img_serializer = ImageSerializer(streamer.original_user) 
+                                print('seri : ', img_serializer.data)
                                 data = {
                                         'streamer_id' : streamer.id,  
                                         'user_username' : streamer.original_user.username,  # to store in temp data model, so that these can be shown in For You sectuion with the Temp Data GET API 
-                                        'profile_image_url' : streamer.original_user.profile_picture, 
+                                        'profile_image_url' : img_serializer.data.get('profile_picture')
                                 }
                         else : 
                                 data = {

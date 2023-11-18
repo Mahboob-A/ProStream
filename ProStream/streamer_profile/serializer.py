@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 
 from .models import * 
+from accounts.models import CustomUser
 
 
 class StreamerCRUDSerializer(serializers.ModelSerializer): 
@@ -36,3 +37,8 @@ class StreamerSerializerForYouSection(serializers.ModelSerializer):
         class Meta: 
                 model = Streamer
                 fields = ['username', 'profile_picture']
+                
+class ImageSerializer(serializers.ModelSerializer):
+        class Meta:  
+                model = CustomUser
+                fields = ['profile_picture',]
