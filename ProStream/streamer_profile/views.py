@@ -172,9 +172,17 @@ class UserFollowAPI(APIView):
         
 
 
+class GetAllStreamersAPI(APIView): 
+        ''' API to get all the streamers in For You Section | (these are not the currently live streamers) '''
+        def get(self, request): 
+                all_streamers = Streamer.objects.all()
+                serializers = StreamerSerializerForYouSection(all_streamers, many=True)
+                return Response({'status' : 'success', 'data' : serializers.data}, status=status.HTTP_200_OK) 
+
+
+
 class StreamerDetailsAPI(APIView): 
         ''' API to show Streamer details | Takes username of the user in QueryParameter  '''
-        permission_classes  = [IsAuthenticated]
         
         def get(self, request):  
                 username = request.query_params.get('username')
@@ -197,7 +205,6 @@ class StreamerDetailsAPI(APIView):
 
 class CategoryAPI(APIView): 
         ''' API to show categories in home page and show all the Categories Based On Tag Click '''
-        permission_classes = [IsAuthenticated]
         # Categories will be added by admin | users are not allowed to add categories 
         def get(self, request): 
                 tag = request.query_params.get('tag')

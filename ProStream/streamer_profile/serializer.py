@@ -30,6 +30,14 @@ class CategorySerializer(serializers.ModelSerializer):
                 model = Category
                 exclude = ['createdAt', 'updatedAt', 'deletedAt']
                 
+class StreamerSerializerForYouSection(serializers.ModelSerializer): 
+        ''' serializer for streamers details for For You Section '''
+        username = serializers.CharField(source='original_user.username', read_only=True)
+        profile_picture = serializers.ImageField(source='original_user.profile_picture', read_only=True) 
+        class Meta: 
+                model = Streamer
+                fields = ['username', 'profile_picture']
+                
 class ImageSerializer(serializers.ModelSerializer):
         class Meta:  
                 model = CustomUser
