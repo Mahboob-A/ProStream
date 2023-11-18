@@ -18,7 +18,7 @@ from rest_framework.permissions import IsAuthenticated
 from .renderer import AuthAPIRenderer 
 from .serializer import * 
 # to send email 
-from .utils import EmailUser, format_email, generate_otp, get_tokens_for_user
+from .utils import EmailUser, format_email, generate_otp, get_tokens_for_user, updated_email_formatter  
 from finance.models import UserWallet
 
 
@@ -27,11 +27,22 @@ class RegistrationAPI(APIView):
         ''' Registers an user with username, email and password and passes token  '''
         def post(self, request): 
                 serializer = RegistrationAPISerializer(data=request.data)
+                email_send = False 
                 if serializer.is_valid(): # do not raise exception here, let the structured erros pass to the client 
                         user = serializer.save()
                         user_wallet = UserWallet.objects.create(user = user)
                         token = get_tokens_for_user(user)
-                        return Response({'status' : 'success', 'token' : token, 'wallet_id': user_wallet.id}, status=status.HTTP_201_CREATED)
+                        try: 
+                                email_body = updated_email_formatter(user, user_signed_up=True)
+                                EmailUser.send_email(email_body)
+                                email_send = True 
+                        except Exception as e: 
+                                print('signup email not send : ',  str(e))
+                                email_send = False 
+                                pass 
+                        if email_send: 
+                                return Response({'status' : 'success', 'token' : token, 'wallet_id': user_wallet.id, 'email' : 'Send Send Seccussfull'}, status=status.HTTP_201_CREATED)
+                        return Response({'status' : 'success', 'token' : token, 'wallet_id': user_wallet.id, 'email' : 'Email Send Unsuccessfull'}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
         

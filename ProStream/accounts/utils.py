@@ -123,10 +123,56 @@ def generate_otp(otp_size=6):
 
 # updated email body formatter for other administrative works 
 def updated_email_formatter(user, **kwargs): 
-        reset_pass_with_otp_url = 'http://127.0.0.1:8000/auth/reset-password-email-otp/'
-   
+        reset_pass_with_otp_url = 'http://16.171.185.111/auth/reset-password-email-otp/'
+        
  
         email_body = ""
+        
+        # send an email when user signs up 
+        if 'user_signed_up' in kwargs: 
+                email_body = format_html(
+        ''' 
+        Hey Future Streaming Rockstar! &#127775; <br> <br>
+        Thrilled to have you onboard {}!, where your journey to stardom begins! &#128640; <br> <br>
+        While you are here, get comfy, grab the popcorn, and enjoy a smorgasbord of amazing streams! &#10024; &#11088;<br> <br>
+        Feeling generous? Toss some digital love (aka tips) to your favorite performers! <br> <br>
+        Oh, did we mention? You are just a click away from joining the lineup! Fill out a teeny form, and bam! You are all set to rock the stream! &#127908; &#127752; <br> <br>
+        Keep an eye on your inbox for updates, and get those star-shaped sunglasses ready! &#128526; <br> 
+        <br><br><br><br> <br> <br> <br> 
+        P.S. Get those creative juices flowing, because your audience is waiting! &#127928; &#11088; <br> <br>
+
+        Cheers, <br>
+        The ProStream Team <br>
+                                
+        ''', user.username,)
+                
+                data = {
+                        'subject' : f'WooHoo! Welcome {user.username} to the Grand Party in ProStream!',
+                        'body' : email_body, 
+                        'recipient_email' : user.email, 
+                }
+                
+        if 'user_sign_up_as_streamer' in kwargs: 
+                email_body = format_html(
+        '''
+        Howdy {}! Congratulations on stepping into the limelight at ProStream! &#11088; <br> <br>
+        Your journey to stardom officially begins! &#127775; <br> <br>
+        Ever dreamed of earning while entertaining? Well, grab the mic, because here you can! Tips are raining in! &#9748; &#128176; <br> <br>
+        Pssst… Want to form a dream team with other streamers and rule the stage? Together, you'll be unstoppable! &#127926; &#127908; <br> <br>
+        For that extra sparkle: We take a teeny part of the pie. But hey, think of it this way—you do not need to master algorithms! Just focus on rocking the stage; we handle the backstage chaos! &#128516; <br> <br>
+        <br><br><br><br> <br> <br> 
+        P.S. Keep your eyes on the inbox for more updates, and get set to dazzle the audience! <br> <br> <br>
+        
+        Cheers,  <br>
+        The ProStream Team  <br>
+        
+        ''', user.username)
+                data = {
+                        'subject' : f'Hello Superhero! {user.username} You are Now a ProStream Performer!',
+                        'body' : email_body, 
+                        'recipient_email' : user.email, 
+                }        
+        
         if 'verification_created' in kwargs:  # Verification POST request
                 email_body = format_html(
         ''' 
