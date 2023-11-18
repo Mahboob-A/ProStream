@@ -4,12 +4,15 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.db.models import Q 
 
 from .models import * 
 from .serializer import * 
+from accounts.models import CustomUser
 from live_stream.models import Category 
-
-from rest_framework.permissions import IsAuthenticated
+from dashboards.serializers import EditChannelSerializer
+from accounts.utils import EmailUser, updated_email_formatter
 
 class StreamerCreateAPI(APIView): 
         ''' Creates An Instance Of Streamer '''
@@ -18,6 +21,7 @@ class StreamerCreateAPI(APIView):
                 if request.user.is_a_streamer == True:
                         return Response({'status' : 'error', 'data' : "You are already a Streamer"}, status=status.HTTP_201_CREATED)
                 serializer = StreamerCRUDSerializer(data=request.data)
+                email_send = False 
                 if serializer.is_valid(): 
                         instance = serializer.save()
                         user = request.user
@@ -25,12 +29,21 @@ class StreamerCreateAPI(APIView):
                         instance.original_user = user
                         streamer_channel = Channel.objects.create(streamer=instance)  # when a user registers as streamer, create a channel for that streamer 
                         instance.channel_id = streamer_channel.id
-                        user.is_a_user = False
                         user.is_a_streamer = True
                         user.save()
                         instance.save()
                         streamer_social_media = SocialMedia.objects.get_or_create(streamer = instance, channel = streamer_channel) # when a streamer register then create his social media instance
-                        return Response({'status' : 'success', 'data' : "Streamer and Streamer's Channel Created Successfully!"}, status=status.HTTP_201_CREATED)
+                        try: 
+                                email_body = updated_email_formatter(request.user, user_sign_up_as_streamer=True)
+                                EmailUser.send_email(email_body)
+                                email_send = True 
+                        except Exception as e: 
+                                print('streamer create email not send: ',  str(e))
+                                email_send = False 
+                                pass 
+                        if email_send: 
+                                return Response({'status' : 'success', 'data' : "Streamer and Streamer's Channel Created, Email Send Successfull!"}, status=status.HTTP_201_CREATED)
+                        return Response({'status' : 'success', 'data' : "Streamer and Streamer's Channel Created, But Eamil Send Unsuccessfull!"}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -55,7 +68,12 @@ class StreamGoLiveAPI(APIView):
                         instance = serializer.save()
                         instance.streamer = streamer
                         instance.save()
-                        return Response({'status' : 'success', 'data' : {'streamer_id' : streamer_id}}, status=status.HTTP_201_CREATED)
+                        data = {
+                                'streamer_id' : streamer.id,  
+                                'user_username' : streamer.original_user.username,  # to store in temp data model, so that these can be shown in For You sectuion with the Temp Data GET API 
+                                'user_profile_image_url' : streamer.original_user.profile_picture, 
+                        }
+                        return Response({'status' : 'success', 'data' : data}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         
 
@@ -142,4 +160,52 @@ class UserFollowAPI(APIView):
                 channel.total_followers -= 1
                 channel.save()
                 return Response({'status': 'success', 'data': 'Unfollowed successfully'}, status=status.HTTP_204_NO_CONTENT)
+        
+
+
+class StreamerDetailsAPI(APIView): 
+        ''' API to show Streamer details | Takes username of the user in QueryParameter  '''
+        permission_classes  = [IsAuthenticated]
+        
+        def get(self, request):  
+                username = request.query_params.get('username')
+                try: 
+                        user = CustomUser.objects.get(username=username)
+                        streamer = user.streamer # reverse relationship 
+                        channel = streamer.channel_id 
+                        streamer_serializer = StreamerInfoSerialiser(streamer)
+                        channel_serializer = EditChannelSerializer(channel)
+                        data = {
+                                'streamer' : streamer_serializer.data, 
+                                'channel' : channel_serializer.data
+                        }
+                        return Response({'status' : 'success', 'data' : data}, status=status.HTTP_200_OK)
+                except CustomUser.DoesNotExist: 
+                        return Response({'status' : 'error', 'data' : f'User with this username - {username} could not be found'}, status=status.HTTP_400_BAD_REQUEST)
+                
+
+class CategoryAPI(APIView): 
+        ''' API to show categories in home page and show all the Categories Based On Tag Click '''
+        permission_classes = [IsAuthenticated]
+        # Categories will be added by admin | users are not allowed to add categories 
+        def get(self, request): 
+                tag = request.query_params.get('tag')
+                if tag: 
+                        categories_with_searched_tags = Category.objects.filter(Q(tag1__icontains=tag) | Q(tag2__icontains=tag))
+                        serializer = CategorySerializer(categories_with_searched_tags, many=True)
+                        return Response({'status' : 'success', 'data' : serializer.data}, status=status.HTTP_200_OK)
+                else: 
+                        categories = Category.objects.all()
+                        serializer = CategorySerializer(categories, many=True)
+                        return Response({'status' : 'success', 'data' : serializer.data}, status=status.HTTP_200_OK)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         

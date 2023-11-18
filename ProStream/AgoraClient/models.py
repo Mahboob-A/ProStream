@@ -29,6 +29,8 @@ class TempStremData(models.Model):
         token = models.CharField(max_length=255, null=True, blank=True)
         thumbnail = models.URLField(max_length=500, null=True, blank=True)
         streamer_id = models.CharField(max_length=255, null = True, blank = True)
+        username = models.CharField(max_length=25, null=True, blank=True)  # store the streamer username to show in the recommendation 
+        profile_image_url = models.CharField(max_length=255, null=True, blank=True) # store streamer profile pic to show in Recommendation 
         
         def __str__(self): 
                 return f"Deporary data for {self.channel_name} channel "
