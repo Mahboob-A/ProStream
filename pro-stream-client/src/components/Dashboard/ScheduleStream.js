@@ -18,7 +18,7 @@ const ScheduleStream = () => {
 
   // useEffect(() => {
   //   axios
-  //     .get("http://127.0.0.1:8000/dashboard/live-stream-schedule-crud/", {
+  //     .get("http://16.171.185.111/dashboard/live-stream-schedule-crud/", {
   //       headers: {
   //         Authorization: `Bearer ${access_token}`,
   //         "Content-Type": "application/json",
@@ -44,7 +44,7 @@ const ScheduleStream = () => {
     e.preventDefault();
     axios
       .post(
-        "http://127.0.0.1:8000/dashboard/live-stream-schedule-crud/",
+        "http://16.171.185.111/dashboard/live-stream-schedule-crud/",
         schedule,
         {
           headers: {

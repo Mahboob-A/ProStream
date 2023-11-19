@@ -24,7 +24,7 @@ const ValidationPage = () => {
     try {
       const credential = localStorage.getItem("credential");
       const response = await axios.post(
-        "http://127.0.0.1:8000/auth/reset-password-email-otp-confirmation/",
+        "http://16.171.185.111/auth/reset-password-email-otp-confirmation/",
         { otp, credential, password, password2 }
       );
       // console.log(response);

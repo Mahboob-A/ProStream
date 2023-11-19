@@ -48,7 +48,7 @@ const BecomeStreamForm = () => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/live-stream/create-streamer/api/",
+        "http://16.171.185.111/live-stream/create-streamer/api/",
         formData,
         { headers: headers }
       );

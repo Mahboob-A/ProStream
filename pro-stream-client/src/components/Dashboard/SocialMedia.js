@@ -27,7 +27,7 @@ const SocialMedia = () => {
   useEffect(() => {
     if (streamer_id !== "") {
       axios
-        .get("http://127.0.0.1:8000/dashboard/social-media-links/api/", {
+        .get("http://16.171.185.111/dashboard/social-media-links/api/", {
           params: {
             streamer_id: streamer_id,
           },
@@ -56,7 +56,7 @@ const SocialMedia = () => {
     console.log("Form submitted:", socialLink);
     axios
       .post(
-        "http://127.0.0.1:8000/dashboard/social-media-links/api/",
+        "http://16.171.185.111/dashboard/social-media-links/api/",
         socialLink,
         {
           headers: {

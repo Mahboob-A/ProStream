@@ -100,7 +100,7 @@ export default function Home() {
   // React.useEffect(() => {
   //   if (!access_token) return;
   //   axios
-  //     .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
+  //     .get("http://16.171.185.111/auth/get/user-all-details/", {
   //       headers: {
   //         Authorization: `Bearer ${access_token}`,
   //         "Content-Type": "application/json",
@@ -127,13 +127,13 @@ export default function Home() {
       // runing streaming info
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/token/stream-temp-data/api/"
+          "http://16.171.185.111/token/stream-temp-data/api/"
         );
         console.log("Running strem data", response.data.data);
         setCurrentStream(response.data.data);
 
         const response1 = await axios.get(
-          "http://127.0.0.1:8000/live-stream/get-all-streamer-details/api/"
+          "http://16.171.185.111/live-stream/get-all-streamer-details/api/"
         );
         console.log("all streamer data", response1.data.data);
         setAllStreamerData(response1.data.data);
@@ -228,7 +228,7 @@ export default function Home() {
                     >
                       <Avatar
                         alt="Profile pic"
-                        src={`http://127.0.0.1:8000/${text?.profile_image_url}`}
+                        src={`http://16.171.185.111/${text?.profile_image_url}`}
                       />
                     </ListItemIcon>
                     <Grid
@@ -347,7 +347,7 @@ export default function Home() {
                   >
                     <Avatar
                       alt="Profile pic"
-                      src={`http://127.0.0.1:8000/${text?.profile_picture}`}
+                      src={`http://16.171.185.111/${text?.profile_picture}`}
                     />
                   </ListItemIcon>
                   <Grid

@@ -40,7 +40,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/dashboard/edit-profile/api/", {
+      .get("http://16.171.185.111/dashboard/edit-profile/api/", {
         headers: headers,
       })
       .then((response) => {
@@ -68,7 +68,7 @@ const UserProfile = () => {
     console.log("Form submitted:", userData);
 
     axios
-      .patch("http://127.0.0.1:8000/dashboard/edit-profile/api/", userData, {
+      .patch("http://16.171.185.111/dashboard/edit-profile/api/", userData, {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "multipart/form-data",
@@ -78,7 +78,7 @@ const UserProfile = () => {
         console.log("User data updated successfully:", response.data);
         alert("User data updated successfully!");
         axios
-          .get("http://127.0.0.1:8000/dashboard/edit-profile/api/", {
+          .get("http://16.171.185.111/dashboard/edit-profile/api/", {
             headers: headers,
           })
           .then((response) => {
@@ -111,7 +111,7 @@ const UserProfile = () => {
           <Avatar
             src={
               userData.profile_picture
-                ? `http://127.0.0.1:8000/${userData.profile_picture}`
+                ? `http://16.171.185.111/${userData.profile_picture}`
                 : "https://i.ibb.co/k81m8xT/image-1.png"
             }
             alt="Profile Picture"
@@ -212,7 +212,7 @@ const UserProfile = () => {
                 <Avatar
                   src={
                     userData.profile_picture
-                      ? `http://127.0.0.1:8000/${userData.profile_picture}`
+                      ? `http://16.171.185.111/${userData.profile_picture}`
                       : ""
                   }
                   alt="Profile Picture"

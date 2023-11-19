@@ -207,7 +207,7 @@ const VideoStream = () => {
       if (streamer === "true") {
         try {
           const response = await axios.delete(
-            `http://127.0.0.1:8000/token/stream-temp-data/api/?channel_name=${CHANNEL}`
+            `http://16.171.185.111/token/stream-temp-data/api/?channel_name=${CHANNEL}`
           );
           console.log("Stream temporary data deleted:", response.data);
         } catch (error) {

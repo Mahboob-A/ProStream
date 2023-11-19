@@ -178,7 +178,7 @@ const Category = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/live-stream/get-categories/api/"
+          "http://16.171.185.111/live-stream/get-categories/api/"
         );
         console.log(response.data.data);
         setAllCategory(response.data.data);
