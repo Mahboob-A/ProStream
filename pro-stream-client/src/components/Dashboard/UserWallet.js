@@ -15,7 +15,7 @@ const UserWallet = () => {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/dashboard/get/user-wallet-status/", {
+      .get("http://16.171.185.111/dashboard/get/user-wallet-status/", {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
@@ -35,7 +35,7 @@ const UserWallet = () => {
     e.preventDefault();
     axios
       .post(
-        "http://127.0.0.1:8000/finance/recharge/",
+        "http://16.171.185.111/finance/recharge/",
         { amount: amount },
         {
           headers: {

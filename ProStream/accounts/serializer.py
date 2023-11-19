@@ -120,7 +120,7 @@ class ResetPasswordEmailLinkRequestSerializer(serializers.ModelSerializer):
                         user = CustomUser.objects.get(email=email)
                         encoded_uuid = urlsafe_base64_encode(force_bytes(user.id))
                         password_token = PasswordResetTokenGenerator().make_token(user)
-                        link = 'http://127.0.0.1:8000/auth/reset-password/'+encoded_uuid+'/'+password_token # here is the endpoint to get the new passwords 
+                        link = 'http://16.171.185.111/auth/reset-password/'+encoded_uuid+'/'+password_token # here is the endpoint to get the new passwords 
                         data = format_email(user=user, link=link)
                         # send email 
                         EmailUser.send_email(data)

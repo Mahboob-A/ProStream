@@ -15,7 +15,7 @@ const HeadPart = () => {
       // runing streaming info
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/token/stream-temp-data/api/"
+          "http://16.171.185.111/token/stream-temp-data/api/"
         );
 
         console.log("user data", response.data.data);
@@ -36,7 +36,7 @@ const HeadPart = () => {
     try {
       // get hosting video info
       let res = await fetch(
-        `http://127.0.0.1:8000/token/get-token-for-viewer/api/?channel=${channel_name}`
+        `http://16.171.185.111/token/get-token-for-viewer/api/?channel=${channel_name}`
       );
 
       let data = await res.json();

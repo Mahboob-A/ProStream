@@ -26,7 +26,7 @@ const ChangePassword = ({ encoded_uuid, password_token }) => {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/auth/reset-password/",
+        "http://16.171.185.111/auth/reset-password/",
         {
           email,
         }

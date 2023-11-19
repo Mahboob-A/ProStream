@@ -44,7 +44,7 @@ export default function SignIn() {
 
     try {
       // Make an Axios POST request to your login endpoint
-      const response = await axios.post("http://127.0.0.1:8000/auth/login/", {
+      const response = await axios.post("http://16.171.185.111/auth/login/", {
         credential,
         password,
       });
@@ -55,7 +55,7 @@ export default function SignIn() {
         storeToken(response.data.token);
         if (response.data.token.access) {
           axios
-            .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
+            .get("http://16.171.185.111/auth/get/user-all-details/", {
               headers: {
                 Authorization: `Bearer ${response.data.token.access}`,
                 "Content-Type": "application/json",

@@ -76,7 +76,7 @@ export default function NavBar() {
   React.useEffect(() => {
     if (!access_token) return;
     axios
-      .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
+      .get("http://16.171.185.111/auth/get/user-all-details/", {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",

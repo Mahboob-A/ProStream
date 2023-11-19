@@ -45,7 +45,7 @@ const Profile = () => {
       // console.log("check1", access_token);
       // console.log("check2", streamerStreamData.streamer);
       axios
-        .get("http://127.0.0.1:8000/dashboard/edit-channel/api/", {
+        .get("http://16.171.185.111/dashboard/edit-channel/api/", {
           params: {
             streamer_id: streamer_id,
           },
@@ -89,7 +89,7 @@ const Profile = () => {
     e.preventDefault();
     await axios
       .patch(
-        "http://127.0.0.1:8000/dashboard/edit-channel/api/",
+        "http://16.171.185.111/dashboard/edit-channel/api/",
         streamerData,
         {
           headers: {
@@ -102,7 +102,7 @@ const Profile = () => {
         console.log("Streamer data updated successfully:", response.data);
         setStreamerData(response.data);
         axios
-          .get("http://127.0.0.1:8000/dashboard/edit-channel/api/", {
+          .get("http://16.171.185.111/dashboard/edit-channel/api/", {
             params: {
               streamer_id: streamer_id,
             },
@@ -161,7 +161,7 @@ const Profile = () => {
             </Typography>
             {streamerData.display_picture ? (
               <Avatar
-                src={`http://127.0.0.1:8000/${streamerData.display_picture}`}
+                src={`http://16.171.185.111/${streamerData.display_picture}`}
                 alt="Profile Picture"
                 sx={{ width: 150, height: 150 }}
               />
@@ -177,7 +177,7 @@ const Profile = () => {
             </Typography>
             {streamerData.channel_banner_picture ? (
               <img
-                src={`http://127.0.0.1:8000/${streamerData.channel_banner_picture}`}
+                src={`http://16.171.185.111/${streamerData.channel_banner_picture}`}
                 alt="Profile Picture"
                 width="350px"
                 height="200px"
@@ -265,7 +265,7 @@ const Profile = () => {
                       <Typography variant="h6">Display Picture</Typography>
                       {streamerData.display_picture ? (
                         <Avatar
-                          src={`http://127.0.0.1:8000/${streamerData.display_picture}`}
+                          src={`http://16.171.185.111/${streamerData.display_picture}`}
                           alt="Profile Picture"
                           sx={{ width: 150, height: 150 }}
                         />
@@ -286,7 +286,7 @@ const Profile = () => {
                       </Typography>
                       {streamerData.channel_display_name ? (
                         <img
-                          src={`http://127.0.0.1:8000/${streamerData.channel_banner_picture}`}
+                          src={`http://16.171.185.111/${streamerData.channel_banner_picture}`}
                           alt="Profile Picture"
                           width="350px"
                           height="200px"

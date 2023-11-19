@@ -77,7 +77,7 @@ const StreamForm = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/live-chat/category-crud/api/"
+          "http://16.171.185.111/live-chat/category-crud/api/"
         );
         // console.log(response.data.data);
         setCategory(response.data.data);
@@ -108,7 +108,7 @@ const StreamForm = () => {
     try {
       // create a stream model
       const response1 = await axios.post(
-        "http://127.0.0.1:8000/live-stream/create-stream/api/",
+        "http://16.171.185.111/live-stream/create-stream/api/",
         formData,
         { headers: headers }
       );
@@ -117,7 +117,7 @@ const StreamForm = () => {
 
       // hosting video
       let response2 = await fetch(
-        "http://127.0.0.1:8000/token/get-token-for-host/api/"
+        "http://16.171.185.111/token/get-token-for-host/api/"
       );
 
       let data = await response2.json();
@@ -143,7 +143,7 @@ const StreamForm = () => {
 
       // create stream model
       const response3 = await axios.post(
-        "http://127.0.0.1:8000/token/stream-temp-data/api/",
+        "http://16.171.185.111/token/stream-temp-data/api/",
         {
           uid: uid,
           channel_name: channel,

@@ -15,9 +15,9 @@ const VideoHome = () => {
     // Replace the following fetch with your actual API call using fetch or axios
     try {
       if (room) {
-        apiUrl = `http://127.0.0.1:8000/token/get-token-for-viewer/api/?channel=${room}`;
+        apiUrl = `http://16.171.185.111/token/get-token-for-viewer/api/?channel=${room}`;
       } else {
-        apiUrl = "http://127.0.0.1:8000/token/get-token-for-host/api/";
+        apiUrl = "http://16.171.185.111/token/get-token-for-host/api/";
       }
       let response = await fetch(apiUrl);
       let data = await response.json();

@@ -12,7 +12,7 @@ const Analytics = () => {
   };
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/dashboard/streamer-analytics/", {
+      .get("http://16.171.185.111/dashboard/streamer-analytics/", {
         headers: headers,
       })
       .then((response) => {
@@ -36,7 +36,7 @@ const Analytics = () => {
     if (analytics.username) {
       axios
         .post(
-          "http://127.0.0.1:8000/dashboard/streamer-analytics/",
+          "http://16.171.185.111/dashboard/streamer-analytics/",
           { username: analytics.username, message: sms },
           {
             headers: {

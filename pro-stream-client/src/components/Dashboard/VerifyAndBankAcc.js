@@ -35,7 +35,7 @@ const VerifyAndBankAcc = () => {
   const [edit, setEdit] = React.useState(true);
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/finance/verification/", {
+      .get("http://16.171.185.111/finance/verification/", {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const VerifyAndBankAcc = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://127.0.0.1:8000/finance/verification/", verificationInfo, {
+      .post("http://16.171.185.111/finance/verification/", verificationInfo, {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "multipart/form-data",
@@ -77,7 +77,7 @@ const VerifyAndBankAcc = () => {
         // setSocialLink(response.data.data);
         alert("User data updated successfully!");
         axios
-          .get("http://127.0.0.1:8000/finance/verification/", {
+          .get("http://16.171.185.111/finance/verification/", {
             headers: {
               Authorization: `Bearer ${access_token}`,
               "Content-Type": "application/json",
@@ -108,7 +108,7 @@ const VerifyAndBankAcc = () => {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/finance/add-bank-details/", {
+      .get("http://16.171.185.111/finance/add-bank-details/", {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
@@ -139,7 +139,7 @@ const VerifyAndBankAcc = () => {
   const handleSubmit2 = (e) => {
     e.preventDefault();
     axios
-      .post("http://127.0.0.1:8000/finance/add-bank-details/", bankAccount, {
+      .post("http://16.171.185.111/finance/add-bank-details/", bankAccount, {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "multipart/form-data",
@@ -150,7 +150,7 @@ const VerifyAndBankAcc = () => {
         // setSocialLink(response.data.data);
         alert("User data updated successfully!");
         axios
-          .get("http://127.0.0.1:8000/finance/add-bank-details/", {
+          .get("http://16.171.185.111/finance/add-bank-details/", {
             headers: {
               Authorization: `Bearer ${access_token}`,
               "Content-Type": "application/json",
@@ -207,7 +207,7 @@ const VerifyAndBankAcc = () => {
         </Typography>
         {verificationInfo.document ? (
           <img
-            src={`http://127.0.0.1:8000/${verificationInfo.document}`}
+            src={`http://16.171.185.111/${verificationInfo.document}`}
             alt="document"
             style={{ width: "300px", height: "200px" }}
           />
@@ -282,7 +282,7 @@ const VerifyAndBankAcc = () => {
                   <Typography variant="h6">Display Picture</Typography>
                   {verificationInfo.document ? (
                     <Avatar
-                      src={`http://127.0.0.1:8000/${verificationInfo.document}`}
+                      src={`http://16.171.185.111/${verificationInfo.document}`}
                       alt="Profile Picture"
                       sx={{ width: 150, height: 150 }}
                     />
@@ -387,7 +387,7 @@ const VerifyAndBankAcc = () => {
                   <Typography variant="h6">Passbook Image</Typography>
                   {bankAccount.passbook_img ? (
                     <Avatar
-                      src={`http://127.0.0.1:8000/${bankAccount.passbook_img}`}
+                      src={`http://16.171.185.111/${bankAccount.passbook_img}`}
                       alt="Passport Picture"
                       sx={{ width: 150, height: 150, marginX: "auto" }}
                     />

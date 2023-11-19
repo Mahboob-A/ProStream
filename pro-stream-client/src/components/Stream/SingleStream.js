@@ -228,7 +228,7 @@ export default function SingleStream() {
       console.log("streamer_id from_2nd_flow inside", streamer_id);
       axios
         .get(
-          "http://127.0.0.1:8000/live-chat/get/current-stream-details/api/",
+          "http://16.171.185.111/live-chat/get/current-stream-details/api/",
           {
             params: {
               streamer_id: streamer_id,
@@ -263,7 +263,7 @@ export default function SingleStream() {
       console.log("check1", access_token);
       // console.log("check2", streamerStreamData.streamer);
       axios
-        .get("http://127.0.0.1:8000/dashboard/edit-channel/api/", {
+        .get("http://16.171.185.111/dashboard/edit-channel/api/", {
           params: {
             streamer_id: streamer_id,
           },
@@ -288,7 +288,7 @@ export default function SingleStream() {
   useEffect(() => {
     if (streamer_id !== null && access_token) {
       axios
-        .get("http://127.0.0.1:8000/dashboard/social-media-links/api/", {
+        .get("http://16.171.185.111/dashboard/social-media-links/api/", {
           params: {
             streamer_id: streamer_id,
           },
@@ -316,7 +316,7 @@ export default function SingleStream() {
     };
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/finance/tip/",
+        "http://16.171.185.111/finance/tip/",
         {
           stream_id: streamerStreamDataAll.id,
           amount: amount,
