@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const HeadPart = () => {
-  const [currentStream, setCurrentStream] = useState([]);
   const navigate = useNavigate();
+  const [currentStream, setCurrentStream] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       // runing streaming info

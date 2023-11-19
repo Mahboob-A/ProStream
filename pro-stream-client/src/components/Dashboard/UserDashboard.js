@@ -35,43 +35,6 @@ export default function UserDashboard() {
             <UserWallet />
           </Box>
         );
-      case 2:
-        return (
-          <Box sx={{ color: "white" }}>
-            <VerifyAndBankAcc />
-          </Box>
-        );
-      case 3:
-        return (
-          <Box sx={{ color: "white" }}>
-            <Team />
-            {/* <Analytics /> */}
-          </Box>
-        );
-      case 4:
-        return (
-          <Box sx={{ color: "white" }}>
-            <SocialMedia />
-          </Box>
-        );
-      case 5:
-        return (
-          <Box sx={{ color: "white" }}>
-            <WalletAndWithdrawl />
-          </Box>
-        );
-      case 6:
-        return (
-          <Box sx={{ color: "white" }}>
-            <ScheduleStream />
-          </Box>
-        );
-      case 7:
-        return (
-          <Box sx={{ color: "white" }}>
-            <PrivacyAndWarnings />
-          </Box>
-        );
       default:
         return null;
     }
@@ -102,13 +65,7 @@ export default function UserDashboard() {
         }}
       >
         <Tab label="Edit Profile" sx={{ color: "white" }} />
-        <Tab label="Wallet And Withdrawl" sx={{ color: "white" }} />
-        {/* <Tab label="Verification and Bank Account" sx={{ color: "white" }} />
-        <Tab label="Team" sx={{ color: "white" }} /> */}
-        {/* <Tab label="Analytics" sx={{ color: "white" }} />
-        <Tab label="Social Media" sx={{ color: "white" }} />
-        <Tab label="Schedule Stream" sx={{ color: "white" }} />
-        <Tab label="Privacy And Warnings" sx={{ color: "white" }} /> */}
+        <Tab label="Wallet And Recharge " sx={{ color: "white" }} />
       </Tabs>
       {renderTabContent()}
     </Box>

@@ -1,8 +1,10 @@
 import { Box, Divider, Grid, Paper, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
+import axios from "axios";
+import { getToken } from "../../services/LocalStorageService";
 
 const categoryItems = [
   {
@@ -170,6 +172,23 @@ const categoryItems = [
 ];
 
 const Category = () => {
+  const [allCategory, setAllCategory] = React.useState([]);
+  const { access_token } = getToken();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/live-stream/get-categories/api/"
+        );
+        console.log(response.data.data);
+        setAllCategory(response.data.data);
+      } catch (error) {
+        console.error("Error category data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <Box>
       <Typography variant="h4" color="white">
@@ -188,7 +207,7 @@ const Category = () => {
         // columns={{ xs: 4, sm: 8, md: 12 }}
         columns={12}
       >
-        {categoryItems.map((text, index) => (
+        {allCategory?.map((text, index) => (
           <Grid item key={text.id} xs={12} sm={4} lg={3} xl={2}>
             <Card
               sx={{
@@ -200,17 +219,17 @@ const Category = () => {
               <CardContent>
                 <img
                   style={{ width: "230px", height: "310px" }}
-                  src={text.img}
+                  src={text.image_url}
                   alt={text.categoryName}
                 />
                 <Typography sx={{ fontSize: 17, color: "white" }}>
-                  {text.categoryName}
+                  {text.name}
                 </Typography>
                 <Typography
                   sx={{ my: 1, color: "white", fontSize: 14 }}
                   color="text.secondary"
                 >
-                  {text.viewers} viewers
+                  {text.total_followers} viewers
                 </Typography>
                 <Typography variant="text" sx={{ color: "white" }}>
                   <Button
@@ -220,6 +239,7 @@ const Category = () => {
                       paddingX: "2px",
                     }}
                     color="primary"
+                    href={`/directory/tags/${text.tag1}`}
                   >
                     {text.tag1}
                   </Button>
@@ -232,10 +252,24 @@ const Category = () => {
                       paddingX: "2px",
                     }}
                     color="secondary"
+                    href={`/directory/tags/${text.tag2}`}
                   >
                     {text.tag2}
                   </Button>
-                </Typography>
+                </Typography>{" "}
+                {/* <Typography variant="text">
+                  <Button
+                    variant="contained"
+                    sx={{
+                      paddingY: "1px",
+                      paddingX: "2px",
+                    }}
+                    color="warning"
+                    href={`/directory/tags/${text.tag3}`}
+                  >
+                    {text.tag3}
+                  </Button>
+                </Typography> */}
               </CardContent>
             </Card>
           </Grid>

@@ -10,7 +10,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Stream from "./Stream";
 import SendIcon from "@mui/icons-material/Send";
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, Stack, TextField } from "@mui/material";
 import StartSharpIcon from "@mui/icons-material/StartSharp";
 import Footer from "../Common/Footer";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
@@ -76,6 +76,7 @@ export default function SingleStream() {
   const [open, setOpen] = React.useState(true);
   const [openModal, setOpenModal] = React.useState(false);
   const [amount, setAmount] = React.useState("");
+  const [count, setCount] = React.useState(0);
   const handleModalOpen = () => setOpenModal(true);
   const handleModalClose = () => setOpenModal(false);
   const dispatch = useDispatch();
@@ -107,6 +108,9 @@ export default function SingleStream() {
 
       channel = await client.createChannel(CHANNEL_NAME);
       await channel.join();
+
+      // get the current user count
+      getCurrentUserCount();
 
       // listerer
       channel.on("ChannelMessage", (message, peerId) => {
@@ -186,10 +190,27 @@ export default function SingleStream() {
     // const leaveButton = document.getElementById("leave");
 
     // leaveButton.addEventListener("click", function () {
+    //   getCurrentUserCount();
     //   client.logout();
     //   window.open("/", "_self");
     // });
     window.addEventListener("beforeunload", deleteLocalStorage);
+
+    async function getCurrentUserCount() {
+      try {
+        const membersData = await channel.getMembers();
+        if (membersData) {
+          const currentUserCount = membersData.length;
+          setCount(currentUserCount);
+          // console.log(`Channel Count: ${currentUserCount}`);
+          // document.getElementById(
+          //   "active-user-count"
+          // ).innerText = `Active Users: ${currentUserCount}`;
+        }
+      } catch (error) {
+        console.error("Error fetching channel members:", error);
+      }
+    }
 
     initRTMEngine();
   }, []);
@@ -380,7 +401,7 @@ export default function SingleStream() {
             "& .MuiDrawer-paper": {
               width: drawerWidth,
               boxSizing: "border-box",
-              marginTop: "75px",
+              marginTop: "70px",
               backgroundColor: "#18181b",
             },
           }}
@@ -399,12 +420,21 @@ export default function SingleStream() {
                   }}
                 >
                   <StartSharpIcon sx={{ color: "white", mr: 6 }} />
-                  <Typography
-                    variant="text"
-                    sx={{ color: "white", textAlign: "start" }}
-                  >
-                    Stream Chat
-                  </Typography>
+                  <Stack direction="column" textAlign="center">
+                    <Typography
+                      variant="h6"
+                      sx={{ color: "white", textAlign: "start" }}
+                    >
+                      Stream Chat
+                    </Typography>
+                    <Typography
+                      id="active-user-count"
+                      variant="body1"
+                      sx={{ color: "red", textAlign: "start" }}
+                    >
+                      Active user: {count}
+                    </Typography>
+                  </Stack>
                 </Box>
               ) : (
                 <IconButton
@@ -439,12 +469,15 @@ export default function SingleStream() {
             {/*  Chat Page */}
             <Box>
               <InfiniteScroll dataLength={1} height="500px">
-                <Box sx={{ backgroundColor: "gray" }}>
+                <Box sx={{ backgroundColor: "#eecaff", padding: 1 }}>
                   <section className="main--container">
                     <div id="chat-lists">
                       <div className="chat-inner"></div>
                     </div>
                     {/* <button id="leave">Leave</button> */}
+                    {/* <h2 id="active-user-count">
+                      Current Active Users: Loading...
+                    </h2> */}
                   </section>
                 </Box>
               </InfiniteScroll>

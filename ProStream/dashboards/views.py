@@ -124,7 +124,10 @@ class AddSocialLinksAPI(APIView):
                         return Response({'status' : 'error','data': 'No streamer found'}, status=status.HTTP_400_BAD_REQUEST)
                 serializer = serializers.SocialMediaSerializer(data = request.data)
                 if serializer.is_valid():
-                        serializer.save()
+                        instance = serializer.save()
+                        instance.streamer = streamer
+                        instance.save()
+                        
                         return Response({'status' : 'success', 'data' : 'Added Successfully!'}, status=status.HTTP_200_OK)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
                                       

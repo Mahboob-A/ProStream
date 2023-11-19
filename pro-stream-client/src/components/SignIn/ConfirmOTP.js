@@ -47,11 +47,40 @@ const ConfirmOTP = () => {
       console.log("Login successful", response.data);
       if (response.data.status === "success") {
         storeToken(response.data.token);
+        if (response.data.token.access) {
+          axios
+            .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
+              headers: {
+                Authorization: `Bearer ${response.data.token.access}`,
+                "Content-Type": "application/json",
+              },
+            })
+            .then((response) => {
+              // console.log("user data", response.data.data);
+              // setUserAllInfo(response.data.data);
+              localStorage.setItem("username", response.data.data.username);
+              localStorage.setItem("email", response.data.data.email);
+              localStorage.setItem(
+                "streamer_id",
+                response.data.data.streamer_id
+              );
+              localStorage.setItem("is_a_user", response.data.data.is_a_user);
+              localStorage.setItem(
+                "is_a_streamer",
+                response.data.data.is_a_streamer
+              );
+            })
+            .catch((error) => {
+              console.error("Error fetching data:", error);
+            });
+        }
         // set user token in redux store
         let { access_token } = getToken();
         dispatch(setUserToken({ access_token: access_token }));
+
         alert("You are successfully login. Go to home page.");
         navigate("/");
+
         // after verifying email using credential we will remove credential from localstorage
         localStorage.removeItem("credential");
         // window.location.reload();

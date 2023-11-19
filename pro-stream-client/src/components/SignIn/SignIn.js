@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -12,7 +12,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import signinbg from "../../Images/signinbg.jpg";
-import { Toolbar } from "@mui/material";
+import {
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Toolbar,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +53,33 @@ export default function SignIn() {
       if (response.data.status === "success") {
         // localStorage.setItem("credential", credential);
         storeToken(response.data.token);
+        if (response.data.token.access) {
+          axios
+            .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
+              headers: {
+                Authorization: `Bearer ${response.data.token.access}`,
+                "Content-Type": "application/json",
+              },
+            })
+            .then((response) => {
+              console.log("streamer_id", response.data.data.streamer_id);
+              // setUserAllInfo(response.data.data);
+              localStorage.setItem("username", response.data.data.username);
+              localStorage.setItem("email", response.data.data.email);
+              localStorage.setItem(
+                "streamer_id",
+                response.data.data.streamer_id
+              );
+              localStorage.setItem("is_a_user", response.data.data.is_a_user);
+              localStorage.setItem(
+                "is_a_streamer",
+                response.data.data.is_a_streamer
+              );
+            })
+            .catch((error) => {
+              console.error("Error fetching data:", error);
+            });
+        }
         // set user token in redux store
         let { access_token } = getToken();
         dispatch(setUserToken({ access_token: access_token }));
@@ -148,9 +182,9 @@ export default function SignIn() {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
+                id="credential"
                 label="Email Address or User Name"
-                name="email"
+                name="credential"
                 autoComplete="email"
                 autoFocus
                 color="secondary"
@@ -204,18 +238,10 @@ export default function SignIn() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link
-                    href="/forgot-password"
-                    variant="body2"
-                    color="secondary"
-                  >
-                    Forgot password?
-                  </Link>
+                  <Link to="/forgot-password">Forgot password?</Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/signup" variant="body2" color="secondary">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
+                  <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
                 </Grid>
               </Grid>
             </form>

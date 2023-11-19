@@ -112,10 +112,7 @@ const StreamForm = () => {
         formData,
         { headers: headers }
       );
-      console.log(
-        "Create Stream Form submitted:",
-        response1.data.data.streamer_id
-      );
+      console.log("Create Stream Form submitted:", response1.data);
       sessionStorage.setItem("streamer_id", response1.data.data.streamer_id);
 
       // hosting video
@@ -153,9 +150,11 @@ const StreamForm = () => {
           token: token,
           thumbnail: formData.thumbnail,
           streamer_id: response1.data.data.streamer_id,
+          username: response1.data.data.user_username,
+          profile_image_url: response1.data.data.profile_image_url,
         }
       );
-      // console.log("Create Stream:", response3.data);
+      console.log("Create Stream:", response3.data);
 
       navigate("/video");
     } catch (error) {

@@ -11,6 +11,7 @@ import SocialMedia from "./SocialMedia";
 import WalletAndWithdrawl from "./WalletAndWithdrawl";
 import ScheduleStream from "./ScheduleStream";
 import PrivacyAndWarnings from "./PrivacyAndWarnings";
+import UserWallet from "./UserWallet";
 
 export default function Dashboard() {
   const [value, setValue] = React.useState(0);
@@ -54,16 +55,22 @@ export default function Dashboard() {
       case 5:
         return (
           <Box sx={{ color: "white" }}>
-            <WalletAndWithdrawl />
+            <UserWallet />
           </Box>
         );
       case 6:
         return (
           <Box sx={{ color: "white" }}>
-            <ScheduleStream />
+            <WalletAndWithdrawl />
           </Box>
         );
       case 7:
+        return (
+          <Box sx={{ color: "white" }}>
+            <ScheduleStream />
+          </Box>
+        );
+      case 8:
         return (
           <Box sx={{ color: "white" }}>
             <PrivacyAndWarnings />
@@ -103,7 +110,8 @@ export default function Dashboard() {
         <Tab label="Team" sx={{ color: "white" }} />
         <Tab label="Analytics" sx={{ color: "white" }} />
         <Tab label="Social Media" sx={{ color: "white" }} />
-        <Tab label="Wallet And Withdrawl" sx={{ color: "white" }} />
+        <Tab label="Recharge Wallet" sx={{ color: "white" }} />
+        <Tab label="Withdrawl Money" sx={{ color: "white" }} />
         <Tab label="Schedule Stream" sx={{ color: "white" }} />
         <Tab label="Privacy And Warnings" sx={{ color: "white" }} />
       </Tabs>

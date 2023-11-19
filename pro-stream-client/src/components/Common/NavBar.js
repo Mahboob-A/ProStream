@@ -9,7 +9,8 @@ import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Button, Grid, Link } from "@mui/material";
+import { Button, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
 import logo from "../../Images/prostream.png";
 import { useNavigate } from "react-router-dom";
 import { getToken, removeToken } from "../../services/LocalStorageService";
@@ -93,7 +94,7 @@ export default function NavBar() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []);
+  }, [access_token]);
   // console.log("user data", UserAllInfo);
 
   const handleProfileMenuOpen = (event) => {
@@ -145,22 +146,38 @@ export default function NavBar() {
       onClose={handleMenuClose}
       sx={{ marginTop: "50px" }}
     >
-      {UserAllInfo?.is_a_streamer ? (
-        <MenuItem>
-          <Button href="/dashboard">Dashboard</Button>{" "}
-        </MenuItem>
-      ) : (
-        <MenuItem>
-          <Button href="/user-dashboard">Dashboard</Button>{" "}
-        </MenuItem>
-      )}
-
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
       {access_token && (
-        <MenuItem onClick={() => navigate("/change-password")}>
-          Change Password
-        </MenuItem>
+        <Box>
+          {UserAllInfo?.is_a_streamer ? (
+            <MenuItem onClick={handleMenuClose}>
+              <Link to="/dashboard">
+                <Button>Dashboard</Button>{" "}
+              </Link>
+            </MenuItem>
+          ) : (
+            <MenuItem onClick={handleMenuClose}>
+              <Link to="/user-dashboard">
+                <Button>Dashboard</Button>{" "}
+              </Link>
+            </MenuItem>
+          )}
+          <MenuItem onClick={handleMenuClose}>
+            <Link to="/change-password">
+              <Button>Change Password</Button>{" "}
+            </Link>
+          </MenuItem>
+        </Box>
       )}
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="/documentation">
+          <Button>Documentation</Button>{" "}
+        </Link>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="https://github.com/Mahboob-A/ProStream">
+          <Button>GitHub</Button>{" "}
+        </Link>
+      </MenuItem>
     </Menu>
   );
 
@@ -180,77 +197,81 @@ export default function NavBar() {
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
-      sx={{ marginTop: "50px" }}
+      // sx={{ marginTop: "50px" }}
     >
       {!access_token ? (
         <Box>
-          <MenuItem>
-            <Button
-              variant="contained"
-              sx={{
-                color: "white",
-                backgroundColor: "#9147ff",
-                paddingX: "10px",
-                marginRight: "5px",
-                textTransform: "capitalize",
-              }}
-              onClick={() => navigate("/signin")}
-            >
-              Sign In
-            </Button>
-          </MenuItem>
-          <MenuItem>
-            <Button
-              variant="contained"
-              sx={{
-                color: "white",
-                backgroundColor: "#CB6D85",
-                paddingX: "10px",
-                textTransform: "capitalize",
-              }}
-              onClick={() => navigate("/signup")}
-            >
-              Sign Up
-            </Button>
-          </MenuItem>
-        </Box>
-      ) : (
-        <Box>
-          {UserAllInfo?.is_a_streamer ? (
-            <MenuItem>
+          <MenuItem onClick={handleMenuClose}>
+            <Link to="/signin">
               <Button
                 variant="contained"
                 sx={{
-                  color: "#ffffff",
-                  backgroundColor: "red",
+                  color: "white",
+                  backgroundColor: "#9147ff",
                   paddingX: "10px",
                   marginRight: "5px",
                   textTransform: "capitalize",
                 }}
-                startIcon={<VideoCallIcon sx={{ color: "white" }} />}
-                href="/stream-form"
               >
-                Go Live
+                Sign In
               </Button>
-            </MenuItem>
-          ) : (
-            <MenuItem>
+            </Link>
+          </MenuItem>
+          <MenuItem onClick={handleMenuClose}>
+            <Link to="/signup">
               <Button
                 variant="contained"
                 sx={{
                   color: "white",
                   backgroundColor: "#CB6D85",
                   paddingX: "10px",
-                  marginRight: "5px",
                   textTransform: "capitalize",
                 }}
-                onClick={() => navigate("/become-stream-form")}
               >
-                Become Streamer
+                Sign Up
               </Button>
+            </Link>
+          </MenuItem>
+        </Box>
+      ) : (
+        <Box>
+          {UserAllInfo?.is_a_streamer ? (
+            <MenuItem onClick={handleMenuClose}>
+              <Link to="/stream-form">
+                <Button
+                  variant="contained"
+                  sx={{
+                    color: "#ffffff",
+                    backgroundColor: "red",
+                    paddingX: "10px",
+                    marginRight: "5px",
+                    textTransform: "capitalize",
+                  }}
+                  startIcon={<VideoCallIcon sx={{ color: "white" }} />}
+                >
+                  Go Live
+                </Button>
+              </Link>
+            </MenuItem>
+          ) : (
+            <MenuItem onClick={handleMenuClose}>
+              <Link to="/become-stream-form">
+                <Button
+                  variant="contained"
+                  sx={{
+                    color: "white",
+                    backgroundColor: "#CB6D85",
+                    paddingX: "10px",
+                    marginRight: "5px",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  Become Streamer
+                </Button>
+              </Link>
             </MenuItem>
           )}
-          <MenuItem>
+          <MenuItem onClick={handleMenuClose}>
             <Button
               variant="contained"
               sx={{
@@ -264,39 +285,40 @@ export default function NavBar() {
               Logout
             </Button>
           </MenuItem>
+          {access_token && (
+            <Box>
+              {UserAllInfo?.is_a_streamer ? (
+                <MenuItem onClick={handleMenuClose}>
+                  <Link to="/dashboard">
+                    <Button>Dashboard</Button>{" "}
+                  </Link>
+                </MenuItem>
+              ) : (
+                <MenuItem onClick={handleMenuClose}>
+                  <Link to="/user-dashboard">
+                    <Button>Dashboard</Button>{" "}
+                  </Link>
+                </MenuItem>
+              )}
+              <MenuItem onClick={handleMenuClose}>
+                <Link to="/change-password">
+                  <Button>Change Password</Button>{" "}
+                </Link>
+              </MenuItem>
+            </Box>
+          )}
         </Box>
       )}
-      {UserAllInfo?.is_a_streamer ? (
-        <Button href="/dashboard">
-          <MenuItem>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="primary-search-account-menu"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <PersonOutlineIcon />
-            </IconButton>
-            <p>Dashboard</p>
-          </MenuItem>
-        </Button>
-      ) : (
-        <Button href="/user-dashboard">
-          <MenuItem>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="primary-search-account-menu"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <PersonOutlineIcon />
-            </IconButton>
-            <p>Dashboard</p>
-          </MenuItem>
-        </Button>
-      )}
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="/documentation">
+          <Button>Documentation</Button>{" "}
+        </Link>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="https://github.com/Mahboob-A/ProStream">
+          <Button>GitHub</Button>{" "}
+        </Link>
+      </MenuItem>
     </Menu>
   );
 
@@ -310,15 +332,13 @@ export default function NavBar() {
       <AppBar position="fixed" sx={{ backgroundColor: "black" }}>
         <Grid
           container
-          spacing={12}
-          paddingX={2}
-          paddingY={1}
+          padding={1}
           direction="row"
           justifyContent="space-between"
           alignItems="center"
         >
           <Grid item>
-            <Link href="/">
+            <Link to="/">
               <img style={{ width: 200 }} src={logo}></img>
             </Link>
           </Grid>
@@ -338,63 +358,67 @@ export default function NavBar() {
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               {!access_token ? (
                 <Box>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      color: "white",
-                      backgroundColor: "#9147ff",
-                      paddingX: "10px",
-                      marginRight: "5px",
-                      textTransform: "capitalize",
-                    }}
-                    href="/signin"
-                  >
-                    Sign In
-                  </Button>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      color: "white",
-                      backgroundColor: "#CB6D85",
-                      paddingX: "10px",
-                      textTransform: "capitalize",
-                    }}
-                    href="/signup"
-                  >
-                    Sign Up
-                  </Button>
-                </Box>
-              ) : (
-                <Box>
-                  {UserAllInfo?.is_a_streamer ? (
+                  <Link to="/signin">
                     <Button
                       variant="contained"
                       sx={{
-                        color: "#ffffff",
-                        backgroundColor: "red",
+                        color: "white",
+                        backgroundColor: "#9147ff",
                         paddingX: "10px",
                         marginRight: "5px",
                         textTransform: "capitalize",
                       }}
-                      startIcon={<VideoCallIcon sx={{ color: "white" }} />}
-                      href="/stream-form"
                     >
-                      Go Live
+                      Sign In
                     </Button>
-                  ) : (
+                  </Link>
+                  <Link to="/signup">
                     <Button
                       variant="contained"
                       sx={{
                         color: "white",
                         backgroundColor: "#CB6D85",
                         paddingX: "10px",
-                        marginRight: "5px",
                         textTransform: "capitalize",
                       }}
-                      href="/become-stream-form"
                     >
-                      Become Streamer
+                      Sign Up
                     </Button>
+                  </Link>
+                </Box>
+              ) : (
+                <Box>
+                  {UserAllInfo?.is_a_streamer ? (
+                    <Link to="/stream-form">
+                      <Button
+                        variant="contained"
+                        sx={{
+                          color: "#ffffff",
+                          backgroundColor: "red",
+                          paddingX: "10px",
+                          marginRight: "5px",
+                          textTransform: "capitalize",
+                        }}
+                        startIcon={<VideoCallIcon sx={{ color: "white" }} />}
+                      >
+                        Go Live
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link to="/become-stream-form">
+                      <Button
+                        variant="contained"
+                        sx={{
+                          color: "white",
+                          backgroundColor: "#CB6D85",
+                          paddingX: "10px",
+                          marginRight: "5px",
+                          textTransform: "capitalize",
+                        }}
+                      >
+                        Become Streamer
+                      </Button>
+                    </Link>
                   )}
                   <Button
                     variant="contained"
@@ -436,9 +460,9 @@ export default function NavBar() {
             </Box>
           </Grid>
         </Grid>
+        {renderMobileMenu}
+        {renderMenu}
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
     </Box>
   );
 }

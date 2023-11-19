@@ -12,11 +12,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { navbarItems } from "./NavbarItems";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Grid, Toolbar, Typography } from "@mui/material";
+import { Avatar, Grid, Toolbar, Typography } from "@mui/material";
 import { getToken } from "../../services/LocalStorageService";
 import { setUserToken } from "../../features/authSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
 
 const drawerWidth = 240;
 
@@ -96,28 +97,55 @@ export default function Home() {
   // user data fetch
   const [UserAllInfo, setUserAllInfo] = React.useState({});
 
+  // React.useEffect(() => {
+  //   if (!access_token) return;
+  //   axios
+  //     .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
+  //       headers: {
+  //         Authorization: `Bearer ${access_token}`,
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //     .then((response) => {
+  //       // console.log("user data", response.data.data);
+  //       setUserAllInfo(response.data.data);
+  //       localStorage.setItem("username", response.data.data.username);
+  //       localStorage.setItem("email", response.data.data.email);
+  //       localStorage.setItem("streamer_id", response.data.data.streamer_id);
+  //       localStorage.setItem("is_a_user", response.data.data.is_a_user);
+  //       localStorage.setItem("is_a_streamer", response.data.data.is_a_streamer);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, []);
+
+  const [currentStream, setCurrentStream] = React.useState([]);
+  const [allStreamerData, setAllStreamerData] = React.useState([]);
   React.useEffect(() => {
-    if (!access_token) return;
-    axios
-      .get("http://127.0.0.1:8000/auth/get/user-all-details/", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        // console.log("user data", response.data.data);
-        setUserAllInfo(response.data.data);
-        localStorage.setItem("username", response.data.data.username);
-        localStorage.setItem("email", response.data.data.email);
-        localStorage.setItem("streamer_id", response.data.data.streamer_id);
-        localStorage.setItem("is_a_user", response.data.data.is_a_user);
-        localStorage.setItem("is_a_streamer", response.data.data.is_a_streamer);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    const fetchData = async () => {
+      // runing streaming info
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/token/stream-temp-data/api/"
+        );
+        console.log("Running strem data", response.data.data);
+        setCurrentStream(response.data.data);
+
+        const response1 = await axios.get(
+          "http://127.0.0.1:8000/live-stream/get-all-streamer-details/api/"
+        );
+        console.log("all streamer data", response1.data.data);
+        setAllStreamerData(response1.data.data);
+      } catch (error) {
+        console.error("Error stream  data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  console.log("currentStream", currentStream.length);
 
   return (
     <Box>
@@ -131,7 +159,7 @@ export default function Home() {
             [`& .MuiDrawer-paper`]: {
               // width: drawerWidth,
               boxSizing: "border-box",
-              marginTop: "75px",
+              marginTop: "70px",
             },
           }}
         >
@@ -160,11 +188,147 @@ export default function Home() {
               )}
             </IconButton>
           </DrawerHeader>
+          {currentStream.length > 0 && (
+            <List>
+              {open ? (
+                <Typography
+                  variant="h6"
+                  sx={{ color: "red", textAlign: "start", marginLeft: "20px" }}
+                >
+                  Live Channel
+                </Typography>
+              ) : (
+                <VideocamOutlinedIcon
+                  sx={{ marginLeft: "5px", fontSize: "40px", color: "red" }}
+                />
+              )}
+              {currentStream.map((text, index) => (
+                <ListItem
+                  key={text?.id}
+                  disablePadding
+                  sx={{ display: "block" }}
+                >
+                  <ListItemButton
+                    onClick={() => navigate(`/channel/${text?.username}`)}
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 1 : "auto",
+                        justifyContent: "center",
+                        color: "rgba(255,255,255)",
+                        border: "2px solid red",
+                        borderRadius: "50%",
+                      }}
+                    >
+                      <Avatar
+                        alt="Profile pic"
+                        src={`http://127.0.0.1:8000/${text?.profile_image_url}`}
+                      />
+                    </ListItemIcon>
+                    <Grid
+                      container
+                      justifyContent="space-between"
+                      sx={{
+                        // opacity: open ? 1 : 0,
+                        display: open ? "flex" : "none",
+                      }}
+                    >
+                      <Grid item>
+                        <ListItemText primary={text?.username} />
+                      </Grid>
+                      <Grid item>
+                        <ListItemText primary="0" sx={{ color: "red" }} />
+                      </Grid>
+                    </Grid>
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+            // <List>
+            //   {open ? (
+            //     <Typography
+            //       variant="h6"
+            //       sx={{ color: "red", textAlign: "start", marginLeft: "20px" }}
+            //     >
+            //       Live Channel
+            //     </Typography>
+            //   ) : (
+            //     <VideocamOutlinedIcon
+            //       sx={{ marginLeft: "5px", fontSize: "40px", color: "red" }}
+            //     />
+            //   )}
+            //   {navbarItems.map((text, index) => (
+            //     <ListItem
+            //       key={text.id}
+            //       disablePadding
+            //       sx={{ display: "block" }}
+            //     >
+            //       <ListItemButton
+            //         onClick={() => navigate(`/channel/${text.route}`)}
+            //         sx={{
+            //           minHeight: 48,
+            //           justifyContent: open ? "initial" : "center",
+            //           px: 2.5,
+            //         }}
+            //       >
+            //         <ListItemIcon
+            //           sx={{
+            //             minWidth: 0,
+            //             mr: open ? 1 : "auto",
+            //             justifyContent: "center",
+            //             color: "rgba(255,255,255)",
+            //             border: "2px solid red",
+            //             borderRadius: "50%",
+            //           }}
+            //         >
+            //           {text.icon}
+            //         </ListItemIcon>
+            //         <Grid
+            //           container
+            //           justifyContent="space-between"
+            //           sx={{
+            //             // opacity: open ? 1 : 0,
+            //             display: open ? "flex" : "none",
+            //           }}
+            //         >
+            //           <Grid item>
+            //             <ListItemText primary={text.label} />
+            //           </Grid>
+            //           <Grid item>
+            //             <ListItemText
+            //               primary={text.watching}
+            //               sx={{ color: "red" }}
+            //             />
+            //           </Grid>
+            //         </Grid>
+            //       </ListItemButton>
+            //     </ListItem>
+            //   ))}
+            // </List>
+          )}
           <List>
-            {navbarItems.map((text, index) => (
+            {open ? (
+              <Typography
+                variant="body1"
+                sx={{ color: "white", textAlign: "start", marginLeft: "20px" }}
+              >
+                Recommended Channel
+              </Typography>
+            ) : (
+              <VideocamOutlinedIcon
+                sx={{ marginLeft: "5px", fontSize: "40px" }}
+              />
+            )}
+            {allStreamerData.map((text, index) => (
               <ListItem key={text.id} disablePadding sx={{ display: "block" }}>
                 <ListItemButton
-                  onClick={() => navigate(text.route)}
+                  onClick={() => navigate(`/channel/${text?.username}`)}
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
@@ -177,11 +341,14 @@ export default function Home() {
                       mr: open ? 2 : "auto",
                       justifyContent: "center",
                       color: "rgba(255,255,255)",
-                      border: "3px solid red",
+                      // border: "3px solid red",
                       borderRadius: "50%",
                     }}
                   >
-                    {text.icon}
+                    <Avatar
+                      alt="Profile pic"
+                      src={`http://127.0.0.1:8000/${text?.profile_picture}`}
+                    />
                   </ListItemIcon>
                   <Grid
                     container
@@ -192,13 +359,10 @@ export default function Home() {
                     }}
                   >
                     <Grid item>
-                      <ListItemText primary={text.label} />
+                      <ListItemText primary={text.username} />
                     </Grid>
                     <Grid item>
-                      <ListItemText
-                        primary={text.watching}
-                        sx={{ color: "red" }}
-                      />
+                      <ListItemText primary="12k" sx={{ color: "white" }} />
                     </Grid>
                   </Grid>
                 </ListItemButton>

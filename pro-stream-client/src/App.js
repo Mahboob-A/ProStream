@@ -20,6 +20,8 @@ import AgoraChat from "./components/AgoraChat/AgoraChat";
 import Dashboard from "./components/Dashboard/Dashboard";
 import ErrorPage from "./components/Common/ErrorPage";
 import UserDashboard from "./components/Dashboard/UserDashboard";
+import SingleChannel from "./components/Channel/SingleChannel";
+import SingleTag from "./components/Directory/SingleTag";
 
 function App() {
   // access access_token from redux state
@@ -36,10 +38,22 @@ function App() {
             element={<Home />}
           >
             <Route path="/" element={<AllStream />} />
-            <Route path="video" element={<SingleStream />} />
+            <Route
+              path="video"
+              element={
+                access_token ? <SingleStream /> : <Navigate to="/signin" />
+              }
+            />
           </Route>
           <Route path="stream-form" element={<StreamForm />} />
           <Route path="become-stream-form" element={<BecomeStreamForm />} />
+
+          <Route path="channel" element={<Home />}>
+            <Route path=":username" element={<SingleChannel />} />
+          </Route>
+          <Route path="directory/tags" element={<Home />}>
+            <Route path=":tag" element={<SingleTag />} />
+          </Route>
 
           {/* signin signup related route  */}
           <Route
@@ -79,10 +93,18 @@ function App() {
 
           {/* dashboard all routes  */}
           {/* <Route path="dashboard/profile" element={<Profile />} /> */}
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="user-dashboard" element={<UserDashboard />} />
+          <Route
+            path="dashboard"
+            element={access_token ? <Dashboard /> : <Navigate to="/signin" />}
+          />
+          <Route
+            path="user-dashboard"
+            element={
+              access_token ? <UserDashboard /> : <Navigate to="/signin" />
+            }
+          />
           {/* agora chat  */}
-          <Route path="chat" element={<AgoraChat />} />
+          {/* <Route path="chat" element={<AgoraChat />} /> */}
 
           {/* error page  */}
           {/* <Route path="*" element={<ErrorPage />} /> */}

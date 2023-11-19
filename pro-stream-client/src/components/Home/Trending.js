@@ -73,7 +73,7 @@ const Trending = () => {
 
       <Grid container spacing={1} padding={1} rowSpacing={1} columnSpacing={1}>
         {treadingItems.map((text, index) => (
-          <Grid item key={text.id} padding={1} xs={12} sm={6} lg={4} xl={3}>
+          <Grid item key={text.id} padding={1} xs={12} md={6} lg={4} xl={3}>
             <img
               style={{ width: "320px", height: "200px" }}
               src={text.img}

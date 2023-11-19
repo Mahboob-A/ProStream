@@ -66,7 +66,7 @@ const VerifyAndBankAcc = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .patch("http://127.0.0.1:8000/finance/verification/", verificationInfo, {
+      .post("http://127.0.0.1:8000/finance/verification/", verificationInfo, {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "multipart/form-data",
@@ -139,7 +139,7 @@ const VerifyAndBankAcc = () => {
   const handleSubmit2 = (e) => {
     e.preventDefault();
     axios
-      .patch("http://127.0.0.1:8000/finance/add-bank-details/", bankAccount, {
+      .post("http://127.0.0.1:8000/finance/add-bank-details/", bankAccount, {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "multipart/form-data",
@@ -166,13 +166,24 @@ const VerifyAndBankAcc = () => {
       })
       .catch((error) => {
         console.error("Error updating user data:", error);
-        alert("Error updating user data!");
+        alert(error?.resoponse?.data);
       });
     setEdit(!edit);
   };
   return (
-    <Box>
-      <Box>
+    <Box justifyContent="center">
+      <Box
+        sx={{
+          marginTop: 2,
+          backgroundColor: "gray",
+          padding: 3,
+          textAlign: "center",
+          width: "600px",
+          height: "100%",
+          marginX: "auto",
+          borderRadius: "10px",
+        }}
+      >
         <Typography variant="h3" marginBottom={2}>
           Verification
         </Typography>
@@ -296,7 +307,18 @@ const VerifyAndBankAcc = () => {
           </Grid>
         </Grid>
       </Box>
-      <Box sx={{ marginTop: 2, backgroundColor: "gray" }}>
+      <Box
+        sx={{
+          marginTop: 2,
+          backgroundColor: "gray",
+          padding: 3,
+          textAlign: "center",
+          width: "600px",
+          height: "100%",
+          marginX: "auto",
+          borderRadius: "10px",
+        }}
+      >
         <Typography variant="h3" marginBottom={2}>
           Bank Account Information
         </Typography>
@@ -367,7 +389,7 @@ const VerifyAndBankAcc = () => {
                     <Avatar
                       src={`http://127.0.0.1:8000/${bankAccount.passbook_img}`}
                       alt="Passport Picture"
-                      sx={{ width: 150, height: 150 }}
+                      sx={{ width: 150, height: 150, marginX: "auto" }}
                     />
                   ) : (
                     <Typography>No document available</Typography>
