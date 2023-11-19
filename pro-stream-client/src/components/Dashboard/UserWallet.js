@@ -46,7 +46,7 @@ const UserWallet = () => {
       )
       .then((response) => {
         console.log("WalletAndWithdrawl", response.data);
-        alert("Withdrawl money sent successfully!");
+
         window.location.href = response.data.redirect_url;
       })
       .catch((error) => {

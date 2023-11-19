@@ -66,7 +66,7 @@ const VerifyAndBankAcc = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .patch("http://127.0.0.1:8000/finance/verification/", verificationInfo, {
+      .post("http://127.0.0.1:8000/finance/verification/", verificationInfo, {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "multipart/form-data",
@@ -139,7 +139,7 @@ const VerifyAndBankAcc = () => {
   const handleSubmit2 = (e) => {
     e.preventDefault();
     axios
-      .patch("http://127.0.0.1:8000/finance/add-bank-details/", bankAccount, {
+      .post("http://127.0.0.1:8000/finance/add-bank-details/", bankAccount, {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "multipart/form-data",
@@ -166,7 +166,7 @@ const VerifyAndBankAcc = () => {
       })
       .catch((error) => {
         console.error("Error updating user data:", error);
-        alert("Error updating user data!");
+        alert(error?.resoponse?.data);
       });
     setEdit(!edit);
   };

@@ -62,7 +62,7 @@ export default function SignIn() {
               },
             })
             .then((response) => {
-              // console.log("user data", response.data.data);
+              console.log("streamer_id", response.data.data.streamer_id);
               // setUserAllInfo(response.data.data);
               localStorage.setItem("username", response.data.data.username);
               localStorage.setItem("email", response.data.data.email);

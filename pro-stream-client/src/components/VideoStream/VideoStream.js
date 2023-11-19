@@ -251,11 +251,11 @@ const VideoStream = () => {
 
   return (
     <Box>
-      <section id="room-name-wrapper">
+      {/* <section id="room-name-wrapper">
         <p style={{ fontWeight: "bold" }}>
           Room Name: <span id="room-name">{CHANNEL}</span>
         </p>
-      </section>
+      </section> */}
       <section id="video-stream">{/* Video streaming content */}</section>
       <section className="stream-actions" id="controls-wrapper">
         <Stack direction="row" justifyContent="center" alignItems="center">
