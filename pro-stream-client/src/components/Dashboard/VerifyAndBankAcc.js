@@ -171,8 +171,19 @@ const VerifyAndBankAcc = () => {
     setEdit(!edit);
   };
   return (
-    <Box>
-      <Box>
+    <Box justifyContent="center">
+      <Box
+        sx={{
+          marginTop: 2,
+          backgroundColor: "gray",
+          padding: 3,
+          textAlign: "center",
+          width: "600px",
+          height: "100%",
+          marginX: "auto",
+          borderRadius: "10px",
+        }}
+      >
         <Typography variant="h3" marginBottom={2}>
           Verification
         </Typography>
@@ -296,7 +307,18 @@ const VerifyAndBankAcc = () => {
           </Grid>
         </Grid>
       </Box>
-      <Box sx={{ marginTop: 2, backgroundColor: "gray" }}>
+      <Box
+        sx={{
+          marginTop: 2,
+          backgroundColor: "gray",
+          padding: 3,
+          textAlign: "center",
+          width: "600px",
+          height: "100%",
+          marginX: "auto",
+          borderRadius: "10px",
+        }}
+      >
         <Typography variant="h3" marginBottom={2}>
           Bank Account Information
         </Typography>
@@ -367,7 +389,7 @@ const VerifyAndBankAcc = () => {
                     <Avatar
                       src={`http://127.0.0.1:8000/${bankAccount.passbook_img}`}
                       alt="Passport Picture"
-                      sx={{ width: 150, height: 150 }}
+                      sx={{ width: 150, height: 150, marginX: "auto" }}
                     />
                   ) : (
                     <Typography>No document available</Typography>

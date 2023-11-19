@@ -96,14 +96,17 @@ const UserProfile = () => {
   };
 
   return (
-    <Box padding={2}>
-      <Grid
-        container
-        spacing={3}
-        marginTop={1}
-        sx={{ backgroundColor: "black" }}
-        align="center"
-      >
+    <Box
+      sx={{
+        backgroundColor: "gray",
+        padding: 2,
+        width: "600px",
+        height: "100%",
+        marginX: "auto",
+        borderRadius: "20px",
+      }}
+    >
+      <Grid container spacing={3} marginTop={1} align="center">
         <Grid item xs={12}>
           <Avatar
             src={
@@ -151,9 +154,9 @@ const UserProfile = () => {
       >
         <Grid
           item
-          xs={6}
+          xs={12}
           align="center"
-          sx={{ backgroundColor: "gray" }}
+          sx={{ backgroundColor: "gray", borderRadius: "20px" }}
           padding={3}
         >
           {/* set profile data  */}
