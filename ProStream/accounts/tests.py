@@ -4,10 +4,10 @@ from .models import CustomUser
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-import jwt
 from django.contrib.auth import get_user_model
 
 class RegistrationAPITestCase(TestCase): 
+    '''test registraition of a user'''
     def test_register_view_success(self):
         url = reverse('registration_api')
 
@@ -23,19 +23,22 @@ class RegistrationAPITestCase(TestCase):
         self.assertIn('wallet_id', response.data)
         self.assertIn('email', response.data)
 
-    def test_invalid_login(self):
+    def test_invalid_registration(self):
         url = reverse('registration_api')
         data = {
             'email': 'test@example.com',
             'username': 'testuser',
-
+            'password': 'testpassword@', 
+            'password2': 'testpasswo@'  # confirmed password incorrect
         }
         response = self.client.post(url, data)
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn('error', response.data.get('status'))
 
 
 class LoginAPITestCase(TestCase):
+    '''test login api'''
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(

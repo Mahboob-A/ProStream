@@ -7,6 +7,7 @@ from django.utils import timezone
 from taggit.managers import TaggableManager
 # from streamer_profile.models import Streamer
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 
 
@@ -31,6 +32,9 @@ class Category(models.Model):
         def __str__(self): 
                 return self.name + " " + str(self.id)
         
+        class Meta:
+                verbose_name = _("Category")
+                verbose_name_plural = _("Categories")
 
 class Chat(models.Model): 
         ''' a single chat instance for a single stream instance   '''

@@ -193,11 +193,19 @@ class StreamerWalletAPI(APIView):
                 if streamer_wallet.available_amount < Decimal(amount):
                         return Response({'status' : 'error','data': 'You have not sufficient money in your wallet'}, status=status.HTTP_400_BAD_REQUEST)                
                 streamer_wallet.withdraw(Decimal(amount)) #withdraw function
-                return Response({'status' : 'success', 'data' : 'Successfully Withdraw money'}, status=status.HTTP_200_OK)
+
+                try: # send email to the streamer his withdraw money successfully
+                        email_body = updated_email_formatter(user, streamer_wallet_status = True, available_amount = streamer_wallet.available_amount, amount = Decimal(amount))
+                        EmailUser.send_email(email_body)
+                        print('send email')
+                except Exception as e:
+                        return Response({'status' : 'error','data': 'Successfully Withdraw money but mail not sent for missing information'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'status' : 'success', 'data' : 'Successfully Withdraw money and mail already sent'}, status=status.HTTP_200_OK)
 
 
 
 class StreamerAnalytics(APIView):
+        '''Get streamer follower count, total tip recieved and biggest tipper'''
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user
@@ -219,7 +227,8 @@ class StreamerAnalytics(APIView):
                 else:
                         biggest_tipper_username = None         
                 return Response({'status' : 'success', 'data' : {'follower_count':follower_count,'total_tip_recieved': total_tip_recieved, 'username':biggest_tipper_username}}, status=status.HTTP_200_OK)
-
+        
+        '''Send message to the biggest tipper'''
         def post(self, request):
                 biggest_tipper_username = request.data.get('username')
                 message = request.data.get('message')
@@ -227,14 +236,13 @@ class StreamerAnalytics(APIView):
                         biggest_tipper = CustomUser.objects.get(username = biggest_tipper_username)
                 except CustomUser.DoesNotExist:
                         return Response({'status' : 'error','data': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
-                email_to = biggest_tipper.email
                 
                 try:
                         channel = Channel.objects.get(streamer__id = request.user.streamer_id)
                 except Channel.DoesNotExist:
                         return Response({'status' : 'error','data': 'You are not Streamer'}, status=status.HTTP_400_BAD_REQUEST)
 
-                try:
+                try: # send email to the biggest tipper
                         email_body = updated_email_formatter(biggest_tipper, meessage_biggest_tipper=True, channel_name=channel.channel_display_name, message = message)
                         EmailUser.send_email(email_body)
                         print('send email')
@@ -345,6 +353,7 @@ class TeamActionAPI(APIView):
                 
 
 class ScheduleLiveStreamCRUIDAPI(APIView):
+        '''Create and Update schedule live stream'''
         permission_classes = [IsAuthenticated]
         def post(self, request):
                 if request.user.is_a_streamer == False:

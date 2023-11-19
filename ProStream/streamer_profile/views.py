@@ -88,6 +88,7 @@ class StreamGoLiveAPI(APIView):
 
 
 class UserFollowAPI(APIView):
+        '''user follow to a streamer and unfollow streamer'''
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user
