@@ -325,12 +325,12 @@ export default function NavBar() {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Grid item xl={12}>
+          <Grid item>
             <Link to="/">
               <img style={{ width: 200 }} src={logo}></img>
             </Link>
           </Grid>
-          <Grid item xl={12}>
+          <Grid item>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
@@ -341,7 +341,7 @@ export default function NavBar() {
               />
             </Search>
           </Grid>
-          <Grid item xl={12}>
+          <Grid item>
             {/* <Box sx={{ flexGrow: 1 }} /> */}
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               {!access_token ? (
