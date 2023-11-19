@@ -71,10 +71,10 @@ const UserWallet = () => {
         }}
       >
         <Typography variant="h4" marginBottom={2}>
-          User Wallet
+          Recharge Wallet
         </Typography>
         <Typography variant="h6" marginBottom={2}>
-          Available Amount: {currentAmount}
+          Available Amount To Tip: {currentAmount ? currentAmount : 0}
         </Typography>
         <form action="" method="post" onSubmit={handleSubmit}>
           <TextField

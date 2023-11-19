@@ -20,6 +20,8 @@ import AgoraChat from "./components/AgoraChat/AgoraChat";
 import Dashboard from "./components/Dashboard/Dashboard";
 import ErrorPage from "./components/Common/ErrorPage";
 import UserDashboard from "./components/Dashboard/UserDashboard";
+import SingleChannel from "./components/Channel/SingleChannel";
+import SingleTag from "./components/Directory/SingleTag";
 
 function App() {
   // access access_token from redux state
@@ -40,6 +42,13 @@ function App() {
           </Route>
           <Route path="stream-form" element={<StreamForm />} />
           <Route path="become-stream-form" element={<BecomeStreamForm />} />
+
+          <Route path="channel" element={<Home />}>
+            <Route path=":username" element={<SingleChannel />} />
+          </Route>
+          <Route path="directory/tags" element={<Home />}>
+            <Route path=":tag" element={<SingleTag />} />
+          </Route>
 
           {/* signin signup related route  */}
           <Route

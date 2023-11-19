@@ -68,17 +68,19 @@ const WalletAndWithdrawl = () => {
           padding: "20px",
         }}
       >
-        <Typography variant="h4">Wallet</Typography>
+        <Typography variant="h4">Withdrawl Money</Typography>
         <Typography variant="h6">
-          Available amount: {wallet.available_amount}
+          Available Money To Withdrawl:{" "}
+          {wallet.available_amount ? wallet.available_amount : 0}
         </Typography>
         <Typography variant="h6">
-          Total Tip Received: {wallet.total_tip_received}
+          Total Tip Received:{" "}
+          {wallet.total_tip_received ? wallet.total_tip_received : 0}
         </Typography>
-        <Typography variant="h4">Withdrawl</Typography>
+        {/* <Typography variant="h4">Withdrawl</Typography> */}
         <form action="" method="post" onSubmit={handleSubmit}>
           <TextField
-            label="Amount"
+            label="Withdrawl Amount"
             fullWidth
             type="number"
             name="amount"

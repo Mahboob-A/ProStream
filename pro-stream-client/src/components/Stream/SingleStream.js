@@ -108,6 +108,9 @@ export default function SingleStream() {
       channel = await client.createChannel(CHANNEL_NAME);
       await channel.join();
 
+      // get the current user count
+      // getCurrentUserCount();
+
       // listerer
       channel.on("ChannelMessage", (message, peerId) => {
         console.log("channel.on: ", message);
@@ -186,10 +189,26 @@ export default function SingleStream() {
     // const leaveButton = document.getElementById("leave");
 
     // leaveButton.addEventListener("click", function () {
+    //   getCurrentUserCount();
     //   client.logout();
     //   window.open("/", "_self");
     // });
     window.addEventListener("beforeunload", deleteLocalStorage);
+
+    // async function getCurrentUserCount() {
+    //   try {
+    //     const membersData = await channel.getMembers();
+    //     if (membersData) {
+    //       const currentUserCount = membersData.length;
+    //       console.log(`Channel Count: ${currentUserCount}`);
+    //       document.getElementById(
+    //         "active-user-count"
+    //       ).innerText = `Current Active Users: ${currentUserCount}`;
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching channel members:", error);
+    //   }
+    // }
 
     initRTMEngine();
   }, []);
@@ -445,6 +464,9 @@ export default function SingleStream() {
                       <div className="chat-inner"></div>
                     </div>
                     {/* <button id="leave">Leave</button> */}
+                    {/* <h2 id="active-user-count">
+                      Current Active Users: Loading...
+                    </h2> */}
                   </section>
                 </Box>
               </InfiniteScroll>
