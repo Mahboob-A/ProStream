@@ -54,6 +54,8 @@ ADDED_APPS = {
     'finance',
     'privacy_and_security',
     'AgoraClient'
+    'dashboards',
+    'storages',
 }
 
 INSTALLED_APPS += ADDED_APPS 
