@@ -191,11 +191,7 @@ class BankAccountDetailsAPI(APIView):
             try:  # send email to streamer that bank account is created. 
                 email_data = updated_email_formatter(user, bank_account_created = True)
                 EmailUser.send_email(email_data)
-                
-                # deleting the user wallet that was created when the user signed up 
-                old_uer_wallet = UserWallet.objects.get(user=request.user)
-                old_uer_wallet.delete()
-                
+                 
                 # creating a wallet that is for streamers
                 streamer_wallet = StreamerWallet.objects.create(streamer = streamer, bank_account = instance)  # creating a wallter for streamer 
                 return Response({'status' : 'success','data': 'Bank Account, Streamer Wallet Created! You will receive email shortly!'}, status=status.HTTP_200_OK)

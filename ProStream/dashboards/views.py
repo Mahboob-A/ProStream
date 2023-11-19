@@ -15,6 +15,7 @@ from accounts.models import CustomUser
 from streamer_profile.models import * 
 from . import serializers
 from finance.models import *
+from accounts.utils import EmailUser, updated_email_formatter
 
 
 ############################ User Dashboard APIs ##################################
@@ -219,7 +220,27 @@ class StreamerAnalytics(APIView):
                         biggest_tipper_username = None         
                 return Response({'status' : 'success', 'data' : {'follower_count':follower_count,'total_tip_recieved': total_tip_recieved, 'username':biggest_tipper_username}}, status=status.HTTP_200_OK)
 
+        def post(self, request):
+                biggest_tipper_username = request.data.get('username')
+                message = request.data.get('message')
+                try:
+                        biggest_tipper = CustomUser.objects.get(username = biggest_tipper_username)
+                except CustomUser.DoesNotExist:
+                        return Response({'status' : 'error','data': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+                email_to = biggest_tipper.email
+                
+                try:
+                        channel = Channel.objects.get(streamer__id = request.user.streamer_id)
+                except Channel.DoesNotExist:
+                        return Response({'status' : 'error','data': 'You are not Streamer'}, status=status.HTTP_400_BAD_REQUEST)
 
+                try:
+                        email_body = updated_email_formatter(biggest_tipper, meessage_biggest_tipper=True, channel_name=channel.channel_display_name, message = message)
+                        EmailUser.send_email(email_body)
+                        print('send email')
+                except Exception as e:
+                        return Response({'status' : 'error','data': 'Sorry, you can not sent this message. Maybe some information missing'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'status' : 'success', 'data' : 'Message sent successfully!'}, status=status.HTTP_200_OK)
 
 
 
