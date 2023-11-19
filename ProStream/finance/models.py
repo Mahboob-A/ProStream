@@ -5,7 +5,7 @@ from django.utils import timezone
 # from accounts.models import CustomUser
 from streamer_profile.models import Streamer, Stream
 from django.conf import settings 
-
+from django.utils.translation import gettext_lazy as _
 
 # crate an wallent first before accepting Tip for Streamer         
 
@@ -106,7 +106,10 @@ class BankAccountDetails(models.Model):
         def __str__(self): 
                 return f"{self.first_name} {self.last_name}'s Bank Account"
 
-
+        class Meta:
+                verbose_name = _("Bank Account Detail")
+                verbose_name_plural = _("Bank Account Details")
+                
 class StreamerWallet(models.Model):
         id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
         streamer = models.OneToOneField(Streamer, on_delete=models.CASCADE, null=True, blank=True) 
@@ -171,6 +174,9 @@ class Tip(models.Model):
 
 
 class PaymentGateWaySettings(models.Model):
-    '''ssl commerz details'''
-    store_id = models.CharField(max_length=500, blank=True, null=True)
-    store_pass = models.CharField(max_length=500, blank=True, null = True)
+        '''ssl commerz details'''
+        store_id = models.CharField(max_length=500, blank=True, null=True)
+        tore_pass = models.CharField(max_length=500, blank=True, null = True)
+        class Meta:
+                verbose_name = _("PaymentGateWaySetting")
+                verbose_name_plural = _("PaymentGateWaySettings")

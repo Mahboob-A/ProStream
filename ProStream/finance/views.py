@@ -65,7 +65,6 @@ class rechargeWalletApi(APIView):
 class successApi(APIView):
     '''Payment successfull and add amount in user wallet'''
     def post(self, request):
-        print(request.user)
         user_id = request.data.get('value_a')
         amount = request.data.get('amount')
         user = CustomUser.objects.get(id = user_id)      
@@ -73,7 +72,15 @@ class successApi(APIView):
         user_wallet = UserWallet.objects.get(user = user)
         user_wallet.recharge_wallet(Decimal(amount))
         user_wallet.update_last_recharged_amoount(Decimal(amount))
-        return Response({'status' : 'success','data': 'Payment successful'}, status=status.HTTP_200_OK)
+
+        try: # send email to the user his recharged successfully
+            email_body = updated_email_formatter(user, user_wallet_recharge = True, available_amount = user_wallet.available_amount, amount = Decimal(amount))
+            EmailUser.send_email(email_body)
+            print('send email')
+        except Exception as e:
+                return Response({'status' : 'error','data': 'Payment successfully money but mail not sent for missing information'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'status' : 'success','data': 'Payment successful and mail already sent'}, status=status.HTTP_200_OK)
 
 
 # @csrf_exempt
@@ -86,6 +93,7 @@ class failedApi(APIView):
         return Response({'status' : 'error','data': 'failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 class verificationAPI(APIView):
+    '''Streamer can verified himself and also updated information for verification'''
     permission_classes = [IsAuthenticated]
     
     def get(self, request): 
@@ -149,6 +157,7 @@ class verificationAPI(APIView):
     
 
 class BankAccountDetailsAPI(APIView):
+    '''Add and update Bank Account details api'''
     permission_classes = [IsAuthenticated]
     
     def get(self, request): 
@@ -191,11 +200,7 @@ class BankAccountDetailsAPI(APIView):
             try:  # send email to streamer that bank account is created. 
                 email_data = updated_email_formatter(user, bank_account_created = True)
                 EmailUser.send_email(email_data)
-                
-                # deleting the user wallet that was created when the user signed up 
-                old_uer_wallet = UserWallet.objects.get(user=request.user)
-                old_uer_wallet.delete()
-                
+                 
                 # creating a wallet that is for streamers
                 streamer_wallet = StreamerWallet.objects.create(streamer = streamer, bank_account = instance)  # creating a wallter for streamer 
                 return Response({'status' : 'success','data': 'Bank Account, Streamer Wallet Created! You will receive email shortly!'}, status=status.HTTP_200_OK)
@@ -235,6 +240,7 @@ class BankAccountDetailsAPI(APIView):
 
 
 class TipAPI(APIView):
+    '''User can tip to a streamer during the stream'''
     permission_classes = [IsAuthenticated]
     def post(self, request):
         user = request.user

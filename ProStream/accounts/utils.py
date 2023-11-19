@@ -8,7 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 import random
 import string
 from django.conf import settings 
-
+from datetime import datetime
 
 # in use 
 class EmailUser: 
@@ -224,7 +224,7 @@ def updated_email_formatter(user, **kwargs):
                         'recipient_email' : user.email, 
                 }
         
-        if 'bank_account_created' in kwargs: 
+        if 'bank_account_created' in kwargs:  # bank account details created email
                 email_body = format_html(
         ''' 
         Howdy {}! <br> <br>
@@ -249,7 +249,7 @@ def updated_email_formatter(user, **kwargs):
                 'recipient_email' : user.email, 
                 }
         
-        if 'bank_account_updated' in kwargs: 
+        if 'bank_account_updated' in kwargs: # bank account details updated
                 email_body = format_html(
         ''' 
         Howdy {}! <br> <br>
@@ -276,8 +276,105 @@ def updated_email_formatter(user, **kwargs):
                 'recipient_email' : user.email, 
                 }
         
+        
+        
+        if 'meessage_biggest_tipper' in kwargs:  # message to biggest tipper
+                channel_name = kwargs.get('channel_name', 'Anonymous')
+                message = kwargs.get('message', 'Thanks for supporting me :)')
+                email_body = format_html(
+        ''' 
+        Congratulations <span style="font-weight: bold;">{}</span>! <br> <br>
+        
+        You've received a special message from <span style="font-weight: bold;">{}</span>, for tipping the streamer :) <br> 
+
+        Here the message...... <br>
+
+        <div style="background-color: #f0f0f0; padding: 20px; border-radius: 10px; border: 1px solid #ccc; width: 50%; margin: 0 auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <p style="color: red;font-weight: bold; font-size: 16px; line-height: 1.4; margin: 0;">
+                        {}
+                </p>
+        </div>
+        
+        <br> <br> <br> 
+        
+
+        Thank you, <br>
+        ProStream Team. <br> 
+                                
+        ''', user.username,  channel_name, message)
+                data = {
+                'subject' : f'You received message from {channel_name}',
+                'body' : email_body, 
+                'recipient_email' : user.email, 
+                }
+
+        if 'streamer_wallet_status' in kwargs:  # streamer withdraw money successfully
+                available_amount = kwargs.get('available_amount', 0)
+                amount = kwargs.get('amount', 0)
+                date_time = datetime.now()
+                formatted_datetime = date_time.strftime("%Y-%m-%d, %H:%M")
+                email_body = format_html(
+        ''' 
+        Dear {}, <br>
+        We hope this email finds you well. We are writing to confirm the successful withdrawal of funds from your ProStream account. We understand the importance of your financial transactions,
+        and we want to ensure that you are informed and satisfied with our services. <br>
+
+        <p style = "font-weight: bold; font-size: 16px; "> Withdrawal Details: </p>
+
+        <p style = "font-weight: bold;"> Amount: {} </p>
+        <p style = "font-weight: bold;"> Current Available Balance: {} </p> 
+        <p style = "font-weight: bold;"> Withdrawal Date: {} </p> <br> 
+        Please note that the withdrawn funds will be transferred to your bank account within the next 72 hours. We appreciate your patience in this process.
+
+        If you have any questions or concerns regarding this withdrawal or if you encounter any issues, please do not hesitate to contact our support team at {}. Our dedicated team is here to assist you and ensure that your experience with ProStream is smooth and hassle-free.
+
+        <br> <br> <br> 
+        
+        Thank you, <br>
+        ProStream Team. <br>                                
+        ''', user.username,  amount, available_amount, formatted_datetime, settings.EMAIL_HOST_USER)
+                data = {
+                'subject' : f'Your current wallet status',
+                'body' : email_body, 
+                'recipient_email' : user.email, 
+                }
+
+        if 'user_wallet_recharge' in kwargs:  # user recharged money successfully
+                available_amount = kwargs.get('available_amount', 0)
+                amount = kwargs.get('amount', 0)
+                date_time = datetime.now()
+                formatted_datetime = date_time.strftime("%Y-%m-%d, %H:%M")
+                email_body = format_html(
+        ''' 
+        Dear {}, <br>
+        We are delighted to inform you that the recent recharge of your ProStream wallet was successful. 
+        Your continued trust in ProStream is greatly appreciated, and we are committed to providing you with a seamless and secure experience.<br>
+
+        <p style = "font-weight: bold; font-size: 16px; "> Recharge Details:: </p>
+
+        <p style = "font-weight: bold;"> Amount: {} </p>
+        <p style = "font-weight: bold;"> Current Available Balance: {} </p> 
+        <p style = "font-weight: bold;"> Recharge Date: {} </p> <br> 
+
+        Your wallet has been updated with the recharge amount, and you can now enjoy uninterrupted streaming on ProStream. <br>
+
+        If you have any questions or concerns regarding this withdrawal or if you encounter any issues, please do not hesitate to contact our support team at {}. 
+        Our dedicated team is here to assist you and ensure that your experience with ProStream is smooth and hassle-free.
+
+        <br> <br> <br> 
+        
+        Thank you, <br>
+        ProStream Team. <br>                                
+        ''', user.username,  amount, available_amount, formatted_datetime, settings.EMAIL_HOST_USER)
+                data = {
+                'subject' : f'Hey {user.username}, you have recharged successfully!',
+                'body' : email_body, 
+                'recipient_email' : user.email, 
+                }
+
         return data 
 
+        
 # documentation code 
 # email = EmailMessage(
 #     "Hello",

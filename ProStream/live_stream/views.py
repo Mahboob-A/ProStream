@@ -34,6 +34,7 @@ class CategoryCRUDAPI(APIView):
 
 
 class GetCurrentStreamDetails(APIView):
+        '''Get current Stream details for certain streamer'''
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user
