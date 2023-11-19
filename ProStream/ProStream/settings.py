@@ -53,7 +53,7 @@ ADDED_APPS = {
     'live_stream', 
     'finance',
     'privacy_and_security',
-    'AgoraClient'
+    'AgoraClient',
     'dashboards',
     'storages',
 }
@@ -101,7 +101,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
