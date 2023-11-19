@@ -276,8 +276,41 @@ def updated_email_formatter(user, **kwargs):
                 'recipient_email' : user.email, 
                 }
         
+        
+        
+        if 'meessage_biggest_tipper' in kwargs: 
+                channel_name = kwargs.get('channel_name', 'Anonymous')
+                message = kwargs.get('message', 'Thanks for supporting me :)')
+                email_body = format_html(
+        ''' 
+        Congratulations <span style="font-weight: bold;">{}</span>! <br> <br>
+        
+        You've received a special message from <span style="font-weight: bold;">{}</span>, for tipping the streamer :) <br> 
+
+        Here the message...... <br>
+
+        <div style="background-color: #f0f0f0; padding: 20px; border-radius: 10px; border: 1px solid #ccc; width: 50%; margin: 0 auto; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <p style="color: red;font-weight: bold; font-size: 16px; line-height: 1.4; margin: 0;">
+                        {}
+                </p>
+        </div>
+        
+        <br> <br> <br> 
+        
+
+        Thank you, <br>
+        ProStream Team. <br> 
+                                
+        ''', user.username,  channel_name, message)
+                data = {
+                'subject' : f'You received message from {channel_name}',
+                'body' : email_body, 
+                'recipient_email' : user.email, 
+                }
+
         return data 
 
+        
 # documentation code 
 # email = EmailMessage(
 #     "Hello",
