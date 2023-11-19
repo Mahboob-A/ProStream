@@ -469,7 +469,7 @@ export default function SingleStream() {
             {/*  Chat Page */}
             <Box>
               <InfiniteScroll dataLength={1} height="500px">
-                <Box sx={{ backgroundColor: "gray" }}>
+                <Box sx={{ backgroundColor: "#eecaff", padding: 1 }}>
                   <section className="main--container">
                     <div id="chat-lists">
                       <div className="chat-inner"></div>

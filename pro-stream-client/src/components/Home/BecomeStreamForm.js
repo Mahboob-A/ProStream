@@ -56,8 +56,8 @@ const BecomeStreamForm = () => {
       if (response.data.status === "success") {
         alert(response.data.data);
         localStorage.setItem("is_a_streamer", true);
-        navigate("/stream-form");
-        // window.location.reload();
+        navigate("/");
+        window.location.reload();
       } else {
         setError(response.data.data);
       }

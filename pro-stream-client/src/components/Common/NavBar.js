@@ -146,30 +146,36 @@ export default function NavBar() {
       onClose={handleMenuClose}
       sx={{ marginTop: "50px" }}
     >
-      {UserAllInfo?.is_a_streamer ? (
-        <MenuItem onClick={handleMenuClose}>
-          <Link to="/dashboard">
-            <Button>Dashboard</Button>{" "}
-          </Link>
-        </MenuItem>
-      ) : (
-        <MenuItem onClick={handleMenuClose}>
-          <Link to="/user-dashboard">
-            <Button>Dashboard</Button>{" "}
-          </Link>
-        </MenuItem>
-      )}
       {access_token && (
-        <MenuItem onClick={handleMenuClose}>
-          <Link to="/change-password">
-            <Button>Change Password</Button>{" "}
-          </Link>
-        </MenuItem>
+        <Box>
+          {UserAllInfo?.is_a_streamer ? (
+            <MenuItem onClick={handleMenuClose}>
+              <Link to="/dashboard">
+                <Button>Dashboard</Button>{" "}
+              </Link>
+            </MenuItem>
+          ) : (
+            <MenuItem onClick={handleMenuClose}>
+              <Link to="/user-dashboard">
+                <Button>Dashboard</Button>{" "}
+              </Link>
+            </MenuItem>
+          )}
+          <MenuItem onClick={handleMenuClose}>
+            <Link to="/change-password">
+              <Button>Change Password</Button>{" "}
+            </Link>
+          </MenuItem>
+        </Box>
       )}
-
       <MenuItem onClick={handleMenuClose}>
         <Link to="/documentation">
           <Button>Documentation</Button>{" "}
+        </Link>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="https://github.com/Mahboob-A/ProStream">
+          <Button>GitHub</Button>{" "}
         </Link>
       </MenuItem>
     </Menu>
@@ -279,34 +285,40 @@ export default function NavBar() {
               Logout
             </Button>
           </MenuItem>
-          {UserAllInfo?.is_a_streamer ? (
-            <MenuItem onClick={handleMenuClose}>
-              <Link to="/dashboard">
-                <Button>Dashboard</Button>{" "}
-              </Link>
-            </MenuItem>
-          ) : (
-            <MenuItem onClick={handleMenuClose}>
-              <Link to="/user-dashboard">
-                <Button>Dashboard</Button>{" "}
-              </Link>
-            </MenuItem>
-          )}
           {access_token && (
-            <MenuItem onClick={handleMenuClose}>
-              <Link to="/change-password">
-                <Button>Change Password</Button>{" "}
-              </Link>
-            </MenuItem>
+            <Box>
+              {UserAllInfo?.is_a_streamer ? (
+                <MenuItem onClick={handleMenuClose}>
+                  <Link to="/dashboard">
+                    <Button>Dashboard</Button>{" "}
+                  </Link>
+                </MenuItem>
+              ) : (
+                <MenuItem onClick={handleMenuClose}>
+                  <Link to="/user-dashboard">
+                    <Button>Dashboard</Button>{" "}
+                  </Link>
+                </MenuItem>
+              )}
+              <MenuItem onClick={handleMenuClose}>
+                <Link to="/change-password">
+                  <Button>Change Password</Button>{" "}
+                </Link>
+              </MenuItem>
+            </Box>
           )}
-
-          <MenuItem onClick={handleMenuClose}>
-            <Link to="/documentation">
-              <Button>Documentation</Button>{" "}
-            </Link>
-          </MenuItem>
         </Box>
       )}
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="/documentation">
+          <Button>Documentation</Button>{" "}
+        </Link>
+      </MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="https://github.com/Mahboob-A/ProStream">
+          <Button>GitHub</Button>{" "}
+        </Link>
+      </MenuItem>
     </Menu>
   );
 

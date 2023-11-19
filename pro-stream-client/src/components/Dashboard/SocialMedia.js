@@ -55,7 +55,7 @@ const SocialMedia = () => {
     e.preventDefault();
     console.log("Form submitted:", socialLink);
     axios
-      .patch(
+      .post(
         "http://127.0.0.1:8000/dashboard/social-media-links/api/",
         socialLink,
         {

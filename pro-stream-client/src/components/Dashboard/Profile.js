@@ -41,7 +41,7 @@ const Profile = () => {
   console.log("Streamer data:", streamerData);
 
   useEffect(() => {
-    if (streamer_id !== "") {
+    if (streamer_id !== null && access_token) {
       // console.log("check1", access_token);
       // console.log("check2", streamerStreamData.streamer);
       axios
