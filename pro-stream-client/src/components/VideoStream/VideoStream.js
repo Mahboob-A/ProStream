@@ -18,6 +18,7 @@ const VideoStream = () => {
     const TOKEN = sessionStorage.getItem("token");
     let uid = Number(sessionStorage.getItem("uid"));
     // let userName = sessionStorage.getItem("username");
+    
     let localTracks = [];
     let localScreenTracks;
     let remoteUsers = {};
