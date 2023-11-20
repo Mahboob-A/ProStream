@@ -14,11 +14,12 @@ const VideoStream = () => {
   useEffect(() => {
     if (initiateRTCRef.current) return;
     initiateRTCRef.current = true;
-    const APP_ID = process.env.REACT_APP_APP_ID;
+    // const APP_ID = process.env.REACT_APP_APP_ID;
+    const APP_ID = "165129b40d854d378bb66172725f9ddjoin2";
     const TOKEN = sessionStorage.getItem("token");
     let uid = Number(sessionStorage.getItem("uid"));
     // let userName = sessionStorage.getItem("username");
-    
+
     let localTracks = [];
     let localScreenTracks;
     let remoteUsers = {};

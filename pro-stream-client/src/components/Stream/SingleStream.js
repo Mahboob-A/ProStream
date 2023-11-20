@@ -93,7 +93,8 @@ export default function SingleStream() {
   useEffect(() => {
     if (initiateRTMRef.current) return;
     initiateRTMRef.current = true;
-    const CHAT_APP_ID = process.env.REACT_APP_CHAT_APP_ID;
+    // const CHAT_APP_ID = process.env.REACT_APP_CHAT_APP_ID;
+    const CHAT_APP_ID = "11103c7e74624c1fa0d6a9199c65b362";
     let CHANNEL_NAME = sessionStorage.getItem("channel");
     let UID = sessionStorage.getItem("uid");
     console.log("chat channel and uid", CHANNEL_NAME, UID);
