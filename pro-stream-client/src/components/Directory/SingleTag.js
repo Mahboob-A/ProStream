@@ -19,7 +19,7 @@ const SingleTag = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://16.171.185.111/live-stream/get-categories/api/",
+          "https://mahboob-alam.tech/live-stream/get-categories/api/",
           {
             params: {
               tag: tag,

@@ -67,7 +67,7 @@ const Stream = ({
     if (streamer_id !== "") {
       axios
         .get(
-          "http://16.171.185.111/live-stream/follow-streamer-category/api/",
+          "https://mahboob-alam.tech/live-stream/follow-streamer-category/api/",
           {
             params: {
               streamer_id: streamer_id,
@@ -95,7 +95,7 @@ const Stream = ({
     // if (streamer_id !== "") {
     //   try {
     //     const response = await axios.post(
-    //       "http://16.171.185.111/live-stream/follow-streamer-category/api/",
+    //       "https://mahboob-alam.tech/live-stream/follow-streamer-category/api/",
     //       {
     //         streamer_id: streamer_id,
     //       },

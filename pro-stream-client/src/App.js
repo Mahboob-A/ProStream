@@ -93,16 +93,8 @@ function App() {
 
           {/* dashboard all routes  */}
           {/* <Route path="dashboard/profile" element={<Profile />} /> */}
-          <Route
-            path="dashboard"
-            element={access_token ? <Dashboard /> : <Navigate to="/signin" />}
-          />
-          <Route
-            path="user-dashboard"
-            element={
-              access_token ? <UserDashboard /> : <Navigate to="/signin" />
-            }
-          />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="user-dashboard" element={<UserDashboard />} />
           {/* agora chat  */}
           {/* <Route path="chat" element={<AgoraChat />} /> */}
 

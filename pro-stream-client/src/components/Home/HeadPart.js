@@ -15,7 +15,7 @@ const HeadPart = () => {
       // runing streaming info
       try {
         const response = await axios.get(
-          "http://16.171.185.111/token/stream-temp-data/api/"
+          "https://mahboob-alam.tech/token/stream-temp-data/api/"
         );
 
         console.log("user data", response.data.data);
@@ -31,12 +31,12 @@ const HeadPart = () => {
   const handleClick = async (channel_name, streamer_id) => {
     console.log("streamer_id", streamer_id);
     // localStorage.setItem("streamer_id", streamer_id);
-    sessionStorage.setItem("streamer_id", streamer_id);
+    localStorage.setItem("streamer_id", streamer_id);
 
     try {
       // get hosting video info
       let res = await fetch(
-        `http://16.171.185.111/token/get-token-for-viewer/api/?channel=${channel_name}`
+        `https://mahboob-alam.tech/token/get-token-for-viewer/api/?channel=${channel_name}`
       );
 
       let data = await res.json();

@@ -44,10 +44,13 @@ export default function SignIn() {
 
     try {
       // Make an Axios POST request to your login endpoint
-      const response = await axios.post("http://16.171.185.111/auth/login/", {
-        credential,
-        password,
-      });
+      const response = await axios.post(
+        "https://mahboob-alam.tech/auth/login/",
+        {
+          credential,
+          password,
+        }
+      );
       // console.log("Login responese", response.data);
 
       if (response.data.status === "success") {
@@ -55,7 +58,7 @@ export default function SignIn() {
         storeToken(response.data.token);
         if (response.data.token.access) {
           axios
-            .get("http://16.171.185.111/auth/get/user-all-details/", {
+            .get("https://mahboob-alam.tech/auth/get/user-all-details/", {
               headers: {
                 Authorization: `Bearer ${response.data.token.access}`,
                 "Content-Type": "application/json",

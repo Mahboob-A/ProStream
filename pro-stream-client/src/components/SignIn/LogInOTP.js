@@ -32,7 +32,7 @@ const LogInOTP = () => {
 
     try {
       const response = await axios.post(
-        "http://16.171.185.111/auth/login-with-otp-email/",
+        "https://mahboob-alam.tech/auth/login-with-otp-email/",
         {
           credential,
         }

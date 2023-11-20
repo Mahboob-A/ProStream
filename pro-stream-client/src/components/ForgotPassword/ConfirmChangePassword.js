@@ -32,7 +32,7 @@ const ConfirmChangePassword = ({ match }) => {
     console.log(e);
     // try {
     const response = await axios.post(
-      `http://16.171.185.111/auth/reset-password/${match.params.encoded_uuid}/${match.params.password_token}/`,
+      `https://mahboob-alam.tech/auth/reset-password/${match.params.encoded_uuid}/${match.params.password_token}/`,
       { password, password2 }
     );
     console.log(response);

@@ -39,7 +39,7 @@ export default function SignUp() {
     try {
       // Make an Axios POST request to your login endpoint
       const response = await axios.post(
-        "http://16.171.185.111/auth/register/",
+        "https://mahboob-alam.tech/auth/register/",
         {
           username,
           email,
