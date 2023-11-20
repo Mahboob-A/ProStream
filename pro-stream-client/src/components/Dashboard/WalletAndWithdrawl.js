@@ -10,7 +10,7 @@ const WalletAndWithdrawl = () => {
   const [wallet, setWallet] = React.useState({});
   useEffect(() => {
     axios
-      .get("http://16.171.185.111/dashboard/streamer-wallet-status/", {
+      .get("https://mahboob-alam.tech/dashboard/streamer-wallet-status/", {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
@@ -35,7 +35,7 @@ const WalletAndWithdrawl = () => {
     e.preventDefault();
     axios
       .post(
-        "http://16.171.185.111/dashboard/streamer-wallet-status/",
+        "https://mahboob-alam.tech/dashboard/streamer-wallet-status/",
         { amount: amount },
         {
           headers: {

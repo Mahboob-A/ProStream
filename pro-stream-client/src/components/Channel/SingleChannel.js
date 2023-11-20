@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getToken } from "../../services/LocalStorageService";
 import axios from "axios";
-// api : http://16.171.185.111/live-stream/get-streamer-details/api/
+// api : https://mahboob-alam.tech/live-stream/get-streamer-details/api/
 // streamer details. username is needed to pass. also auth token.
 
 const SingleChannel = () => {
@@ -14,7 +14,7 @@ const SingleChannel = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://16.171.185.111/live-stream/get-streamer-details/api/",
+          "https://mahboob-alam.tech/live-stream/get-streamer-details/api/",
           {
             params: {
               username: username,
@@ -55,7 +55,7 @@ const SingleChannel = () => {
             </Typography>
             {channelInfo?.channel.display_picture ? (
               <img
-                src={`http://16.171.185.111/${channelInfo?.channel.display_picture}`}
+                src={`${channelInfo?.channel.display_picture}`}
                 alt=""
                 height="150px"
                 width="150px"
@@ -72,7 +72,7 @@ const SingleChannel = () => {
             </Typography>
             {channelInfo?.channel.channel_banner_picture ? (
               <img
-                src={`http://16.171.185.111/${channelInfo?.channel.channel_banner_picture}`}
+                src={`${channelInfo?.channel.channel_banner_picture}`}
                 alt=""
                 height="100%"
                 width="100%"

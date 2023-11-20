@@ -48,7 +48,7 @@ const BecomeStreamForm = () => {
 
     try {
       const response = await axios.post(
-        "http://16.171.185.111/live-stream/create-streamer/api/",
+        "https://mahboob-alam.tech/live-stream/create-streamer/api/",
         formData,
         { headers: headers }
       );
@@ -56,7 +56,8 @@ const BecomeStreamForm = () => {
       if (response.data.status === "success") {
         alert(response.data.data);
         localStorage.setItem("is_a_streamer", true);
-        navigate("/");
+        // localStorage.setItem("streamer_id", true);
+        navigate("/stream-form");
         window.location.reload();
       } else {
         setError(response.data.data);

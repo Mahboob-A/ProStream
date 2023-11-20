@@ -26,7 +26,7 @@ const ForgotPassword = () => {
     try {
       // Make an Axios POST request to your login endpoint
       const response = await axios.post(
-        "http://16.171.185.111/auth/reset-password-email-otp/",
+        "https://mahboob-alam.tech/auth/reset-password-email-otp/",
         {
           credential,
         }

@@ -219,7 +219,7 @@ export default function SingleStream() {
   // const [streamerStreamData, setStreamerStreamData] = React.useState("");
   const [streamerStreamDataAll, setStreamerStreamDataAll] = React.useState({});
   const [streamerChannelData, setStreamerChannelData] = React.useState({});
-  let streamer_id = sessionStorage.getItem("streamer_id");
+  let streamer_id = localStorage.getItem("streamer_id");
   console.log("streamer_id from_2nd_flow", streamer_id);
 
   useEffect(() => {
@@ -228,7 +228,7 @@ export default function SingleStream() {
       console.log("streamer_id from_2nd_flow inside", streamer_id);
       axios
         .get(
-          "http://16.171.185.111/live-chat/get/current-stream-details/api/",
+          "https://mahboob-alam.tech/live-chat/get/current-stream-details/api/",
           {
             params: {
               streamer_id: streamer_id,
@@ -263,7 +263,7 @@ export default function SingleStream() {
       console.log("check1", access_token);
       // console.log("check2", streamerStreamData.streamer);
       axios
-        .get("http://16.171.185.111/dashboard/edit-channel/api/", {
+        .get("https://mahboob-alam.tech/dashboard/edit-channel/api/", {
           params: {
             streamer_id: streamer_id,
           },
@@ -288,7 +288,7 @@ export default function SingleStream() {
   useEffect(() => {
     if (streamer_id !== null && access_token) {
       axios
-        .get("http://16.171.185.111/dashboard/social-media-links/api/", {
+        .get("https://mahboob-alam.tech/dashboard/social-media-links/api/", {
           params: {
             streamer_id: streamer_id,
           },
@@ -316,7 +316,7 @@ export default function SingleStream() {
     };
     try {
       const response = await axios.post(
-        "http://16.171.185.111/finance/tip/",
+        "https://mahboob-alam.tech/finance/tip/",
         {
           stream_id: streamerStreamDataAll.id,
           amount: amount,
@@ -330,7 +330,7 @@ export default function SingleStream() {
       alert("Tip Sent Successfully");
     } catch (error) {
       console.error("Error sending tip data:", error);
-      alert(error.response.data);
+      alert(error.response.data.data);
     }
     handleModalClose();
   };

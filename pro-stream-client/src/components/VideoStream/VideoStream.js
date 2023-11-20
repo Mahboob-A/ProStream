@@ -5,10 +5,12 @@ import camera from "../../Images/icons/camera.svg";
 import leave from "../../Images/icons/leave.svg";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const VideoStream = () => {
   const initiateRTCRef = useRef(false);
   const CHANNEL = sessionStorage.getItem("channel");
+  const navigate = useNavigate();
   useEffect(() => {
     if (initiateRTCRef.current) return;
     initiateRTCRef.current = true;
@@ -207,7 +209,7 @@ const VideoStream = () => {
       if (streamer === "true") {
         try {
           const response = await axios.delete(
-            `http://16.171.185.111/token/stream-temp-data/api/?channel_name=${CHANNEL}`
+            `https://mahboob-alam.tech/token/stream-temp-data/api/?channel_name=${CHANNEL}`
           );
           console.log("Stream temporary data deleted:", response.data);
         } catch (error) {
@@ -224,7 +226,8 @@ const VideoStream = () => {
       sessionStorage.removeItem("uid");
       sessionStorage.removeItem("token");
 
-      window.open("/", "_self");
+      navigate("/");
+      // window.open("/", "_self");
       redirectUserHome();
     };
 

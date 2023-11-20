@@ -40,7 +40,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     axios
-      .get("http://16.171.185.111/dashboard/edit-profile/api/", {
+      .get("https://mahboob-alam.tech/dashboard/edit-profile/api/", {
         headers: headers,
       })
       .then((response) => {
@@ -68,17 +68,21 @@ const UserProfile = () => {
     console.log("Form submitted:", userData);
 
     axios
-      .patch("http://16.171.185.111/dashboard/edit-profile/api/", userData, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .patch(
+        "https://mahboob-alam.tech/dashboard/edit-profile/api/",
+        userData,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((response) => {
         console.log("User data updated successfully:", response.data);
         alert("User data updated successfully!");
         axios
-          .get("http://16.171.185.111/dashboard/edit-profile/api/", {
+          .get("https://mahboob-alam.tech/dashboard/edit-profile/api/", {
             headers: headers,
           })
           .then((response) => {
@@ -93,6 +97,8 @@ const UserProfile = () => {
         console.error("Error updating user data:", error);
         alert("Error updating user data!");
       });
+
+    setVisibility(false);
   };
 
   return (
@@ -109,11 +115,7 @@ const UserProfile = () => {
       <Grid container spacing={3} marginTop={1} align="center">
         <Grid item xs={12}>
           <Avatar
-            src={
-              userData.profile_picture
-                ? `http://16.171.185.111/${userData.profile_picture}`
-                : "https://i.ibb.co/k81m8xT/image-1.png"
-            }
+            src={userData.profile_picture ? `${userData.profile_picture}` : ""}
             alt="Profile Picture"
             sx={{ width: 150, height: 150 }}
           />
@@ -212,7 +214,7 @@ const UserProfile = () => {
                 <Avatar
                   src={
                     userData.profile_picture
-                      ? `http://16.171.185.111/${userData.profile_picture}`
+                      ? `${userData.profile_picture}`
                       : ""
                   }
                   alt="Profile Picture"

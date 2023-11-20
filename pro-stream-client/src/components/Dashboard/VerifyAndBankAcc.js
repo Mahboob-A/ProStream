@@ -35,7 +35,7 @@ const VerifyAndBankAcc = () => {
   const [edit, setEdit] = React.useState(true);
   useEffect(() => {
     axios
-      .get("http://16.171.185.111/finance/verification/", {
+      .get("https://mahboob-alam.tech/finance/verification/", {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "Content-Type": "application/json",
@@ -66,18 +66,22 @@ const VerifyAndBankAcc = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://16.171.185.111/finance/verification/", verificationInfo, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        "https://mahboob-alam.tech/finance/verification/",
+        verificationInfo,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((response) => {
         console.log("User data updated successfully:", response.data);
         // setSocialLink(response.data.data);
         alert("User data updated successfully!");
         axios
-          .get("http://16.171.185.111/finance/verification/", {
+          .get("https://mahboob-alam.tech/finance/verification/", {
             headers: {
               Authorization: `Bearer ${access_token}`,
               "Content-Type": "application/json",
@@ -95,6 +99,7 @@ const VerifyAndBankAcc = () => {
         console.error("Error updating user data:", error);
         alert("Error updating user data!");
       });
+    setVisibility(!visibility);
   };
   const [bankAccount, setBankAccount] = React.useState({
     first_name: "",
@@ -107,20 +112,22 @@ const VerifyAndBankAcc = () => {
   console.log("bankAccount", bankAccount);
 
   useEffect(() => {
-    axios
-      .get("http://16.171.185.111/finance/add-bank-details/", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log("VerifyAndBankAcc", response.data.data);
-        setBankAccount(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    if (access_token) {
+      axios
+        .get("https://mahboob-alam.tech/finance/add-bank-details/", {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log("VerifyAndBankAcc", response.data.data);
+          setBankAccount(response.data.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
+    }
   }, [access_token]);
 
   const handleChange2 = (e) => {
@@ -139,18 +146,22 @@ const VerifyAndBankAcc = () => {
   const handleSubmit2 = (e) => {
     e.preventDefault();
     axios
-      .post("http://16.171.185.111/finance/add-bank-details/", bankAccount, {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
+      .post(
+        "https://mahboob-alam.tech/finance/add-bank-details/",
+        bankAccount,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
       .then((response) => {
         console.log("User data updated successfully:", response.data);
         // setSocialLink(response.data.data);
         alert("User data updated successfully!");
         axios
-          .get("http://16.171.185.111/finance/add-bank-details/", {
+          .get("https://mahboob-alam.tech/finance/add-bank-details/", {
             headers: {
               Authorization: `Bearer ${access_token}`,
               "Content-Type": "application/json",
@@ -187,19 +198,19 @@ const VerifyAndBankAcc = () => {
         <Typography variant="h3" marginBottom={2}>
           Verification
         </Typography>
-        <Typography variant="h6">
+        <Typography variant="body1">
           First Name:{" "}
           {verificationInfo.first_name
             ? verificationInfo.first_name
             : "Edit your verification information"}
         </Typography>
-        <Typography variant="h6">
+        <Typography variant="body1">
           Last Name:{" "}
           {verificationInfo.last_name
             ? verificationInfo.last_name
             : "Edit your verification information"}
         </Typography>
-        <Typography variant="h6" gutterBottom>
+        <Typography variant="body1" gutterBottom>
           Document Type:{" "}
           {verificationInfo.document_type
             ? verificationInfo.document_type
@@ -207,7 +218,7 @@ const VerifyAndBankAcc = () => {
         </Typography>
         {verificationInfo.document ? (
           <img
-            src={`http://16.171.185.111/${verificationInfo.document}`}
+            src={`${verificationInfo.document}`}
             alt="document"
             style={{ width: "300px", height: "200px" }}
           />
@@ -282,7 +293,7 @@ const VerifyAndBankAcc = () => {
                   <Typography variant="h6">Display Picture</Typography>
                   {verificationInfo.document ? (
                     <Avatar
-                      src={`http://16.171.185.111/${verificationInfo.document}`}
+                      src={`${verificationInfo.document}`}
                       alt="Profile Picture"
                       sx={{ width: 150, height: 150 }}
                     />
@@ -387,7 +398,7 @@ const VerifyAndBankAcc = () => {
                   <Typography variant="h6">Passbook Image</Typography>
                   {bankAccount.passbook_img ? (
                     <Avatar
-                      src={`http://16.171.185.111/${bankAccount.passbook_img}`}
+                      src={`${bankAccount.passbook_img}`}
                       alt="Passport Picture"
                       sx={{ width: 150, height: 150, marginX: "auto" }}
                     />

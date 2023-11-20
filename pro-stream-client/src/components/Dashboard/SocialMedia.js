@@ -1,18 +1,7 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { getToken } from "../../services/LocalStorageService";
-import {
-  Avatar,
-  Box,
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Grid, TextField } from "@mui/material";
 
 const SocialMedia = () => {
   let { access_token } = getToken();
@@ -27,7 +16,7 @@ const SocialMedia = () => {
   useEffect(() => {
     if (streamer_id !== "") {
       axios
-        .get("http://16.171.185.111/dashboard/social-media-links/api/", {
+        .get("https://mahboob-alam.tech/dashboard/social-media-links/api/", {
           params: {
             streamer_id: streamer_id,
           },
@@ -47,6 +36,7 @@ const SocialMedia = () => {
     }
   }, [streamer_id]);
   console.log("socialLink", socialLink);
+
   const handleChange = (e) => {
     setSocialLink({ ...socialLink, [e.target.name]: e.target.value });
   };
@@ -55,8 +45,8 @@ const SocialMedia = () => {
     e.preventDefault();
     console.log("Form submitted:", socialLink);
     axios
-      .post(
-        "http://16.171.185.111/dashboard/social-media-links/api/",
+      .patch(
+        "https://mahboob-alam.tech/dashboard/social-media-links/api/",
         socialLink,
         {
           headers: {

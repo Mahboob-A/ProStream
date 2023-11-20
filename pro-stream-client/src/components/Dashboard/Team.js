@@ -5,7 +5,7 @@ const Team = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#DFC5FE",
+        backgroundColor: "gray",
         padding: 3,
         margin: 2,
         borderRadius: 5,

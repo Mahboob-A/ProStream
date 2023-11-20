@@ -42,10 +42,10 @@ const Profile = () => {
 
   useEffect(() => {
     if (streamer_id !== null && access_token) {
-      // console.log("check1", access_token);
-      // console.log("check2", streamerStreamData.streamer);
+      console.log("check1", access_token);
+      console.log("check2", streamer_id);
       axios
-        .get("http://16.171.185.111/dashboard/edit-channel/api/", {
+        .get("https://mahboob-alam.tech/dashboard/edit-channel/api/", {
           params: {
             streamer_id: streamer_id,
           },
@@ -56,11 +56,11 @@ const Profile = () => {
         })
         .then((response) => {
           console.log("val store", response);
-          setStreamerData(response.data.data);
+          setStreamerData(response.data?.data);
         })
         .catch((error) => {
           console.error("Error fetching data:", error);
-          alert(error.response.data);
+          alert(error.response?.data);
         });
     }
   }, [streamer_id]);
@@ -89,7 +89,7 @@ const Profile = () => {
     e.preventDefault();
     await axios
       .patch(
-        "http://16.171.185.111/dashboard/edit-channel/api/",
+        "https://mahboob-alam.tech/dashboard/edit-channel/api/",
         streamerData,
         {
           headers: {
@@ -102,7 +102,7 @@ const Profile = () => {
         console.log("Streamer data updated successfully:", response.data);
         setStreamerData(response.data);
         axios
-          .get("http://16.171.185.111/dashboard/edit-channel/api/", {
+          .get("https://mahboob-alam.tech/dashboard/edit-channel/api/", {
             params: {
               streamer_id: streamer_id,
             },
@@ -156,12 +156,18 @@ const Profile = () => {
             <Typography variant="h2" gutterBottom>
               Channel Information
             </Typography>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h5" color="orange">
+              Channel Name:{" "}
+              {streamerData.channel_display_name
+                ? streamerData.channel_display_name
+                : "Please update your username"}
+            </Typography>
+            <Typography variant="body1" gutterBottom>
               Profile Picture
             </Typography>
             {streamerData.display_picture ? (
               <Avatar
-                src={`http://16.171.185.111/${streamerData.display_picture}`}
+                src={`${streamerData.display_picture}`}
                 alt="Profile Picture"
                 sx={{ width: 150, height: 150 }}
               />
@@ -172,12 +178,12 @@ const Profile = () => {
             )}
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="body1" gutterBottom>
               Banner Picture
             </Typography>
             {streamerData.channel_banner_picture ? (
               <img
-                src={`http://16.171.185.111/${streamerData.channel_banner_picture}`}
+                src={`${streamerData.channel_banner_picture}`}
                 alt="Profile Picture"
                 width="350px"
                 height="200px"
@@ -189,14 +195,6 @@ const Profile = () => {
             )}
           </Grid>
 
-          <Grid item xs={12}>
-            <Typography variant="h6" color="red">
-              Streamer Username:{" "}
-              {streamerData.streamer_username
-                ? streamerData.streamer_username
-                : "Please update your username"}
-            </Typography>
-          </Grid>
           <Grid item xs={12} marginTop={1}>
             <Typography variant="h5">Bio</Typography>
             <Typography variant="body">
@@ -265,7 +263,7 @@ const Profile = () => {
                       <Typography variant="h6">Display Picture</Typography>
                       {streamerData.display_picture ? (
                         <Avatar
-                          src={`http://16.171.185.111/${streamerData.display_picture}`}
+                          src={`${streamerData.display_picture}`}
                           alt="Profile Picture"
                           sx={{ width: 150, height: 150 }}
                         />
@@ -286,7 +284,7 @@ const Profile = () => {
                       </Typography>
                       {streamerData.channel_display_name ? (
                         <img
-                          src={`http://16.171.185.111/${streamerData.channel_banner_picture}`}
+                          src={`${streamerData.channel_banner_picture}`}
                           alt="Profile Picture"
                           width="350px"
                           height="200px"

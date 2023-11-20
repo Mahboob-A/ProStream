@@ -123,7 +123,7 @@ def generate_otp(otp_size=6):
 
 # updated email body formatter for other administrative works 
 def updated_email_formatter(user, **kwargs): 
-        reset_pass_with_otp_url = 'http://16.171.185.111/auth/reset-password-email-otp/'
+        reset_pass_with_otp_url = 'https://mahboob-alam.tech/auth/reset-password-email-otp/'
         
  
         email_body = ""
