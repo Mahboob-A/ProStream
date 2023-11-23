@@ -20,6 +20,7 @@ from .serializer import *
 # to send email 
 from .utils import EmailUser, format_email, generate_otp, get_tokens_for_user, updated_email_formatter  
 from finance.models import UserWallet
+from streamer_profile.models import Streamer
 
 
 
@@ -215,5 +216,18 @@ class GetUserDetailsAPI(APIView):
         permission_classes = [IsAuthenticated]
         def get(self, request):
                 user = request.user
+                # if the suer is streamer, then also pass the is_verification_approved. adding this to unauthorized access of usign the live streaming right now. 
+                try: 
+                        streamer = Streamer.objects.get(id = user.streamer_id) 
+                        verification = streamer.verification 
+                        serializer = UserDetailsSerializers(instance = user)
+                        data = {
+                                'is_verification_approaved' : verification.is_verification_approaved, 
+                                **serializer.data, 
+                        }
+                        return Response({'status': 'success', 'data' : data})    
+                except Streamer.DoesNotExist: 
+                        pass 
+                # if here the control comes, then it is a user. 
                 serializer = UserDetailsSerializers(instance = user)
                 return Response({'status': 'success', 'data': serializer.data})                        

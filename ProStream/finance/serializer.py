@@ -13,7 +13,7 @@ class UserWalletRechargeSerializer(serializers.Serializer):
 class VerificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Verification
-        exclude = ['is_verification_approaved']
+        fields = '__all__'
 
 class BankAccountDetailsSerializer(serializers.ModelSerializer):
     class Meta:
