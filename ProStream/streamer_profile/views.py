@@ -42,7 +42,7 @@ class StreamerCreateAPI(APIView):
                                 email_send = False 
                                 pass 
                         if email_send: 
-                                return Response({'status' : 'success', 'data' : "Streamer and Streamer's Channel Created, Email Send Successfull!"}, status=status.HTTP_201_CREATED)
+                                return Response({'status' : 'success', 'data' : {'streamer_id' : instance.id}}, status=status.HTTP_201_CREATED)
                         return Response({'status' : 'success', 'data' : "Streamer and Streamer's Channel Created, But Eamil Send Unsuccessfull!"}, status=status.HTTP_201_CREATED)
                 return Response({'status' : 'error', 'data' : serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
