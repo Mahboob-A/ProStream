@@ -11,9 +11,11 @@ class CategoryCRUDSerializer(serializers.ModelSerializer):
                 fields = '__all__'
 
 class StreamSerializer(serializers.ModelSerializer):
+        tag1 = serializers.CharField(source='category.tag1')
+        tag2 = serializers.CharField(source='category.tag2')
         class Meta: 
                 model = Stream
-                fields = ['id', 'category','streamer', 'stream_title','language','follower_goals', 'content_classification', 'total_views_count', 'is_previously_recorded', 'has_branded_content']
+                fields = ['id', 'category','streamer', 'stream_title','language','follower_goals', 'content_classification', 'total_views_count', 'is_previously_recorded', 'has_branded_content', 'tag1', 'tag2']
 
         def get_category(self, obj):
                 return obj.category.name if obj.category else None
