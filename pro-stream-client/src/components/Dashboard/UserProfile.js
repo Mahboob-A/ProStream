@@ -44,7 +44,7 @@ const UserProfile = () => {
         headers: headers,
       })
       .then((response) => {
-        console.log("User data fetched:", response.data.data);
+        // console.log("User data fetched:", response.data.data);
         setUserData(response.data.data);
       })
       .catch((error) => {
@@ -65,7 +65,7 @@ const UserProfile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Form submitted:", userData);
+    // console.log("Form submitted:", userData);
 
     axios
       .patch(
@@ -79,14 +79,14 @@ const UserProfile = () => {
         }
       )
       .then((response) => {
-        console.log("User data updated successfully:", response.data);
+        // console.log("User data updated successfully:", response.data);
         alert("User data updated successfully!");
         axios
           .get("https://mahboob-alam.tech/dashboard/edit-profile/api/", {
             headers: headers,
           })
           .then((response) => {
-            console.log("User data fetched:", response.data.data);
+            // console.log("User data fetched:", response.data.data);
             setUserData(response.data.data);
           })
           .catch((error) => {

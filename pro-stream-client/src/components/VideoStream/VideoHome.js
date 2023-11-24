@@ -29,7 +29,7 @@ const VideoHome = () => {
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("channel", channel);
       sessionStorage.setItem("username", userName);
-      console.log(uid, "-----", token, channel, userName);
+      // console.log(uid, "-----", token, channel, userName);
       // Replace the following with React Router navigation
       // window.open("/stream-check", "_blank");
       navigate("/video");

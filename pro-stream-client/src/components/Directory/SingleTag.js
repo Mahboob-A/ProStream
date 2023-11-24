@@ -30,7 +30,7 @@ const SingleTag = () => {
             },
           }
         );
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setAllCategory(response.data.data);
       } catch (error) {
         console.error("Error category data:", error);

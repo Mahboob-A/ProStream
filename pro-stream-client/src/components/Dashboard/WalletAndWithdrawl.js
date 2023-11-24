@@ -17,7 +17,7 @@ const WalletAndWithdrawl = () => {
         },
       })
       .then((response) => {
-        console.log("WalletAndWithdrawl", response.data.data);
+        // console.log("WalletAndWithdrawl", response.data.data);
         setWallet(response.data.data);
       })
       .catch((error) => {
@@ -30,7 +30,7 @@ const WalletAndWithdrawl = () => {
     setAmount(e.target.value);
   };
 
-  console.log("amount", amount);
+  // console.log("amount", amount);
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -45,7 +45,7 @@ const WalletAndWithdrawl = () => {
         }
       )
       .then((response) => {
-        console.log("WalletAndWithdrawl", response.data.data);
+        // console.log("WalletAndWithdrawl", response.data.data);
         alert("Withdrawl money sent successfully!");
       })
       .catch((error) => {

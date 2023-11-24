@@ -52,12 +52,15 @@ const BecomeStreamForm = () => {
         formData,
         { headers: headers }
       );
-      console.log("Become streamer form submitted:", response.data);
+      // console.log("Become streamer form submitted:", response.data);
       if (response.data.status === "success") {
-        alert(response.data.data);
         localStorage.setItem("is_a_streamer", true);
-        // localStorage.setItem("streamer_id", true);
-        navigate("/stream-form");
+        localStorage.setItem("streamer_id", response.data.data.streamer_id); // this new added
+        alert(
+          "Streamer registration successfull. Verification need to streaming."
+        );
+        // navigate("/stream-form");
+        navigate("/");
         window.location.reload();
       } else {
         setError(response.data.data);

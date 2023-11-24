@@ -107,7 +107,7 @@ class UserFollowAPI(APIView):
                                 return Response({'status' : 'error', 'data' : 'User did not follow this category'}, status=status.HTTP_400_BAD_REQUEST)
                 else:
                         return Response({'status': 'error', 'data': 'Invalid streamer id or category name'}, status=status.HTTP_400_BAD_REQUEST)
-                
+
                 return Response({'status': 'success', 'data': 'Allready followed'}, status=status.HTTP_201_CREATED)
 
         def post(self, request):
@@ -169,7 +169,8 @@ class UserFollowAPI(APIView):
                        
                 channel.total_followers -= 1
                 channel.save()
-                return Response({'status': 'success', 'data': 'Unfollowed successfully'}, status=status.HTTP_204_NO_CONTENT)
+                # we sent 'error' status because this user has unfollowed the streamer successfully
+                return Response({'status': 'error', 'data': 'Unfollowed successfully'}, status=status.HTTP_204_NO_CONTENT)
         
 
 

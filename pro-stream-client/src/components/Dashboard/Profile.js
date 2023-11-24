@@ -38,12 +38,12 @@ const Profile = () => {
     streamer_about_1: "",
     streamer_about_2: "",
   });
-  console.log("Streamer data:", streamerData);
+  // console.log("Streamer data:", streamerData);
 
   useEffect(() => {
     if (streamer_id !== null && access_token) {
-      console.log("check1", access_token);
-      console.log("check2", streamer_id);
+      // console.log("check1", access_token);
+      // console.log("check2", streamer_id);
       axios
         .get("https://mahboob-alam.tech/dashboard/edit-channel/api/", {
           params: {
@@ -55,7 +55,7 @@ const Profile = () => {
           },
         })
         .then((response) => {
-          console.log("val store", response);
+          // console.log("val store", response);
           setStreamerData(response.data?.data);
         })
         .catch((error) => {
@@ -99,7 +99,7 @@ const Profile = () => {
         }
       )
       .then((response) => {
-        console.log("Streamer data updated successfully:", response.data);
+        // console.log("Streamer data updated successfully:", response.data);
         setStreamerData(response.data);
         axios
           .get("https://mahboob-alam.tech/dashboard/edit-channel/api/", {
@@ -112,7 +112,7 @@ const Profile = () => {
             },
           })
           .then((response) => {
-            console.log("val store", response);
+            // console.log("val store", response);
             setStreamerData(response.data.data);
           })
           .catch((error) => {

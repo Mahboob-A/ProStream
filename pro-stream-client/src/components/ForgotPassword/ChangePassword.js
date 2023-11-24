@@ -31,7 +31,7 @@ const ChangePassword = ({ encoded_uuid, password_token }) => {
           email,
         }
       );
-      console.log("Login successful", response.data);
+      // console.log("Login successful", response.data);
 
       if (response.data.status == "success") {
         alert("Email sent");

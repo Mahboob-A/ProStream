@@ -18,7 +18,7 @@ const HeadPart = () => {
           "https://mahboob-alam.tech/token/stream-temp-data/api/"
         );
 
-        console.log("user data", response.data.data);
+        // console.log("user data", response.data.data);
         setCurrentStream(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -29,7 +29,7 @@ const HeadPart = () => {
   }, []);
 
   const handleClick = async (channel_name, streamer_id) => {
-    console.log("streamer_id", streamer_id);
+    // console.log("streamer_id", streamer_id);
     // localStorage.setItem("streamer_id", streamer_id);
     localStorage.setItem("streamer_id", streamer_id);
 
@@ -40,7 +40,7 @@ const HeadPart = () => {
       );
 
       let data = await res.json();
-      console.log("User Stream:", data);
+      // console.log("User Stream:", data);
 
       let uid = data.uid;
       let token = data.token;

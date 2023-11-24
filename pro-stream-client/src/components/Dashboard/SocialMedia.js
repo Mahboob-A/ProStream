@@ -26,7 +26,7 @@ const SocialMedia = () => {
           },
         })
         .then((response) => {
-          console.log("social", response.data.data);
+          // console.log("social", response.data.data);
           setSocialLink(response.data.data);
         })
         .catch((error) => {
@@ -35,7 +35,7 @@ const SocialMedia = () => {
         });
     }
   }, [streamer_id]);
-  console.log("socialLink", socialLink);
+  // console.log("socialLink", socialLink);
 
   const handleChange = (e) => {
     setSocialLink({ ...socialLink, [e.target.name]: e.target.value });
@@ -43,7 +43,7 @@ const SocialMedia = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", socialLink);
+    // console.log("Form submitted:", socialLink);
     axios
       .patch(
         "https://mahboob-alam.tech/dashboard/social-media-links/api/",
@@ -56,7 +56,7 @@ const SocialMedia = () => {
         }
       )
       .then((response) => {
-        console.log("User data updated successfully:", response.data);
+        // console.log("User data updated successfully:", response.data);
         // setSocialLink(response.data.data);
         alert("User data updated successfully!");
       })

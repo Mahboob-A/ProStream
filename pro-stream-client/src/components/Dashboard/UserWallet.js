@@ -30,7 +30,7 @@ const UserWallet = () => {
       });
   }, []);
 
-  console.log("amount", amount);
+  // console.log("amount", amount);
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
@@ -45,7 +45,7 @@ const UserWallet = () => {
         }
       )
       .then((response) => {
-        console.log("WalletAndWithdrawl", response.data);
+        // console.log("WalletAndWithdrawl", response.data);
 
         window.location.href = response.data.redirect_url;
       })
