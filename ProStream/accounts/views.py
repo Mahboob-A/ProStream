@@ -219,12 +219,16 @@ class GetUserDetailsAPI(APIView):
                 # if the suer is streamer, then also pass the is_verification_approved. adding this to unauthorized access of usign the live streaming right now. 
                 try: 
                         streamer = Streamer.objects.get(id = user.streamer_id) 
-                        verification = streamer.verification 
-                        serializer = UserDetailsSerializers(instance = user)
+                        if streamer.verification: 
+                                verification = streamer.verification 
+                                data = {
+                                        'is_verification_approaved' : verification.is_verification_approaved, 
+                                        **serializer.data, 
+                                }
                         data = {
-                                'is_verification_approaved' : verification.is_verification_approaved, 
                                 **serializer.data, 
                         }
+                        serializer = UserDetailsSerializers(instance = user)
                         return Response({'status': 'success', 'data' : data})    
                 except Streamer.DoesNotExist: 
                         pass 
