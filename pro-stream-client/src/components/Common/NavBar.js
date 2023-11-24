@@ -10,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Button, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import logo from "../../Images/prostream.png";
 import { useNavigate } from "react-router-dom";
 import { getToken, removeToken } from "../../services/LocalStorageService";
@@ -85,6 +85,10 @@ export default function NavBar() {
       .then((response) => {
         // console.log("user data", response.data.data);
         setUserAllInfo(response.data.data);
+        localStorage.setItem(
+          "is_verification_approaved",
+          response.data.data.is_verification_approaved
+        );
         // localStorage.setItem("username", response.data.data.username);
         // localStorage.setItem("email", response.data.data.email);
         // localStorage.setItem("streamer_id", response.data.data.streamer_id);
@@ -123,6 +127,7 @@ export default function NavBar() {
     localStorage.removeItem("streamer_id");
     localStorage.removeItem("is_a_user");
     localStorage.removeItem("is_a_streamer");
+    localStorage.removeItem("is_verification_approaved");
     navigate("/signin");
 
     // window.location.reload();
@@ -235,7 +240,8 @@ export default function NavBar() {
         </Box>
       ) : (
         <Box>
-          {UserAllInfo?.is_a_streamer ? (
+          {UserAllInfo?.is_a_streamer &&
+          UserAllInfo?.is_verification_approaved ? (
             <MenuItem onClick={handleMenuClose}>
               <Link to="/stream-form">
                 <Button
@@ -253,7 +259,32 @@ export default function NavBar() {
                 </Button>
               </Link>
             </MenuItem>
-          ) : (
+          ) : null}
+
+          {UserAllInfo?.is_a_streamer &&
+          !UserAllInfo?.is_verification_approaved ? (
+            <MenuItem onClick={handleMenuClose}>
+              <Button
+                variant="contained"
+                sx={{
+                  color: "#ffffff",
+                  backgroundColor: "red",
+                  paddingX: "10px",
+                  marginRight: "5px",
+                  textTransform: "capitalize",
+                }}
+                startIcon={<VideoCallIcon sx={{ color: "white" }} />}
+                onClick={() => {
+                  navigate("/dashboard");
+                }}
+              >
+                Verification Needed for Streaming
+              </Button>
+            </MenuItem>
+          ) : null}
+
+          {!UserAllInfo?.is_a_streamer &&
+          !UserAllInfo?.is_verification_approaved ? (
             <MenuItem onClick={handleMenuClose}>
               <Link to="/become-stream-form">
                 <Button
@@ -270,7 +301,7 @@ export default function NavBar() {
                 </Button>
               </Link>
             </MenuItem>
-          )}
+          ) : null}
           <MenuItem onClick={handleMenuClose}>
             <Button
               variant="contained"
@@ -388,7 +419,8 @@ export default function NavBar() {
                 </Box>
               ) : (
                 <Box>
-                  {UserAllInfo?.is_a_streamer ? (
+                  {UserAllInfo?.is_a_streamer &&
+                  UserAllInfo?.is_verification_approaved ? (
                     <Link to="/stream-form">
                       <Button
                         variant="contained"
@@ -404,7 +436,29 @@ export default function NavBar() {
                         Go Live
                       </Button>
                     </Link>
-                  ) : (
+                  ) : null}
+
+                  {UserAllInfo?.is_a_streamer &&
+                  !UserAllInfo?.is_verification_approaved ? (
+                    <Button
+                      variant="contained"
+                      sx={{
+                        color: "white",
+                        backgroundColor: "red",
+                        paddingX: "10px",
+                        marginRight: "5px",
+                        textTransform: "capitalize",
+                      }}
+                      onClick={() => {
+                        navigate("/dashboard");
+                      }}
+                    >
+                      Verification Needed for Streaming
+                    </Button>
+                  ) : null}
+
+                  {!UserAllInfo?.is_a_streamer &&
+                  !UserAllInfo?.is_verification_approaved ? (
                     <Link to="/become-stream-form">
                       <Button
                         variant="contained"
@@ -419,7 +473,8 @@ export default function NavBar() {
                         Become Streamer
                       </Button>
                     </Link>
-                  )}
+                  ) : null}
+
                   <Button
                     variant="contained"
                     sx={{

@@ -180,7 +180,7 @@ const Category = () => {
         const response = await axios.get(
           "https://mahboob-alam.tech/live-stream/get-categories/api/"
         );
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setAllCategory(response.data.data);
       } catch (error) {
         console.error("Error category data:", error);

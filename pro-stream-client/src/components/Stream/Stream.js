@@ -46,10 +46,10 @@ const Stream = ({
   socialLink,
   streamer_id,
 }) => {
-  console.log("from stream page", streamerStreamData);
-  console.log("from stream page", streamerChannelData);
-  console.log("from stream page", socialLink);
-  console.log("from stream page", streamer_id);
+  // console.log("from stream page streamerStreamData", streamerStreamData);
+  // console.log("from stream page streamerChannelData", streamerChannelData);
+  // console.log("from stream page", socialLink);
+  // console.log("from stream page", streamer_id);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -79,7 +79,7 @@ const Stream = ({
           }
         )
         .then((response) => {
-          console.log("follow check", response);
+          // console.log("follow check", response);
           setFollow(response.data.status);
         })
         .catch((error) => {
@@ -88,37 +88,70 @@ const Stream = ({
         });
     }
   }, []);
-  console.log("follow", follow);
+  // console.log("follow", follow);
 
   const handleFollow = async (event) => {
     event.preventDefault();
-    // if (streamer_id !== "") {
-    //   try {
-    //     const response = await axios.post(
-    //       "https://mahboob-alam.tech/live-stream/follow-streamer-category/api/",
-    //       {
-    //         streamer_id: streamer_id,
-    //       },
-    //       {
-    //         headers: {
-    //           Authorization: `Bearer ${access_token}`,
-    //           "Content-Type": "application/json",
-    //         },
-    //       }
-    //     );
+    if (streamer_id !== "") {
+      try {
+        const response = await axios.post(
+          "https://mahboob-alam.tech/live-stream/follow-streamer-category/api/",
+          {
+            streamer_id: streamer_id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-    //     console.log("follow check", response.data);
-    //     if (response.data.status === "success") {
-    //       console.log("follow check", response);
-    //       // setFollow(response.data.status);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error follow data:", error);
-    //     if (error.response && error.response.data) {
-    //       // alert(error.response.data);
-    //     }
-    //   }
-    // }
+        // console.log("follow check", response.data);
+        if (response.data.status === "success") {
+          // console.log("follow check", response);
+          setFollow(response.data.status);
+        }
+      } catch (error) {
+        console.error("Error follow data:", error);
+        if (error.response && error.response.data) {
+          alert(error.response.data);
+        }
+      }
+    }
+  };
+
+  const handleUnFollow = async (event) => {
+    event.preventDefault();
+    if (streamer_id !== "") {
+      try {
+        const response = await axios.delete(
+          "https://mahboob-alam.tech/live-stream/follow-streamer-category/api/",
+          {
+            data: {
+              streamer_id: streamer_id,
+            },
+            headers: {
+              Authorization: `Bearer ${access_token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        // console.log("unfollow check delete", response.data);
+        //
+        setFollow("error");
+        // if (response.data.status === "error") {
+        //   console.log("unfollow check", response);
+        //   setFollow(response.data.status);
+        // }
+      } catch (error) {
+        console.error("Error follow data:", error);
+        if (error.response && error.response.data) {
+          alert(error.response.data);
+        }
+      }
+    }
   };
 
   return (
@@ -137,6 +170,14 @@ const Stream = ({
               justifyContent="space-between"
             >
               <Grid item>
+                <Typography
+                  variant="h5"
+                  sx={{ color: "white", fontWeight: "bold" }}
+                >
+                  {streamerStreamData.stream_title
+                    ? streamerStreamData.stream_title
+                    : "Stream Title not given"}
+                </Typography>
                 <Grid container alignItems="center" spacing={1}>
                   <Grid item>
                     <Avatar
@@ -145,27 +186,35 @@ const Stream = ({
                     />
                   </Grid>
                   <Grid item>
-                    <Typography variant="h5" sx={{ color: "white" }}>
+                    <Typography variant="body1" sx={{ color: "white" }}>
                       {streamerChannelData.channel_display_name
                         ? streamerChannelData.channel_display_name
                         : streamerChannelData.streamer_username}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "white" }}>
-                      {streamerStreamData.stream_title
-                        ? streamerStreamData.stream_title
-                        : "Stream Title not given"}
-                    </Typography>
-                    <Typography variant="h6" sx={{ color: "white" }}>
-                      Category:{" "}
+                    <Typography
+                      variant="text"
+                      sx={{ color: "white", opacity: 0.7 }}
+                    >
                       {streamerStreamData.category
                         ? streamerStreamData.category
                         : "Category name not given"}
                     </Typography>
-                    <Typography variant="body" sx={{ color: "white" }}>
-                      tag1
+                    <br />
+                    <Typography
+                      variant="text"
+                      sx={{ color: "white", opacity: 0.7 }}
+                    >
+                      {streamerStreamData.tag1
+                        ? streamerStreamData.tag1
+                        : "tag1"}
                     </Typography>{" "}
-                    <Typography variant="body" sx={{ color: "white" }}>
-                      tag2
+                    <Typography
+                      variant="text"
+                      sx={{ color: "white", opacity: 0.7 }}
+                    >
+                      {streamerStreamData.tag2
+                        ? streamerStreamData.tag2
+                        : "tag2"}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -185,20 +234,20 @@ const Stream = ({
                     startIcon={<FavoriteBorderIcon />}
                     onClick={handleFollow}
                   >
-                    Follow check
+                    Follow
                   </Button>
-                ) : (
+                ) : null}
+                {follow === "success" ? (
                   <Button
                     variant="contained"
                     sx={{ marginRight: "5px" }}
                     startIcon={<FavoriteBorderIcon />}
+                    onClick={handleUnFollow}
                   >
                     UnFollow
                   </Button>
-                )}
-                <Button variant="contained" startIcon={<StarBorderIcon />}>
-                  Subscribe
-                </Button>
+                ) : null}
+
                 <IconButton
                   aria-label="more"
                   id="basic-button"
@@ -348,25 +397,25 @@ const Stream = ({
                 </Stack>
               </Grid>
               <Grid item xs={12} sm={4}>
-                {streamerChannelData.channel_banner_picture ? (
-                  <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
-                ) : (
+                {streamerChannelData?.channel_banner_picture ? (
                   <img
                     style={{ width: "50%" }}
                     src={streamerChannelData.channel_banner_picture}
                     alt=""
                   />
+                ) : (
+                  <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
                 )}
               </Grid>
               <Grid item xs={12} sm={4}>
-                {streamerChannelData.channel_display_name ? (
-                  <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
-                ) : (
+                {streamerChannelData?.display_picture ? (
                   <img
                     style={{ width: "50%" }}
-                    src={streamerChannelData.channel_display_name}
+                    src={streamerChannelData.display_picture}
                     alt=""
                   />
+                ) : (
+                  <img style={{ width: "50%" }} src={mickeyMouse} alt="" />
                 )}
               </Grid>
               <Grid item xs={12} sm={8}>

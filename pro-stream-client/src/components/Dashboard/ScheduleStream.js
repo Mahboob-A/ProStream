@@ -54,7 +54,7 @@ const ScheduleStream = () => {
         }
       )
       .then((response) => {
-        console.log("schedule data updated successfully:", response.data);
+        // console.log("schedule data updated successfully:", response.data);
         // setSocialLink(response.data.data);
         alert("User data updated successfully!");
       })

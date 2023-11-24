@@ -97,7 +97,7 @@ export default function SingleStream() {
     const CHAT_APP_ID = "11103c7e74624c1fa0d6a9199c65b362";
     let CHANNEL_NAME = sessionStorage.getItem("channel");
     let UID = sessionStorage.getItem("uid");
-    console.log("chat channel and uid", CHANNEL_NAME, UID);
+    // console.log("chat channel and uid", CHANNEL_NAME, UID);
     let TOKEN = null;
 
     let client;
@@ -115,7 +115,7 @@ export default function SingleStream() {
 
       // listerer
       channel.on("ChannelMessage", (message, peerId) => {
-        console.log("channel.on: ", message);
+        // console.log("channel.on: ", message);
         let chat = JSON.parse(message.text);
         addMessageToChatList(chat);
       });
@@ -132,7 +132,7 @@ export default function SingleStream() {
     });
 
     let submitChatFormData = async (message) => {
-      console.log("submitChatFormData: ", message);
+      // console.log("submitChatFormData: ", message);
       let username = localStorage.getItem("username");
       let data = {
         text: message,
@@ -149,7 +149,7 @@ export default function SingleStream() {
     let addMessageToChatList = async (message) => {
       let allChats = document.getElementById("chat-lists");
 
-      console.log("addMessageToChatList: ", message);
+      // console.log("addMessageToChatList: ", message);
 
       function getCurrentTime() {
         const now = new Date();
@@ -221,12 +221,12 @@ export default function SingleStream() {
   const [streamerStreamDataAll, setStreamerStreamDataAll] = React.useState({});
   const [streamerChannelData, setStreamerChannelData] = React.useState({});
   let streamer_id = localStorage.getItem("streamer_id");
-  console.log("streamer_id from_2nd_flow", streamer_id);
+  // console.log("streamer_id from_2nd_flow", streamer_id);
 
   useEffect(() => {
     if (streamer_id !== null && access_token) {
-      console.log(access_token);
-      console.log("streamer_id from_2nd_flow inside", streamer_id);
+      // console.log(access_token);
+      // console.log("streamer_id from_2nd_flow inside", streamer_id);
       axios
         .get(
           "https://mahboob-alam.tech/live-chat/get/current-stream-details/api/",
@@ -242,7 +242,7 @@ export default function SingleStream() {
         )
         .then((response) => {
           // console.log("check", response.data.data);
-          console.log("check5", response.data);
+          // console.log("check5", response.data);
           // setStreamerStreamData(response.data.streamer_id);
           setStreamerStreamDataAll(response.data.data);
           // localStorage.setItem("streamer_id", response.data.data.streamer);
@@ -254,14 +254,14 @@ export default function SingleStream() {
         });
     }
   }, [access_token, streamer_id]);
-  console.log("streamerStreamData", streamerStreamDataAll);
+  // console.log("streamerStreamData", streamerStreamDataAll);
 
   // console.log("check3", streamerStreamData.streamer);
   // let val = streamerStreamData;
   // console.log("val", val);
   useEffect(() => {
     if (streamer_id !== null && access_token) {
-      console.log("check1", access_token);
+      // console.log("check1", access_token);
       // console.log("check2", streamerStreamData.streamer);
       axios
         .get("https://mahboob-alam.tech/dashboard/edit-channel/api/", {
@@ -274,7 +274,7 @@ export default function SingleStream() {
           },
         })
         .then((response) => {
-          console.log("val store", response);
+          // console.log("val store", response);
           setStreamerChannelData(response.data.data);
         })
         .catch((error) => {
@@ -283,7 +283,7 @@ export default function SingleStream() {
         });
     }
   }, [streamer_id]);
-  console.log("streamerChannelData", streamerChannelData);
+  // console.log("streamerChannelData", streamerChannelData);
 
   const [socialLink, setSocialLink] = React.useState({});
   useEffect(() => {
@@ -299,7 +299,7 @@ export default function SingleStream() {
           },
         })
         .then((response) => {
-          console.log("social", response.data.data);
+          // console.log("social", response.data.data);
           setSocialLink(response.data.data);
         })
         .catch((error) => {
@@ -308,7 +308,7 @@ export default function SingleStream() {
         });
     }
   }, [streamer_id]);
-  console.log("socialLink", socialLink);
+  // console.log("socialLink", socialLink);
 
   const handleSentTip = async () => {
     const headers = {
@@ -327,7 +327,7 @@ export default function SingleStream() {
           headers: headers,
         }
       );
-      console.log("Tip Data sent:", response.data);
+      // console.log("Tip Data sent:", response.data);
       alert("Tip Sent Successfully");
     } catch (error) {
       console.error("Error sending tip data:", error);

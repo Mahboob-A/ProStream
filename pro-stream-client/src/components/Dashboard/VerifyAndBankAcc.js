@@ -30,6 +30,8 @@ const VerifyAndBankAcc = () => {
     last_name: "",
     document_type: "",
     document: null,
+    streamer: "",
+    is_verification_approaved: false,
   });
   const [visibility, setVisibility] = React.useState(false);
   const [edit, setEdit] = React.useState(true);
@@ -42,7 +44,7 @@ const VerifyAndBankAcc = () => {
         },
       })
       .then((response) => {
-        console.log("VerifyAndBankAcc", response.data.data);
+        // console.log("VerifyAndBankAcc", response.data.data);
         setVerificationInfo(response.data.data);
       })
       .catch((error) => {
@@ -77,7 +79,7 @@ const VerifyAndBankAcc = () => {
         }
       )
       .then((response) => {
-        console.log("User data updated successfully:", response.data);
+        // console.log("User data updated successfully:", response.data);
         // setSocialLink(response.data.data);
         alert("User data updated successfully!");
         axios
@@ -88,7 +90,7 @@ const VerifyAndBankAcc = () => {
             },
           })
           .then((response) => {
-            console.log("VerifyAndBankAcc", response.data.data);
+            // console.log("VerifyAndBankAcc", response.data.data);
             setVerificationInfo(response.data.data);
           })
           .catch((error) => {
@@ -109,7 +111,7 @@ const VerifyAndBankAcc = () => {
     ifsc_code: "",
     passbook_img: null,
   });
-  console.log("bankAccount", bankAccount);
+  // console.log("bankAccount", bankAccount);
 
   useEffect(() => {
     if (access_token) {
@@ -121,7 +123,7 @@ const VerifyAndBankAcc = () => {
           },
         })
         .then((response) => {
-          console.log("VerifyAndBankAcc", response.data.data);
+          // console.log("VerifyAndBankAcc", response.data.data);
           setBankAccount(response.data.data);
         })
         .catch((error) => {
@@ -157,7 +159,7 @@ const VerifyAndBankAcc = () => {
         }
       )
       .then((response) => {
-        console.log("User data updated successfully:", response.data);
+        // console.log("User data updated successfully:", response.data);
         // setSocialLink(response.data.data);
         alert("User data updated successfully!");
         axios
@@ -168,7 +170,7 @@ const VerifyAndBankAcc = () => {
             },
           })
           .then((response) => {
-            console.log("VerifyAndBankAcc", response.data.data);
+            // console.log("VerifyAndBankAcc", response.data.data);
             setBankAccount(response.data.data);
           })
           .catch((error) => {
@@ -333,111 +335,123 @@ const VerifyAndBankAcc = () => {
         <Typography variant="h3" marginBottom={2}>
           Bank Account Information
         </Typography>
-        <Grid container>
-          <Grid item xs={12}>
-            {/* set profile data  */}
-            <form>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    color="secondary"
-                    label="First Name"
-                    fullWidth
-                    name="first_name"
-                    value={bankAccount.first_name || ""}
-                    onChange={handleChange2}
-                    disabled={edit}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    color="secondary"
-                    label="Last Name"
-                    fullWidth
-                    name="last_name"
-                    value={bankAccount.last_name || ""}
-                    onChange={handleChange2}
-                    disabled={edit}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    color="secondary"
-                    label="Bank Name"
-                    fullWidth
-                    name="bank_name"
-                    value={bankAccount.bank_name || ""}
-                    onChange={handleChange2}
-                    disabled={edit}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    color="secondary"
-                    label="Account Number"
-                    fullWidth
-                    name="account_no"
-                    value={bankAccount.account_no || ""}
-                    onChange={handleChange2}
-                    disabled={edit}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    color="secondary"
-                    label="IFSC Code"
-                    fullWidth
-                    name="ifsc_code"
-                    value={bankAccount.ifsc_code || ""}
-                    onChange={handleChange2}
-                    disabled={edit}
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Typography variant="h6">Passbook Image</Typography>
-                  {bankAccount.passbook_img ? (
-                    <Avatar
-                      src={`${bankAccount.passbook_img}`}
-                      alt="Passport Picture"
-                      sx={{ width: 150, height: 150, marginX: "auto" }}
-                    />
-                  ) : (
-                    <Typography>No document available</Typography>
-                  )}
-                  <input
-                    type="file"
-                    name="passbook_img"
-                    accept="image/*"
-                    onChange={handleFileChange2}
-                    disabled={edit}
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  {edit && (
-                    <Button
-                      variant="contained"
+        {verificationInfo.is_verification_approaved ? (
+          <Grid container>
+            <Grid item xs={12}>
+              {/* set profile data  */}
+              <Typography variant="h6" sx={{ color: "yellow" }}>
+                Please add you bank account details to receive tip <br />
+              </Typography>
+              <Typography variant="h6" sx={{ color: "orange" }}>
+                Ignore if already added
+              </Typography>
+              <form>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
                       color="secondary"
-                      onClick={() => setEdit(!edit)}
-                    >
-                      Edit
-                    </Button>
-                  )}
-                  {!edit && (
-                    <Button
-                      onClick={handleSubmit2}
-                      variant="contained"
-                      color="primary"
-                    >
-                      Save
-                    </Button>
-                  )}
+                      label="First Name"
+                      fullWidth
+                      name="first_name"
+                      value={bankAccount.first_name || ""}
+                      onChange={handleChange2}
+                      disabled={edit}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      color="secondary"
+                      label="Last Name"
+                      fullWidth
+                      name="last_name"
+                      value={bankAccount.last_name || ""}
+                      onChange={handleChange2}
+                      disabled={edit}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      color="secondary"
+                      label="Bank Name"
+                      fullWidth
+                      name="bank_name"
+                      value={bankAccount.bank_name || ""}
+                      onChange={handleChange2}
+                      disabled={edit}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      color="secondary"
+                      label="Account Number"
+                      fullWidth
+                      name="account_no"
+                      value={bankAccount.account_no || ""}
+                      onChange={handleChange2}
+                      disabled={edit}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      color="secondary"
+                      label="IFSC Code"
+                      fullWidth
+                      name="ifsc_code"
+                      value={bankAccount.ifsc_code || ""}
+                      onChange={handleChange2}
+                      disabled={edit}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Typography variant="h6">Passbook Image</Typography>
+                    {bankAccount.passbook_img ? (
+                      <Avatar
+                        src={`${bankAccount.passbook_img}`}
+                        alt="Passport Picture"
+                        sx={{ width: 150, height: 150, marginX: "auto" }}
+                      />
+                    ) : (
+                      <Typography>No document available</Typography>
+                    )}
+                    <input
+                      type="file"
+                      name="passbook_img"
+                      accept="image/*"
+                      onChange={handleFileChange2}
+                      disabled={edit}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    {edit && (
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => setEdit(!edit)}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                    {!edit && (
+                      <Button
+                        onClick={handleSubmit2}
+                        variant="contained"
+                        color="primary"
+                      >
+                        Save
+                      </Button>
+                    )}
+                  </Grid>
                 </Grid>
-              </Grid>
-            </form>
+              </form>
+            </Grid>
           </Grid>
-        </Grid>
+        ) : (
+          <Typography variant="h6" sx={{ color: "red" }}>
+            Please verify your account first to add bank account details.
+          </Typography>
+        )}
       </Box>
     </Box>
   );

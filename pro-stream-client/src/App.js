@@ -22,6 +22,7 @@ import ErrorPage from "./components/Common/ErrorPage";
 import UserDashboard from "./components/Dashboard/UserDashboard";
 import SingleChannel from "./components/Channel/SingleChannel";
 import SingleTag from "./components/Directory/SingleTag";
+import Documentation from "./components/Documentation/Documentation";
 
 function App() {
   // access access_token from redux state
@@ -100,6 +101,8 @@ function App() {
 
           {/* error page  */}
           {/* <Route path="*" element={<ErrorPage />} /> */}
+
+          <Route path="documentation" element={<Documentation />} />
         </Routes>
       </BrowserRouter>
     </div>

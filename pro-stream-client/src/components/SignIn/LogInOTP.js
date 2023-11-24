@@ -38,7 +38,7 @@ const LogInOTP = () => {
         }
       );
 
-      console.log(response.data);
+      // console.log(response.data);
       if (response.data.status === "success") {
         localStorage.setItem("credential", credential);
         alert("Email send successfully. Please, check your email.");

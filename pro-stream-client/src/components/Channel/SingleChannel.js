@@ -21,7 +21,7 @@ const SingleChannel = () => {
             },
           }
         );
-        console.log(response.data.data);
+        // console.log("channel data", response.data.data);
         setChannelInfo(response.data.data);
       } catch (error) {
         console.error("Error category data:", error);

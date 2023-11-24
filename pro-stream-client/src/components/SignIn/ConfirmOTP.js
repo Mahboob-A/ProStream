@@ -33,7 +33,7 @@ const ConfirmOTP = () => {
 
     try {
       const credential = localStorage.getItem("credential");
-      console.log(credential);
+      // console.log(credential);
       // Make an Axios POST request to your login endpoint
       const response = await axios.post(
         "https://mahboob-alam.tech/auth/login-with-otp-email-confirmation/",
@@ -44,7 +44,7 @@ const ConfirmOTP = () => {
       );
 
       // Handle the response (e.g., set user token or redirect to a dashboard)
-      console.log("Login successful", response.data);
+      // console.log("Login successful", response.data);
       if (response.data.status === "success") {
         storeToken(response.data.token);
         if (response.data.token.access) {

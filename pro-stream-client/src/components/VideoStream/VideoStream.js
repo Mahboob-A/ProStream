@@ -30,7 +30,7 @@ const VideoStream = () => {
       uid: uid,
       channel: CHANNEL,
     };
-    console.log(config);
+    // console.log(config);
     let client = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
     // console.log("Outside Cliend", client);
     let streaming = false;
@@ -86,15 +86,15 @@ const VideoStream = () => {
     let toggleVideoShare = async () => {
       client.setClientRole("host");
       hostUid = uid;
-      console.log(
-        "hostUid: ",
-        hostUid,
-        " ----- ",
-        "uid: ",
-        uid,
-        "config.uid: ",
-        config.uid
-      );
+      // console.log(
+      //   "hostUid: ",
+      //   hostUid,
+      //   " ----- ",
+      //   "uid: ",
+      //   uid,
+      //   "config.uid: ",
+      //   config.uid
+      // );
       document.getElementById("video-stream").innerHTML = "";
       localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
       let Player = `<div class="video-container" id="user-container-${uid}">
@@ -113,7 +113,7 @@ const VideoStream = () => {
     let handleUserPublished = async (user, mediaType) => {
       // subscribing to the stream
       await client.subscribe(user, mediaType);
-      console.log("user uid: ", user.uid, " --- ", "config.uid: ", config.uid);
+      // console.log("user uid: ", user.uid, " --- ", "config.uid: ", config.uid);
       if (mediaType === "video") {
         let player = document.getElementById(`user-container-${user.uid}`);
         if (player != null) {
@@ -140,7 +140,7 @@ const VideoStream = () => {
 
     // when a user quits the stream, remove him from the stream
     let handleStreamUnpublished = async (user) => {
-      console.log("user ---- uid : ", user.uid);
+      // console.log("user ---- uid : ", user.uid);
       document.getElementById("video-stream").innerHTML = "";
     };
     // camera on off
@@ -213,7 +213,7 @@ const VideoStream = () => {
           const response = await axios.delete(
             `https://mahboob-alam.tech/token/stream-temp-data/api/?channel_name=${CHANNEL}`
           );
-          console.log("Stream temporary data deleted:", response.data);
+          // console.log("Stream temporary data deleted:", response.data);
         } catch (error) {
           console.error("Error deleting stream temporary data:", error);
         }

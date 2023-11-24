@@ -16,7 +16,7 @@ const Analytics = () => {
         headers: headers,
       })
       .then((response) => {
-        console.log("Analytics", response.data.data);
+        // console.log("Analytics", response.data.data);
         setAnalytics(response.data.data);
       })
       .catch((error) => {
@@ -46,7 +46,7 @@ const Analytics = () => {
           }
         )
         .then((response) => {
-          console.log("SMS sent", response.data.data);
+          // console.log("SMS sent", response.data.data);
           setSuccess(response.data.data);
           setError("");
         })

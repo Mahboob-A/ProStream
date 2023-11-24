@@ -31,7 +31,7 @@ const ForgotPassword = () => {
           credential,
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
 
       if (response.data.status === "success") {
         localStorage.setItem("credential", credential);

@@ -129,13 +129,13 @@ export default function Home() {
         const response = await axios.get(
           "https://mahboob-alam.tech/token/stream-temp-data/api/"
         );
-        console.log("Running strem data", response.data.data);
+        // console.log("Running strem data", response.data.data);
         setCurrentStream(response.data.data);
 
         const response1 = await axios.get(
           "https://mahboob-alam.tech/live-stream/get-all-streamer-details/api/"
         );
-        console.log("all streamer data", response1.data.data);
+        // console.log("all streamer data", response1.data.data);
         setAllStreamerData(response1.data.data);
       } catch (error) {
         console.error("Error stream  data:", error);
@@ -145,7 +145,7 @@ export default function Home() {
     fetchData();
   }, []);
 
-  console.log("currentStream", currentStream.length);
+  // console.log("currentStream", currentStream.length);
 
   return (
     <Box>
