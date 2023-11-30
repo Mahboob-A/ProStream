@@ -183,7 +183,7 @@ const StreamForm = () => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           width: "100%",
-          height: "130vh",
+          height: "850px",
           opacity: ".9",
         }}
       >

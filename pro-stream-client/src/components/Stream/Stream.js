@@ -182,7 +182,11 @@ const Stream = ({
                   <Grid item>
                     <Avatar
                       sx={{ height: "70px", width: "70px" }}
-                      src="https://i.ibb.co/xHhvpZj/people-1.png"
+                      src={
+                        streamerChannelData?.display_picture
+                          ? streamerChannelData?.display_picture
+                          : ""
+                      }
                     />
                   </Grid>
                   <Grid item>
