@@ -9,7 +9,7 @@
 ProStream is a low latency video streaming platform just like <a href="https://www.twitch.tv/"><strong>Twitch</strong></a>
 <br/>
 <br/>
-<a href="https://github.com/Mahboob-A/algocode-auth"><strong>Read the blog »</strong></a>
+<a href="https://prostream-gamma.vercel.app/"><strong>Explore ProStream »</strong></a>
 <br/>
 <br/>
 </p>
