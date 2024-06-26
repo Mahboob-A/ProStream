@@ -158,8 +158,6 @@ ProStream is built using the below tech-stacks.
 
 * While building an application like ProStream, we struggled in `database design`. We have researched and built `PoC` of database design before integrating it into the ProStream platform. 
 
-* However, the low-latency video streaming was our biggest challenge. We initially decided to implement the platform from `scratch` from processing the data packets using `FFmpeg` and `AWS` to convert the packets into different formats, but we had to discard the idea as the volume of the project became out of the scope time bound as we had to build it within a timeframe. 
-
  
 #### Learning 
 
