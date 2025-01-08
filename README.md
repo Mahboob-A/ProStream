@@ -8,6 +8,12 @@
 <p align="center">
 ProStream is a low latency video streaming platform just like <a href="https://www.twitch.tv/"><strong>Twitch</strong></a>
 <br/>
+  <p align="center">
+  The Monolith VOD version of ProStream is CuteTube. Check it <a href="https://github.com/Mahboob-A/cutetube/" target="_blank" rel="noopener noreferrer"><strong>here »</strong></a>
+  </p>
+  <p style="text-align: center;">
+  The Microservices VOD version of ProStream is Movio. Check it <a href="https://github.com/Mahboob-A/movio/" target="_blank"><strong>here »</strong></a>
+</p>
 <br/>
 <a href="https://prostream-gamma.vercel.app/"><strong>Explore ProStream »</strong></a>
 <br/>
